@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.15)  1 JUN 2026 10:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.15)  1 JUN 2026 12:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -946,7 +946,23 @@ e 481.
 Package natbib Warning: Citation `R-tidytransit' on page 5 undefined on input l
 ine 481.
 
-[5] (./ReynoldsEtAl2026.bbl
+<graphics/map_london.png, id=262, 542.025pt x 542.025pt>
+File: graphics/map_london.png Graphic file (type png)
+<use graphics/map_london.png>
+Package pdftex.def Info: graphics/map_london.png  used on input line 491.
+(pdftex.def)             Requested size: 468.0pt x 468.01811pt.
+<graphics/map_bristol.png, id=263, 542.025pt x 180.675pt>
+File: graphics/map_bristol.png Graphic file (type png)
+<use graphics/map_bristol.png>
+Package pdftex.def Info: graphics/map_bristol.png  used on input line 500.
+(pdftex.def)             Requested size: 468.0pt x 156.00603pt.
+<graphics/Bristol.001.png, id=264, 2410.00375pt x 2552.53625pt>
+File: graphics/Bristol.001.png Graphic file (type png)
+<use graphics/Bristol.001.png>
+Package pdftex.def Info: graphics/Bristol.001.png  used on input line 509.
+(pdftex.def)             Requested size: 468.0pt x 495.65883pt.
+[5] [6 <./graphics/map_london.png>] (./ReynoldsEtAl2026.bbl [7 <./graphics/map_
+bristol.png>] [8 <./graphics/Bristol.001.png>]
 Underfull \hbox (badness 1412) in paragraph at lines 77--80
 []\T1/lmr/m/n/8 (+20) Charles Dob-son.  The cit-i-zen's hand-book; street re-cl
 aim-ing, un-dated.  URL []$\T1/lmtt/m/n/8 http : / / www . citizenshandbook . o
@@ -959,26 +975,26 @@ Underfull \hbox (badness 1014) in paragraph at lines 128--133
  in-stalls il-le-gal bike lane pro-tec-tors on cherry street, 2013.
  []
 
-[6] [7])
+[9])
 
 Package natbib Warning: There were undefined citations.
 
-[8] (./ReynoldsEtAl2026.aux)
+[10] (./ReynoldsEtAl2026.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `ReynoldsEtAl2026.out' has not changed.
-(rerunfilecheck)             Checksum: 3CFB43EB0F40989C373760CE8ED619DE;1382.
+(rerunfilecheck)             Checksum: 8D4809EDA2965164E11327E81606B32F;1382.
  ) 
 Here is how much of TeX's memory you used:
- 17912 strings out of 474116
- 287549 string characters out of 5743682
- 1959187 words of memory out of 5000000
- 39662 multiletter control sequences out of 15000+600000
- 615824 words of font info for 178 fonts, out of 8000000 for 9000
+ 17961 strings out of 474116
+ 288817 string characters out of 5743682
+ 1956187 words of memory out of 5000000
+ 39704 multiletter control sequences out of 15000+600000
+ 615908 words of font info for 179 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,10n,79p,1013b,707s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,10n,79p,1013b,687s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/lo
 cal/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive
 /2024/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2024/texmf
@@ -989,10 +1005,10 @@ fb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri8.pfb></usr/lo
 cal/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive
 /2024/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2024/texmf
 -dist/fonts/type1/public/lm/lmtt8.pfb>
-Output written on ReynoldsEtAl2026.pdf (8 pages, 292314 bytes).
+Output written on ReynoldsEtAl2026.pdf (10 pages, 20359076 bytes).
 PDF statistics:
- 387 PDF objects out of 1000 (max. 8388607)
- 351 compressed objects within 4 object streams
- 85 named destinations out of 1000 (max. 500000)
- 27241 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 401 PDF objects out of 1000 (max. 8388607)
+ 360 compressed objects within 4 object streams
+ 90 named destinations out of 1000 (max. 500000)
+ 27256 words of extra memory for PDF output out of 29859 (max. 10000000)
 

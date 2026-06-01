@@ -117,47 +117,79 @@ In the 'definition' phase the findings from site visits and other exploration of
 
 
 
-```{r generate_map, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r generate_map_london, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
-map1 <- rnaturalearth::ne_states("Ireland", returnclass = "sf")
-p1 <- ggplot(map1) + geom_sf() 
+map1 <- rnaturalearth::ne_states(country = "United Kingdom", returnclass = "sf")
+p1 <- ggplot(map1) + geom_sf() + 
+ ggspatial::annotation_map_tile(type = "osm", zoom = 11) + 
+  coord_sf(xlim = c(-0.2, 0.11), ylim = c(51.44, 51.6))
 
 hub_location <- list(
-  letterkenny = tibble(lat=54.95151900289267, lon =-7.734405435672215, name = "Letterkenny"), 
-  galway = tibble(lat = 53.277326344086504, lon = -9.073269666553948, name = "Galway"), 
-  waterford = tibble(lat = 52.2599339, lon = -7.1170565, name = "Waterford"),
-  dundrum = tibble(lat = 53.288029794549054, lon = -6.241222689308968, name = "Dundrum"))
+  wanstead = tibble(lat = 51.578686391095, lon = 0.02619981811466512, name = "High Street Wanstead"), 
+  south_woodford = tibble(lat = 51.5926232270048, lon =  0.026476304350274767, name = "South Woodford"), 
+  lewisham_high_st = tibble(lat = 51.46128308335398, lon = -0.010380231136465612, name = "Lewisham High St"))
 
 
-ggsave(file="graphics/map.png", plot = p1 + 
+ggsave(file="graphics/map_london.png", plot = p1 + 
   geom_point(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat)) + 
-  ggrepel::geom_label_repel(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat, label=name), hjust=1.05, vjust=1.05, size = 5.0) + 
+  ggrepel::geom_label_repel(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat, label=name), hjust=1.1, vjust=1.1, size = 5.0) + 
   theme(
         axis.title.x  = element_blank(), 
         axis.title.y  = element_blank() 
        ), 
   height = 7.5, 
   width = 7.5, 
-  units = "in"
+  units = "in" 
 ) 
 
 ```
 
-```{r location_all_ireland, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
-knitr::include_graphics("graphics/map.png") 
+```{r location_map_london, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/map_london.png") 
+
+```
+
+
+```{r generate_map_bristol, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+
+map1 <- rnaturalearth::ne_states(country = "United Kingdom", returnclass = "sf")
+p1 <- ggplot(map1) + geom_sf() + 
+ ggspatial::annotation_map_tile(type = "osm", zoom = 10) + 
+  coord_sf(xlim = c(-2.8, -2.4), ylim = c(51.45, 51.525))
+
+hub_location <- list(
+  abbey_wood = tibble(lat = 51.507374018425104, lon =  -2.557977642470572, name = "Abbey Wood"), 
+  UWE_Frenchay = tibble(lat = 51.500103870678025, lon =  -2.546301107865488, name = "UWE Frenchay"), 
+  gainsborough_square = tibble(lat = 51.49007921451471, lon = -2.562807494900329, name = "Gainsborough Square"), 
+  horfield_library = tibble(lat = 51.494931138321185, lon = -2.5741801829392097, name = "Gainsborough Square"))
+
+
+
+ggsave(file="graphics/map_bristol.png", plot = p1 + 
+  geom_point(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat)) + 
+  ggrepel::geom_label_repel(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat, label=name), hjust=1.1, vjust=1.1, size = 5.0) + 
+  theme(
+        axis.title.x  = element_blank(), 
+        axis.title.y  = element_blank() 
+       ), 
+  height = 2.5, 
+  width = 7.5, 
+  units = "in" 
+) 
+
+```
+
+```{r location_map_bristol, out.width = "100%", fig.align = "center", fig.cap = "Hubs visited in Bristol. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/map_bristol.png") 
 
 ```
 
 
 
-
-
-```{r signage_improvements, include=TRUE, echo=FALSE, fig.margin = TRUE, fig.cap = "Example of additional signage", crop = TRUE}
-
-knitr::include_graphics("graphics/ROBUST_website.png") 
+```{r location_map_bristol_images, out.width = "100%", fig.align = "center", fig.cap = "Bristol hubs, selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/Bristol.001.png") 
 
 ```
-
 
 
 

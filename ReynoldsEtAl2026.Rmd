@@ -310,6 +310,21 @@ design elements; included facilities and hub identity; maintenance; and the abil
 
 ## Definition
 
+Identifying 'a hub' 
+
+Identifying the 'facitiles and services' to be included as 'part' of each hub, be they
+
+
+Connected naming, branding etc. 
+
+Website, posters, banners, leaflets and other informational products that might be generated quickly by practitioners, adovocates or others, and easily maintained and updated. 
+
+
+Dated to show how current the information is.  Version control may also be important.  
+
+More generic parts of the puzzle - maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and (maybe even) growth. 
+
+
 ## Development
 
 As shown in Figure \ref{fig:bristol_images} and  \ref{fig:bristol_images_panels}, the various elements the Bristol hubs are linked through visual cues provided by the elevated green cube markers and matching iconography on the information panel and local maps. Even though some components of some of the hubs may not be immediately visible from the main panel and/or separated by up to around 30-50 metres, this iconography appears to provide consistent, logical and clear local wayfinding around the hub facilities themselves.  As discussed in relation to the previous 'discovery' phase, however, some facilities (e.g. toilets) are shown on parts of the main informational panels (the top and the map), but not marked in the physical world (i.e. with the green cubes), while other elements such as cafes, groceries shops and similar are only shown on the maps.  
@@ -317,6 +332,9 @@ As shown in Figure \ref{fig:bristol_images} and  \ref{fig:bristol_images_panels}
 
 
 Figure \ref{fig:andrew_road_images}, top-left and bottom-left, show various hub elements (e.g. electric car charges, bike docks) on more temporary signage, including: (top-left) replaceable poster of the type typical at transit stops; and (bottom-left) a banner sign printed on flexible materials. Notably, the Andrew Road hub is billed as a "Local Travel Point pilot" and at the time of the site visit there was no information provided about the, at the time incomplete, electric car charging facilities. This might imply that information at Andrew Road is to be updated as the pilot progress, and the mobility offer or other elements change.  This contrasts to the permanency of the mapping and information in Bristol (Figure \ref{fig:bristol_images_panels}), which includes iconography and descriptive text detailing the hub offerings and providing information about nearby services. Such examples from the cases might highlight the value to practitioners, activists and others of easily updatable mapping and informational products 
+
+
+LAT AND LON branding? As per that Collingwood Brew Pub shirt I had.  
 
 
 ## Delivery

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.15)  1 JUN 2026 12:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.15)  4 JUN 2026 16:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -795,70 +795,6 @@ Overfull \hbox (2.22221pt too wide) has occurred while \output is active
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\comma' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@fnmark' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\comma' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@fnmark' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\comma' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@fnmark' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<let>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\comma' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@fnmark' on input line 202.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\<def>-command' on input line 202.
 
 
@@ -921,48 +857,169 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\@fnmark' on input line 202.
 
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<let>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\comma' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<def>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@fnmark' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<let>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\comma' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<def>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@fnmark' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<let>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\comma' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<def>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@fnmark' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<let>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\comma' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<def>-command' on input line 202.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@fnmark' on input line 202.
+
 [1
 
 {/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
 al/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/202
 4/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}] [2] [3] [4]
+<graphics/map_london.png, id=257, 542.025pt x 542.025pt>
+File: graphics/map_london.png Graphic file (type png)
+<use graphics/map_london.png>
+Package pdftex.def Info: graphics/map_london.png  used on input line 442.
+(pdftex.def)             Requested size: 468.0pt x 468.01811pt.
+<graphics/map_birmingham.png, id=258, 542.025pt x 180.675pt>
+File: graphics/map_birmingham.png Graphic file (type png)
+<use graphics/map_birmingham.png>
+Package pdftex.def Info: graphics/map_birmingham.png  used on input line 451.
+(pdftex.def)             Requested size: 468.0pt x 156.00603pt.
+<graphics/map_bristol.png, id=259, 542.025pt x 180.675pt>
+File: graphics/map_bristol.png Graphic file (type png)
+<use graphics/map_bristol.png>
+Package pdftex.def Info: graphics/map_bristol.png  used on input line 460.
+(pdftex.def)             Requested size: 468.0pt x 156.00603pt.
+<graphics/map_oxford.png, id=260, 542.025pt x 180.675pt>
+File: graphics/map_oxford.png Graphic file (type png)
+<use graphics/map_oxford.png>
+Package pdftex.def Info: graphics/map_oxford.png  used on input line 469.
+(pdftex.def)             Requested size: 468.0pt x 156.00603pt.
 
 Package natbib Warning: Citation `wickham2023r' on page 5 undefined on input li
-ne 463.
+ne 503.
 
 
 Package natbib Warning: Citation `R-ggspatial' on page 5 undefined on input lin
-e 472.
+e 512.
 
 
 Package natbib Warning: Citation `R-osmdata' on page 5 undefined on input line 
-472.
+512.
 
 
 Package natbib Warning: Citation `R-gtfstools' on page 5 undefined on input lin
-e 481.
+e 521.
 
 
 Package natbib Warning: Citation `R-tidytransit' on page 5 undefined on input l
-ine 481.
+ine 521.
 
-<graphics/map_london.png, id=262, 542.025pt x 542.025pt>
-File: graphics/map_london.png Graphic file (type png)
-<use graphics/map_london.png>
-Package pdftex.def Info: graphics/map_london.png  used on input line 491.
-(pdftex.def)             Requested size: 468.0pt x 468.01811pt.
-<graphics/map_bristol.png, id=263, 542.025pt x 180.675pt>
-File: graphics/map_bristol.png Graphic file (type png)
-<use graphics/map_bristol.png>
-Package pdftex.def Info: graphics/map_bristol.png  used on input line 500.
-(pdftex.def)             Requested size: 468.0pt x 156.00603pt.
-<graphics/Bristol.001.png, id=264, 2410.00375pt x 2552.53625pt>
+<graphics/camden.png, id=270, 2419.0375pt x 2399.96625pt>
+File: graphics/camden.png Graphic file (type png)
+<use graphics/camden.png>
+Package pdftex.def Info: graphics/camden.png  used on input line 531.
+(pdftex.def)             Requested size: 468.0pt x 464.27457pt.
+<graphics/south_woodford.png, id=271, 2122.93124pt x 1188.44pt>
+File: graphics/south_woodford.png Graphic file (type png)
+<use graphics/south_woodford.png>
+Package pdftex.def Info: graphics/south_woodford.png  used on input line 540.
+(pdftex.def)             Requested size: 468.0pt x 261.9835pt.
+<graphics/wanstead.png, id=272, 2385.91376pt x 2304.61pt>
+File: graphics/wanstead.png Graphic file (type png)
+<use graphics/wanstead.png>
+Package pdftex.def Info: graphics/wanstead.png  used on input line 549.
+(pdftex.def)             Requested size: 468.0pt x 452.05214pt.
+<graphics/andrew_road.png, id=273, 2489.3pt x 3521.155pt>
+File: graphics/andrew_road.png Graphic file (type png)
+<use graphics/andrew_road.png>
+Package pdftex.def Info: graphics/andrew_road.png  used on input line 558.
+(pdftex.def)             Requested size: 468.0pt x 661.98799pt.
+
+LaTeX Warning: Float too large for page by 59.48798pt on input line 563.
+
+<graphics/Bristol.001.png, id=274, 2410.00375pt x 2552.53625pt>
 File: graphics/Bristol.001.png Graphic file (type png)
 <use graphics/Bristol.001.png>
-Package pdftex.def Info: graphics/Bristol.001.png  used on input line 509.
+Package pdftex.def Info: graphics/Bristol.001.png  used on input line 567.
 (pdftex.def)             Requested size: 468.0pt x 495.65883pt.
-[5] [6 <./graphics/map_london.png>] (./ReynoldsEtAl2026.bbl [7 <./graphics/map_
-bristol.png>] [8 <./graphics/Bristol.001.png>]
+<graphics/Bristol.002.png, id=275, 2329.70375pt x 3135.715pt>
+File: graphics/Bristol.002.png Graphic file (type png)
+<use graphics/Bristol.002.png>
+Package pdftex.def Info: graphics/Bristol.002.png  used on input line 576.
+(pdftex.def)             Requested size: 468.0pt x 629.90703pt.
+
+LaTeX Warning: Float too large for page by 27.40701pt on input line 581.
+
+<graphics/marina.png, id=276, 2485.285pt x 2106.87125pt>
+File: graphics/marina.png Graphic file (type png)
+<use graphics/marina.png>
+Package pdftex.def Info: graphics/marina.png  used on input line 585.
+(pdftex.def)             Requested size: 468.0pt x 396.74124pt.
+[5] [6 <./graphics/map_london.png>] [7 <./graphics/map_birmingham.png> <./graph
+ics/map_bristol.png> <./graphics/map_oxford.png>] [8 <./graphics/camden.png>]
+
+LaTeX Warning: Reference `fig:location_map_bristol_images' on page 9 undefined 
+on input line 648.
+
+
+LaTeX Warning: Reference `fig:bristol_images_panel' on page 9 undefined on inpu
+t line 656.
+
+[9 <./graphics/south_woodford.png>] [10 <./graphics/wanstead.png>] [11 <./graph
+ics/andrew_road.png>] [12 <./graphics/Bristol.001.png>] [13 <./graphics/Bristol
+.002.png>] [14 <./graphics/marina.png>] [15] (./ReynoldsEtAl2026.bbl
 Underfull \hbox (badness 1412) in paragraph at lines 77--80
 []\T1/lmr/m/n/8 (+20) Charles Dob-son.  The cit-i-zen's hand-book; street re-cl
 aim-ing, un-dated.  URL []$\T1/lmtt/m/n/8 http : / / www . citizenshandbook . o
@@ -975,26 +1032,29 @@ Underfull \hbox (badness 1014) in paragraph at lines 128--133
  in-stalls il-le-gal bike lane pro-tec-tors on cherry street, 2013.
  []
 
-[9])
+[16] [17])
 
 Package natbib Warning: There were undefined citations.
 
-[10] (./ReynoldsEtAl2026.aux)
+[18] (./ReynoldsEtAl2026.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `ReynoldsEtAl2026.out' has not changed.
-(rerunfilecheck)             Checksum: 8D4809EDA2965164E11327E81606B32F;1382.
+(rerunfilecheck)             Checksum: 27EBA7CCEE4C4C92D68E75AE85FF8066;1383.
  ) 
 Here is how much of TeX's memory you used:
- 17961 strings out of 474116
- 288817 string characters out of 5743682
- 1956187 words of memory out of 5000000
- 39704 multiletter control sequences out of 15000+600000
- 615908 words of font info for 179 fonts, out of 8000000 for 9000
+ 18078 strings out of 474116
+ 291810 string characters out of 5743682
+ 1958187 words of memory out of 5000000
+ 39802 multiletter control sequences out of 15000+600000
+ 615992 words of font info for 180 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,10n,79p,1013b,687s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,10n,79p,1013b,707s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/lo
 cal/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive
 /2024/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2024/texmf
@@ -1005,10 +1065,10 @@ fb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri8.pfb></usr/lo
 cal/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive
 /2024/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2024/texmf
 -dist/fonts/type1/public/lm/lmtt8.pfb>
-Output written on ReynoldsEtAl2026.pdf (10 pages, 20359076 bytes).
+Output written on ReynoldsEtAl2026.pdf (18 pages, 86446221 bytes).
 PDF statistics:
- 401 PDF objects out of 1000 (max. 8388607)
- 360 compressed objects within 4 object streams
- 90 named destinations out of 1000 (max. 500000)
- 27256 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 474 PDF objects out of 1000 (max. 8388607)
+ 416 compressed objects within 5 object streams
+ 107 named destinations out of 1000 (max. 500000)
+ 27296 words of extra memory for PDF output out of 29859 (max. 10000000)
 

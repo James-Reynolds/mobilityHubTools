@@ -4,6 +4,7 @@ author:
   - name: James Reynolds
     email: julianj.reynolds@atu.ie
     footnote: 3
+    correspondingauthor: true
   - name: Noreen Armstrong
     email: ????
     footnote: 2
@@ -16,7 +17,6 @@ author:
   - name: Brian Caulfield
     email: brian.caulfield@tcd.ie
     affiliation: 
-    correspondingauthor: true
     footnote: 1
   - name: Agnieszka Stefaniec
     email: a.stefaniec@soton.ac.uk
@@ -107,32 +107,31 @@ Case studies can be especially effective for research into areas when theory dev
 
 Here the need to be seeking generalisable findings is addressed directly by the form taken by the research outputs: namely, the research produces a software of package tools that might be used for mobility hubs in any location, not just the locations selected as cases. More generally, the case study (i.e. field visits) component of this research is only part of the diverging 'discovery' and 'development' phases, with additional examples of mobility hubs examined through review of websites, online imagery of street locations and other means.  As such, while there may be other approaches to information provision, mapping and branding at mobility hubs not examined in this study, it is expected that the study has enough 'breadth' to offset the possible limitations to generalisability that might come from examining only a small number of cases a great 'depth'.   
 
-Cases selected for this study was somewhat constrained by circumstances and opportunity, at least for those that were visited in person. The logisitics of and avaiable time for travel, unfortunately, limited case selection to those that were close to the researchers' home base in Ireland or that could otherwise be visited as part of other travel. Hence, most of the visited sites were in the south of England, including in the vicinity of London, Oxford, Birmingham and Bristol. However, and in line with the recommendations of the methodological literature, the cases selected for site visits include those that are leading and particularly novel examples, those that are more representative, and sufficient variation to provide for cross-case comparison. More practically though, the actual conditions at each hub were only briefly examined before each site visit, so as to retain some level of randomness in the selection as far as the inclusion of good, average and not as good examples of mobility hubs in the sampled sites. The location of the mobility hubs themselves was sourced from (INSERT CITATION TO THE MOBILITY HUB WEBSITE), which includes hundreds of sites across the UK and Europe.  
-
-In the 'definition' phase the findings from site visits and other exploration of the cases are synthesised through cross-case comparison so as to arrive at a design problem definition. The 'diverging' development phase is then guided by the standardise approaches to package development for the R language, using @wickham2023r as a key reference.  While there are many other computing languages and software tools that might have been selected instead, R is chosen here because: it is open source and freely available, therefore supporting the goals of this research that relate to developing an accessible suite of tools for practitioners, advocates, tactical urbanists and others who might not have immediate access to commercial software; it has an extensive set of packages for geospatial analysis and mapping, including *sf* [@R-sf], and the *ggspatial* and *osmdata* [@R-ggspatial, @R-osmdata] packages that facilitate access to Open Street Maps (OSM) datasets and mapping tiles; and there is a large community of users, the availability of beginner learning and reference material^[See for example INSERT THE MONASH COURSES HERE, AND THE O'REILLY ANIMAL BOOKS] and an online culture that appears to support those with less experience with troubleshooting code examples. This community of users is also responsible for the development and maintenance of a wide range of R packages, including: the *tidyverse* [@tidyverse2019]; *gtfstools* [@R-gtfstools]; *tidytransit* [@R-tidytransit]; and INSERT OTHERS HERE, which were all relied upon to support the code development aspects of this research.  
-
-# Results
-
-## Discovery
 
 
-
-```{r generate_map_london, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r generate_map_london, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", eval = FALSE, echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
 map1 <- rnaturalearth::ne_states(country = "United Kingdom", returnclass = "sf")
 p1 <- ggplot(map1) + geom_sf() + 
- ggspatial::annotation_map_tile(type = "osm", zoom = 11) + 
-  coord_sf(xlim = c(-0.2, 0.11), ylim = c(51.44, 51.6))
+ ggspatial::annotation_map_tile(type = "osm", zoom = 12) + 
+  coord_sf(xlim = c(-0.18, 0.05), ylim = c(51.513, 51.60))
 
 hub_location <- list(
   wanstead = tibble(lat = 51.578686391095, lon = 0.02619981811466512, name = "High Street Wanstead"), 
   south_woodford = tibble(lat = 51.5926232270048, lon =  0.026476304350274767, name = "South Woodford"), 
-  lewisham_high_st = tibble(lat = 51.46128308335398, lon = -0.010380231136465612, name = "Lewisham High St"))
-
+  goldington_cres = tibble(lat=51.53525161008772, lon= -0.1329661628092648, name = "Goldington Cres"), 
+  charrington_st = tibble(lat=51.534125844712676, lon= -0.13293384506442132, name = "Charrington St"), 
+  cranleigh_st = tibble(lat= 51.53272526848009, lon= -0.13538854209281476, name = "Cranleigh St"), 
+  werrington_st = tibble(lat=51.53171762569113,  lon=-0.1342026092966679, name="Werrington St"), 
+  chalton_st = tibble(lat = 51.53146571150885, lon= -0.1320910704157235, name = "Chalton St"), 
+  brill_pl = tibble(lat = 51.531843582259505, lon= -0.1289960750696817, name = "Brill Pl"), 
+doric_way = tibble(lat = 51.52950433198319, lon= -0.13180181851422423, name="Doric Way"))
 
 ggsave(file="graphics/map_london.png", plot = p1 + 
   geom_point(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat)) + 
   ggrepel::geom_label_repel(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat, label=name), hjust=1.1, vjust=1.1, size = 5.0) + 
+    ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
   theme(
         axis.title.x  = element_blank(), 
         axis.title.y  = element_blank() 
@@ -142,19 +141,10 @@ ggsave(file="graphics/map_london.png", plot = p1 +
   units = "in" 
 ) 
 
-```
-
-```{r location_map_london, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
-knitr::include_graphics("graphics/map_london.png") 
-
-```
-
-
-```{r generate_map_bristol, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 
 map1 <- rnaturalearth::ne_states(country = "United Kingdom", returnclass = "sf")
 p1 <- ggplot(map1) + geom_sf() + 
- ggspatial::annotation_map_tile(type = "osm", zoom = 10) + 
+ ggspatial::annotation_map_tile(type = "osm", zoom = 11) + 
   coord_sf(xlim = c(-2.8, -2.4), ylim = c(51.45, 51.525))
 
 hub_location <- list(
@@ -168,6 +158,8 @@ hub_location <- list(
 ggsave(file="graphics/map_bristol.png", plot = p1 + 
   geom_point(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat)) + 
   ggrepel::geom_label_repel(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat, label=name), hjust=1.1, vjust=1.1, size = 5.0) + 
+    ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
   theme(
         axis.title.x  = element_blank(), 
         axis.title.y  = element_blank() 
@@ -177,7 +169,75 @@ ggsave(file="graphics/map_bristol.png", plot = p1 +
   units = "in" 
 ) 
 
+
+
+map1 <- rnaturalearth::ne_states(country = "United Kingdom", returnclass = "sf")
+p1 <- ggplot(map1) + geom_sf() + 
+ ggspatial::annotation_map_tile(type = "osm", zoom = 12) + 
+  coord_sf(xlim = c(-2.0, -2.15), ylim = c(52.43, 52.46))
+
+hub_location <- list(
+  andrew_road = tibble(lat = 52.448568212245036, lon = -2.053861046130594, name = "Andrew Road"), 
+  huntingtree_park = tibble(lat = 52.44756630128951, lon = -2.06866200462800, name = "Huntingtree Park"))
+
+
+
+ggsave(file="graphics/map_birmingham.png", plot = p1 + 
+  geom_point(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat)) + 
+  ggrepel::geom_label_repel(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat, label=name), hjust=1.1, vjust=1.1, size = 5.0) + 
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  theme(
+        axis.title.x  = element_blank(), 
+        axis.title.y  = element_blank() 
+       ), 
+  height = 2.5, 
+  width = 7.5, 
+  units = "in" 
+) 
+
+
+
+map1 <- rnaturalearth::ne_states(country = "United Kingdom", returnclass = "sf")
+p1 <- ggplot(map1) + geom_sf() + 
+ ggspatial::annotation_map_tile(type = "osm", zoom = 9) + 
+  coord_sf(xlim = c(0, -2), ylim = c(51.5, 51.8))
+
+hub_location <- list(
+  Marina = tibble(lat = 51.619590935649526, lon =  -1.1157212186352172, name = "Benson Marina"))
+
+
+
+ggsave(file="graphics/map_oxford.png", plot = p1 + 
+  geom_point(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat)) + 
+  ggrepel::geom_label_repel(data = do.call(rbind.data.frame, hub_location), aes(x = lon, y = lat, label=name), hjust=1.2, vjust=1.2, size = 5.0) +
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  theme(
+        axis.title.x  = element_blank(), 
+        axis.title.y  = element_blank() 
+       ), 
+  height = 2.5, 
+  width = 7.5, 
+  units = "in" 
+) 
+
+
 ```
+
+ 
+
+```{r location_map_london, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/map_london.png") 
+
+```
+
+
+```{r location_map_birmingham, out.width = "100%", fig.align = "center", fig.cap = "Hubs visited in Birmingham. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/map_birmingham.png") 
+
+```
+
 
 ```{r location_map_bristol, out.width = "100%", fig.align = "center", fig.cap = "Hubs visited in Bristol. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 knitr::include_graphics("graphics/map_bristol.png") 
@@ -185,18 +245,78 @@ knitr::include_graphics("graphics/map_bristol.png")
 ```
 
 
+```{r location_map_oxford, out.width = "100%", fig.align = "center", fig.cap = "Hubs visited in Bristol. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/map_oxford.png") 
 
-```{r location_map_bristol_images, out.width = "100%", fig.align = "center", fig.cap = "Bristol hubs, selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```
+
+Figures \ref{fig:location_map_london} through \ref{fig:location_map_oxford}  show location of hubs visited in London, Bristol, Brimingham and Oxford. Cases selection for this study was somewhat constrained by circumstances and opportunity, at least for those that were visited in person. The logisitics of and avaiable time for travel, unfortunately, limited case selection to those that were close to the researchers' home base in Ireland or that could otherwise be visited as part of other travel. Hence, most of the visited sites were in the south of England, including in the vicinity of London, Oxford, Birmingham and Bristol (see Figures \ref{fig:location_map_london} to \ref{fig:location_map_oxford}. However, and in line with the recommendations of the methodological literature, the cases selected for site visits include those that are leading and particularly novel examples, those that are more representative, and sufficient variation to provide for cross-case comparison. More practically though, the actual conditions at each hub were only briefly examined before each site visit, so as to retain some level of randomness in the selection as far as the inclusion of good, average and not as good examples of mobility hubs in the sampled sites. The location of the mobility hubs themselves was sourced from (INSERT CITATION TO THE MOBILITY HUB WEBSITE), which includes hundreds of sites across the UK and Europe.  
+
+
+
+
+In the 'definition' phase the findings from site visits and other exploration of the cases are synthesised through cross-case comparison so as to arrive at a design problem definition. The 'diverging' development phase is then guided by the standardise approaches to package development for the R language, using @wickham2023r as a key reference.  While there are many other computing languages and software tools that might have been selected instead, R is chosen here because: it is open source and freely available, therefore supporting the goals of this research that relate to developing an accessible suite of tools for practitioners, advocates, tactical urbanists and others who might not have immediate access to commercial software; it has an extensive set of packages for geospatial analysis and mapping, including *sf* [@R-sf], and the *ggspatial* and *osmdata* [@R-ggspatial, @R-osmdata] packages that facilitate access to Open Street Maps (OSM) datasets and mapping tiles; and there is a large community of users, the availability of beginner learning and reference material^[See for example INSERT THE MONASH COURSES HERE, AND THE O'REILLY ANIMAL BOOKS] and an online culture that appears to support those with less experience with troubleshooting code examples. This community of users is also responsible for the development and maintenance of a wide range of R packages, including: the *tidyverse* [@tidyverse2019]; *gtfstools* [@R-gtfstools]; *tidytransit* [@R-tidytransit]; and INSERT OTHERS HERE, which were all relied upon to support the code development aspects of this research.  
+
+# Results
+
+## Discovery
+
+
+```{r camden_images, out.width = "100%", fig.align = "center", fig.cap = "Camden hubs (top three images) and other locations (rest), selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/camden.png") 
+
+```
+
+```{r south_woodford_images, out.width = "100%", fig.align = "center", fig.cap = "South Woodford hub, selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/south_woodford.png") 
+
+```
+
+```{r wanstead_images, out.width = "100%", fig.align = "center", fig.cap = "Wanstead hub, selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/wanstead.png") 
+
+```
+
+```{r andrew_road_images, out.width = "100%", fig.align = "center", fig.cap = "Andrew Road hub, selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/andrew_road.png") 
+
+```
+
+```{r bristol_images, out.width = "100%", fig.align = "center", fig.cap = "Bristol hubs, selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 knitr::include_graphics("graphics/Bristol.001.png") 
+
+```
+ 
+```{r bristol_images_panels, out.width = "100%", fig.align = "center", fig.cap = "Bristol hubs information panels, selected images. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/Bristol.002.png") 
 
 ```
 
 
+```{r marina_images, out.width = "100%", fig.align = "center", fig.cap = "Benson Marina hub, design plans and selected images. Source: authors, including plans from Oxfordshire County Council.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/marina.png") 
+
+```
+ 
+The sites visited in Bristol share common design elements including: elevated green cubes marking various hub components; seating within parklet-style wooden decked areas; bicycle repair and maintenance facilities; integrated USB A and C chargers (Figure \ref{fig:bristol_images}, bottom-right); and extensive information panels that include local and area-wide maps (Figure \ref{fig:bristol_images_panels}. Those hubs located in Camden, likewise, shared a common set of facilities: shared e-bike and e-cargo-bike, secure bike parking and bike maintenance tools, and car club vehicles; but not all of these were present at all of the hubs.As well and as shown in Figure \ref{fig:camden_images}, there were many more mobility-related offerings provided in the more central parts of London on an individual basis, including: package pick-up; various  bike hire schemes both docked and dockless; and electric car charging. Hubs in Brimingham likewise include directions, mapping and iconographic representation of points of interest, facilities and other nearby services that are not specifically 'part' of a hub (Figure \ref{fig:andrew_road_images}, bottom right), which highlights a potential problem for implementers and designers: what services and facilities to 'include' as 'part of the hub', versus those that are in close proximity. In the case of the Transport for West Midlands hub at Andrew Road, directional signage to and information about bus services at the nearby Halesowen Bus Station (approx 50m walking distance) is provided, but the hub has a different location-based name and branding identity. For the proposed hub at Benson Marina, a cafe, the marina itself and the Thames Path are only 30-40m from the nearest bus stop (see Figure \ref{fig:marina_images}, purple circle, for location), but while the design plans envisage a new footpath connection pedestrians would still need to walk around a parking lot and upwards of 60 metres to reach either. This is likely due to the ownership and access restrictions, with the proposed works limited to the road reserve while the marina, cafe and parking area appear to be part of a separate and privately-held title.   
+
+
+Some of the hubs include linemarked areas for shared e-bike, e-scooter or e-cargobike parking, bicycle parking and secure parking lockers, although the offered facilities and services vary by location. The proposed hub at Benson Marina, (Figure \ref{fig:marina_images}, provides an example in that the design plans include an option include electric car charging facilities and reserve parking spaces for shared cars. Various potential operational and cross-institutional challenges, however, were apparent. These include the challenges of cleaning and maintenance, for example that vegetation planted in the parklets would required regular attention and that planting boxes appeared to have become a magnet for litter (Figure \ref{fig:bristol_images}, bottom-right). 
+
+A lack of shade, weather protection and drinking water was also evident at most of the hubs, even though many of the parklet-type facilities included steel framing that might have accommodated open-sided roofing or similar. This might indicate an emphasis on form over function in some of the element design, whereas one of the hubs in Bristol perhaps provides an example of additional functionality, in a containerised "Library of Things" that appears to have been added later into the vinicity of the hub, introduced onto top of areas linemarked and sign-posted as for electric scooter hire (Figure \ref{fig:location_map_bristol_images}, top-left and top-centre). This may provide an indication of the possibilities of using modular components to expand, repurpose or adjust mobility hubs as situations change, but a need for signs, informational maps and other elements to be able to be adjusted to match, perhaps with little to no involvement of the original hub implementers. In the case of the "Library of Things" addition at a hub in Bristol, the accommpanying green informational sign (same design as Figure \ref{fig:bristol_images_panel}) appeared to date from the original hub implementation, and might be relatively challenging for practitioners, location managers or others to keep 'up to date' once the original graphic designers or implementers have moved on^[See also \cite{Reynolds:2017ah} discussion of 'The Garbage Can Model'.].   
+
+Overall, the site visits undertaken during the 'Discovery' phase highlight the following key issues: 
+design elements; included facilities and hub identity; maintenance; and the ability for a hub and supporting informational material to be adjusted to changing circumstances. Design elements relate to the desirability of functional and clearly related hub components, and this appears interlinked with the lack of clarity about what a mobility hub 'is' and what types of nearby facilities should be 'part' of the hub in terms of branding and information. Hub identity, likewise, appears to interlinked with few of the visited hubs apparent have strong connections to named places. For example, despite being close to the Halesowen bus station, a major interchange with eight bus stands, the Andrew Road hub is named after a relatively less important connector road that changes name to Highfield Lane a little over 200m to the south west. Along with naming, the findings discussed about generated through the site visits perhaps also highlight the importance of maintenance, activity and updates to match changing circumstances and give a hub a sense of 'place'.  Hubs in Bristol (Figure \ref{fig:bristol_images}) perhaps highlight this, where litter, non-mobility-related signage, space requisitioned for other purposes, and some sites advertising dockless shared vehicles but without these present in sufficient numbers (or at all at the time of visiting Gainsborough Square) all provide indications of potential post-implementation challenges related to mobility hubs.  
 
 ## Definition
 
-
 ## Development
+
+As shown in Figure \ref{fig:bristol_images} and  \ref{fig:bristol_images_panels}, the various elements the Bristol hubs are linked through visual cues provided by the elevated green cube markers and matching iconography on the information panel and local maps. Even though some components of some of the hubs may not be immediately visible from the main panel and/or separated by up to around 30-50 metres, this iconography appears to provide consistent, logical and clear local wayfinding around the hub facilities themselves.  As discussed in relation to the previous 'discovery' phase, however, some facilities (e.g. toilets) are shown on parts of the main informational panels (the top and the map), but not marked in the physical world (i.e. with the green cubes), while other elements such as cafes, groceries shops and similar are only shown on the maps.  
+
+
+
+Figure \ref{fig:andrew_road_images}, top-left and bottom-left, show various hub elements (e.g. electric car charges, bike docks) on more temporary signage, including: (top-left) replaceable poster of the type typical at transit stops; and (bottom-left) a banner sign printed on flexible materials. Notably, the Andrew Road hub is billed as a "Local Travel Point pilot" and at the time of the site visit there was no information provided about the, at the time incomplete, electric car charging facilities. This might imply that information at Andrew Road is to be updated as the pilot progress, and the mobility offer or other elements change.  This contrasts to the permanency of the mapping and information in Bristol (Figure \ref{fig:bristol_images_panels}), which includes iconography and descriptive text detailing the hub offerings and providing information about nearby services. Such examples from the cases might highlight the value to practitioners, activists and others of easily updatable mapping and informational products 
 
 
 ## Delivery

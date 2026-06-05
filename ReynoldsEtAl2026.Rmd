@@ -310,6 +310,37 @@ design elements; included facilities and hub identity; maintenance; and the abil
 
 ## Definition
 
+This study seeks to address two research questions related to: identifying locations with characteristics that may allow them to become a 'mobility hub'; and creating tools to support practitioners, tactical urbanists or others in creating, operating and maintaining such locations as mobility hubs. In the diverging Discovery phase discussed above, the research used site visits to case study locations to build understanding of mobility hubs and how they are defined in the real world through informational signs, maps and other elements. This section describes the subsequent and converiging Definition phase of the research, in which a formal specification of the design problem to be solved in the later Development and Delivery phases of the Double Diamond process is developed.  
+
+### Characteristics of a ‘mobility hub’
+
+As discussed above, findings from the sites visits suggest that there are many different forms that a mobility hub might take, with a variety of modes offered, services and facilities provided as part of the hub itself, and services and facilities identified as being 'nearby' as an extension of the hub offer. This might suggest adopting an open-ended and expansionist approach to mobility huib definition, given that the designation might be applied to small sites with only a limited number of modes, services and facilities just as much as to hubs at major transport interchanges (e.g. the Andrew Road hub's proximity to the Halesowen Bus Station). 
+
+The consistency of branding at the Bristol hubs, especially with respect to the iconographic green cubes drawing attention to hub elements, might highlight the importance of proximity and line-of-sight in defining a mobility hub. Although mapping at most of the visited hubs provided information about services and facilities within up to around 15 minutes walking distance, hub elements appeared to generally be located within relatively confined areas, generally spanning less than 50 metres. The Andrew Road hub again provides an example as an outlier, with the entirety of the hub and the nearby Halesown Bus Station encompassed within a radius of approximately 70 metres, and spanning slightly less than 200 metres if traversed by foot. Hubs in London provide examples at the other end of the spectrum, with the South Woodford hub taking up approximately 15 metres of kerb space less than 100 metres from the nearest tube station, while some in Camden and the ROBUST hubs themselves use space equivalent to only a few car parking spaces.
+
+Definitions of the facilities, services and modes necessary to become a mobility hub appear likewise to be more likely to invovle open-ended and inclusive approaches, rather than some sort of minimum checklist that all sites must have. CoMoUK's pop-up mobility hub offering provide an example, with the basic option consisting of a 12 square metre parklet with bike repair facilties, and bike parking and/or bike share docking \cite{CoMoUK:0aa}. In *Mobility hub delivery models* \cite{CoMoUK:2021aa} discuss six types of mobility hubs: "large interchanges/city hubs...; transport corridor, smaller interchanges or linking hubs; business park or ne housing development hubs; suburb/mini-hubs; small market town/village hubs; and tourism hubs" along with suggested components for each.  The accompanying guidance \cite{CoMoUK:0ab}, however, suggests: a timeline of 12 to 15 months to step through consultation, design, stakeholder engagement, tendering and construction; budgets in the vicinity of 250k to 650k pounds \cite{CoMoUK:0ac}; and that "mobility hubs work best when part of a wider sustainable transport network that provides  active travel, public transport and shared transport options" \cite{CoMoUK:0aa}.  
+
+The design problem, therefore, appears to relate to determining how to create mobility hubs that: incorporate existing modes, facilities and services; minimise cost and timeframes, such that practitioners and tactical urbanists might build legitimacy through implementation (c.f. \cite{Reynolds:2020aa,Reynolds:2021ab}) using minimal resources, incremental approaches that allow expansion one-hub-at-a-time, and that are scaleable; and allow for rapid iteration, revision or adjustment to account for changing circumstances.  There are limits, however, to what can be achieved in the context of this research study, suggesting that the focus here should be on building tools that allow for mobility hub creation without the sorts of 'hard' engineering works that would necessitate design, tendering and construction of new facilities or infrastructure.  Rather, this research defines the design problem to be solved as to create software tools that might facilitate: the identification of locations that have the potential to become 'mobility hubs'; the creation of user information in both virtual and physical environments (e.g. websites, posters, maps); maintenance and revision of developed hubs to support changing circumstances (i.e. hub element removal or addition) and community ownership (i.e. open-source, freely available and without the need for extensive specialist tools or skills);and rapid development to support bottom-up, tactical urbanist and iterative approaches.  
+
+
+
+
+
+
+## Development
+
+As shown in Figure \ref{fig:bristol_images} and  \ref{fig:bristol_images_panels}, the various elements the Bristol hubs are linked through visual cues provided by the elevated green cube markers and matching iconography on the information panel and local maps. Even though some components of some of the hubs may not be immediately visible from the main panel and/or separated by up to around 30-50 metres, this iconography appears to provide consistent, logical and clear local wayfinding around the hub facilities themselves.  As discussed in relation to the previous 'discovery' phase, however, some facilities (e.g. toilets) are shown on parts of the main informational panels (the top and the map), but not marked in the physical world (i.e. with the green cubes), while other elements such as cafes, groceries shops and similar are only shown on the maps.  
+
+
+
+Figure \ref{fig:andrew_road_images}, top-left and bottom-left, show various hub elements (e.g. electric car charges, bike docks) on more temporary signage, including: (top-left) replaceable poster of the type typical at transit stops; and (bottom-left) a banner sign printed on flexible materials. Notably, the Andrew Road hub is billed as a "Local Travel Point pilot" and at the time of the site visit there was no information provided about the, at the time incomplete, electric car charging facilities. This might imply that information at Andrew Road is to be updated as the pilot progress, and the mobility offer or other elements change.  This contrasts to the permanency of the mapping and information in Bristol (Figure \ref{fig:bristol_images_panels}), which includes iconography and descriptive text detailing the hub offerings and providing information about nearby services. Such examples from the cases might highlight the value to practitioners, activists and others of easily updatable mapping and informational products 
+
+
+LAT AND LON branding? As per that Collingwood Brew Pub shirt I had.  
+
+
+
+
 Identifying 'a hub' 
 
 Identifying the 'facitiles and services' to be included as 'part' of each hub, be they
@@ -325,16 +356,7 @@ Dated to show how current the information is.  Version control may also be impor
 More generic parts of the puzzle - maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and (maybe even) growth. 
 
 
-## Development
 
-As shown in Figure \ref{fig:bristol_images} and  \ref{fig:bristol_images_panels}, the various elements the Bristol hubs are linked through visual cues provided by the elevated green cube markers and matching iconography on the information panel and local maps. Even though some components of some of the hubs may not be immediately visible from the main panel and/or separated by up to around 30-50 metres, this iconography appears to provide consistent, logical and clear local wayfinding around the hub facilities themselves.  As discussed in relation to the previous 'discovery' phase, however, some facilities (e.g. toilets) are shown on parts of the main informational panels (the top and the map), but not marked in the physical world (i.e. with the green cubes), while other elements such as cafes, groceries shops and similar are only shown on the maps.  
-
-
-
-Figure \ref{fig:andrew_road_images}, top-left and bottom-left, show various hub elements (e.g. electric car charges, bike docks) on more temporary signage, including: (top-left) replaceable poster of the type typical at transit stops; and (bottom-left) a banner sign printed on flexible materials. Notably, the Andrew Road hub is billed as a "Local Travel Point pilot" and at the time of the site visit there was no information provided about the, at the time incomplete, electric car charging facilities. This might imply that information at Andrew Road is to be updated as the pilot progress, and the mobility offer or other elements change.  This contrasts to the permanency of the mapping and information in Bristol (Figure \ref{fig:bristol_images_panels}), which includes iconography and descriptive text detailing the hub offerings and providing information about nearby services. Such examples from the cases might highlight the value to practitioners, activists and others of easily updatable mapping and informational products 
-
-
-LAT AND LON branding? As per that Collingwood Brew Pub shirt I had.  
 
 
 ## Delivery

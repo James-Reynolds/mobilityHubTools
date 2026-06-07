@@ -357,10 +357,11 @@ A starting point for Development is to recreate the Bristol style of hub imforma
 ```{r maps, include=TRUE, echo=FALSE, fig.margin = TRUE, fig.cap = "ROBUST hub locations within the Republic of Ireland", crop = TRUE}
 
 hub_location <- list(
-  abbey_wood = tibble(lat = 51.507374018425104, lon =  -2.557977642470572, name = "Abbey Wood"), 
-  UWE_Frenchay = tibble(lat = 51.500103870678025, lon =  -2.546301107865488, name = "UWE Frenchay"), 
-  gainsborough_square = tibble(lat = 51.49007921451471, lon = -2.562807494900329, name = "Gainsborough Square"), 
-  horfield_library = tibble(lat = 51.494931138321185, lon = -2.5741801829392097, name = "Horfield Library"))
+#  abbey_wood = tibble(lat = 51.507374018425104, lon =  -2.557977642470572, name = "Abbey Wood"), 
+#  UWE_Frenchay = tibble(lat = 51.500103870678025, lon =  -2.546301107865488, name = "UWE Frenchay"), 
+  
+#  horfield_library = tibble(lat = 51.494931138321185, lon = -2.5741801829392097, name = "Horfield Library"),
+  gainsborough_square = tibble(lat = 51.49007921451471, lon = -2.562807494900329, name = "Gainsborough Square"))
 
 ```
 
@@ -368,8 +369,16 @@ hub_location <- list(
 
 ```{r extract_osm_data, eval=FALSE, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE }
 
-crs_local_metres <- 2157
+crs_local_metres <- 27700
+# Ireland 2157
 
+
+### Create hub locations
+hub_location <- lapply(hub_location, function(x) x %>% 
+  st_as_sf(coords = c("lon", "lat"), 
+           crs = 4326) %>%
+  st_transform(crs = crs_local_metres) %>% 
+  st_cast("POINT"))
 
 
 ### Create hub locations
@@ -379,9 +388,320 @@ hub_location_metres <- lapply(hub_location, function(x) x %>%
   st_transform(crs = crs_local_metres) %>% 
   st_cast("POINT"))
 
+place_sf <- lapply(hub_location, function(x) x %>% 
+                    st_buffer(dist = 2000) %>%
+                    st_transform(crs = 4326) 
+                  )
 
 
-##### ADAPT FROM PREVIOUS
+placebb <- lapply(hub_location, function(x) x %>% 
+                    st_buffer(dist = 2000) %>%
+                    st_transform(crs = 4326) %>%
+                    st_bbox()
+                  )
+### based on https://github.com/ropensci/osmdata/blob/main/vignettes/query-split.Rmd
+
+split_bbox <- function (bbox, grid = 2, eps = 0.05) {
+    xmin <- bbox ["x", "min"]
+    ymin <- bbox ["y", "min"]
+    dx <- (bbox ["x", "max"] - bbox ["x", "min"]) / grid
+    dy <- (bbox ["y", "max"] - bbox ["y", "min"]) / grid
+
+    bboxl <- list ()
+
+    for (i in 1:grid) {
+        for (j in 1:grid) {
+            b <- matrix (c (
+                xmin + ((i - 1 - eps) * dx),
+                ymin + ((j - 1 - eps) * dy),
+                xmin + ((i + eps) * dx),
+                ymin + ((j + eps) * dy)
+            ),
+            nrow = 2,
+            dimnames = dimnames (bbox)
+            )
+
+            bboxl <- append (bboxl, list (b))
+        }
+    }
+    bboxl
+}
+
+bb_vector <- place_sf[[1]] %>% st_bbox() %>% as.numeric()
+bb <- data.frame(min = bb_vector[1:2], max = bb_vector[3:4])
+rownames(bb) <- c("x", "y")               
+                 
+queue <- split_bbox (bb)
+result <- list ()
+
+while (length (queue) > 0) {
+
+    print (queue [[1]])
+
+    opres <- NULL
+    opres <- try ({
+        opq (bbox = queue [[1]], timeout = 25) |>
+            add_osm_feature (key = "building") |>
+            osmdata_sf ()
+    })
+
+    if (class (opres) [1] != "try-error") {
+        result <- append (result, list (opres))
+        queue <- queue [-1]
+    } else {
+        bboxnew <- split_bbox (queue [[1]])
+        queue <- append (bboxnew, queue [-1])
+    }
+}
+
+final <- do.call (c, result)
+
+
+##SAVE AS OSMDATA object
+amenity <- lapply(placebb, function(x) x %>% opq() %>%
+  add_osm_feature(key = "amenity") %>%
+  osmdata_sf())
+list.save(amenity, "data/amenity_260607.rdata")
+#amenity <- list.load("data/amenity_260413.rdata")
+
+buildings <- lapply(placebb, function(x) x %>% opq() %>%
+  add_osm_feature(key = "building") %>%
+  osmdata_sf())
+list.save(buildings, "data/buildings_260607.rdata")
+#buildings <- list.load("data/buildings_260417.rdata")
+
+## examine and filter building points
+buildings_points <- lapply(buildings, function(x) bind_rows(x$osm_points))
+# remove rows that are all NA except for the OSM ID
+buildings_points <- lapply(buildings_points, function(x) x[rowSums(is.na((x %>% st_drop_geometry()))) != ncol((x %>% st_drop_geometry()))-1, ])
+# remove where amenity is not relevant
+buildings_points <- lapply(
+  buildings_points, function(x) 
+    x[!(x$amenity %in% c(
+      "bicycle_parking", "bicycle_repair_station", "bicycle_wash",
+      "bus_station", "compressed_air", 
+      "charging_station", "ferry_terminal", 
+      "grit_bin", "motorcycle_parking", 
+      "parking", "parking_entrance", "parking_space", 
+      "taxi", "wrighbridge", 
+      "atm", "payment_termnial", 
+      "baby_hatch", "fountain", "public_bookcase", "stage", "post_box",
+      "bbq", "bench", "check_in", "dog_toilet", "dressing_room",
+      "drinking_water", "give_box", "lounge", "mailroom", 
+      "parcel_locker", "shelter", "shower", "telephone", 
+      "toilets", "water_point", "watering_place", 
+      "sanitary_dump_station", "recycling", 
+      "waste_basket", "waste_disposal", 
+      "baking_oven", "clock", "grave_yard", 
+      "hunting_stand", "kneipp_water_cure", "lounger", 
+      "photo_booth", "place_of_mourning", 
+      "vending_machine", "hydrant")), ])
+# remove where entrance is main, as the building address should be on the building itself
+buildings_points <- lapply(
+  buildings_points, function(x) 
+    x[!(x$entrance %in% c(
+      "main")), ])
+# remove historic monuments and similar
+buildings_points <- lapply(
+  buildings_points, function(x) 
+    x[!(x$historic %in% c(
+      "aircraft", "anchor", "aqueduct", "archaelogical_site", 
+      "battlefield", "bomb_crater", "boundary_stone", "bullaun_stone", 
+      "cannon", "castle_wall", "cattle_crush", "charcoal_pile", 
+      "city_gate", "citywalls", "district", "epigraph", 
+      "gallows", "high_cross", "highwater_mark", "lavoir", 
+      "lime_kiln", "locomotive", "machine", "memorial", 
+      "milestone", "millstone", "mine", "minecart", 
+      "monument", "ogham_stone", "optical_telegraph", "pilloty", 
+      "pound", "railway_car", "road", "ruins", "rune_stone", 
+      "shieling", "ship", "stone", "tank", "tomb", "vehicle", 
+      "wayside_cross", "wayside_shrine", "wreck")), ])
+# remove various man-made objects
+buildings_points <- lapply(buildings_points, function(x) x[!(x$man_made %in% c(
+      "adit", "advertising", "antenna", "avalanche_protection",
+      "beacon", "beehive", "borehole", "breakwater", "bridge", 
+      "bunker_silo", "cairn", "carpet_hanger", "cellar_entrance", 
+      "charge_point", "chiller", "chimney", "clarifier", "clearcut", 
+      "column", "communications_tower", "compass_rose", "compressor", 
+      "cooling", "cooling_tower", "courtyard", "crane", 
+      "cross", "cutline", "dolphin", "dovecote", "dyke", 
+      "embankment", "flagpole", "flare", "footwear_decontamination", 
+      "frost_fan", "fuel_pump", "gantry", "gas_well", "gasometer", 
+      "geoglyph", "goods_conveyor", "groyne", "guard_stone", 
+      "guy_wire", "heap", "hongsalmun", "iljumun", "insect_hotel", 
+      "kiln", "manhole", "mast", "maypole", "milk_churn_stand", 
+      "mineshaft", "monitoring_station", "nesting_site", "obelisk", 
+      "offshore_platform", "oil_gas_separator", "oxidation_ditch", 
+      "paifang", "petroleum_well", "pier", "pipeline", "planter", 
+      "pump", "pumping_station", "quay", "reservioir_covered", 
+      "satellite_dish", "sewer_vent", "sign", "silo", "snow_fence", 
+      "spoil_heap", "spring_box", "storage_tank", "street_cabinet",
+      "stupa", "surveillance", "survey_point", "tailings_pond", 
+      "telescope", "torii", "threshing_floor", "trough", 
+      "utility_pole", "ventilation_shaft", "video_wall", 
+      "water_tap", "water_tower", "water_well", "watermill", 
+      "wildlife_crossing", "windpump"))])
+# remove where point is a survey marker, as not relevant to mail-out
+buildings_points <- lapply(
+  buildings_points, function(x) 
+    x[(is.na(x$survey_point)), ])
+buildings_points <- lapply(
+  buildings_points, function(x) 
+    x[(is.na(x$`survey_point:structure`)), ])
+# remove where point is tourism, but not relevant to mail-out
+buildings_points <- lapply(
+  buildings_points, function(x) 
+    x[!(x$tourism %in% c(
+      "artwork", "camp_pitch", "picnic_site","viewpoint")), ])
+
+
+
+
+#select lines, polygons etc into sf dataframe
+#amenity <- lapply(amenity, function(x) bind_rows(x$osm_lines, x$osm_polygons, x$osm_multilines, x$osm_multipolygons, x$osm_points))
+buildings <- lapply(buildings, function(x) bind_rows(x$osm_lines, x$osm_polygons, x$osm_multilines, x$osm_multipolygons))
+
+
+
+### Convert to metres on Irish mapping grid
+#amenity <- lapply(amenity, function(x) x %>% 
+#  st_transform(crs = 2157))
+buildings <- lapply(buildings, function(x) x %>% 
+  st_transform(crs = 2157))
+
+### Calculate distances to hubs - straight line (as the crow flies)
+#amenity$letterkenny <- amenity$letterkenny %>% 
+#  mutate(distance_to_hub = st_distance(amenity$letterkenny, hub_location$letterkenny))
+#amenity$galway <- amenity$galway %>% 
+#  mutate(distance_to_hub = st_distance(amenity$galway, hub_location$galway))
+#amenity$waterford <- amenity$waterford %>% 
+#  mutate(distance_to_hub = st_distance(amenity$waterford, hub_location$waterford))
+#amenity$dundrum <- amenity$dundrum %>% 
+#  mutate(distance_to_hub = st_distance(amenity$dundrum, hub_location$dundrum))
+buildings$letterkenny <- buildings$letterkenny %>% 
+  mutate(distance_to_hub = st_distance(buildings$letterkenny, hub_location$letterkenny))
+buildings$galway <- buildings$galway %>% 
+  mutate(distance_to_hub = st_distance(buildings$galway, hub_location$galway))
+buildings$waterford <- buildings$waterford %>% 
+  mutate(distance_to_hub = st_distance(buildings$waterford, hub_location$waterford))
+buildings$dundrum <- buildings$dundrum %>% 
+  mutate(distance_to_hub = st_distance(buildings$dundrum, hub_location$dundrum))
+
+
+## NEXT Use dodgr to obtain distance by network
+net <- lapply(placebb, function(x) dodgr_streetnet(x))
+list.save(net, "data/net.rdata")
+net <- list.load("data/net.rdata")
+net_foot <- lapply(net, function(x) weight_streetnet (x, wt_profile = "foot"))
+net_bicycle <- lapply(net, function(x) weight_streetnet (x, wt_profile = "bicycle"))
+net_motorcar <- lapply(net, function(x) weight_streetnet (x, wt_profile = "motorcar"))
+
+maps_of_street_networks <- lapply(net, function(x) osm_basemap (x, bg = "gray95") %>%
+    add_osm_objects (x, col = "gray5") %>%
+    add_axes () %>%
+    print_osm_map ())
+
+
+# Add distance by foot, bike and car
+add_dist_function <- function (list_to_add_to){
+  
+  for(i in seq_along(placebb)){
+list_to_add_to[[i]] <- list_to_add_to[[i]] %>% mutate(distance_by_foot = dodgr_dists(net_foot[[i]], from = st_geometry(
+    list_to_add_to[[i]]) %>%
+    st_centroid() %>%
+    st_transform(crs = 4326) %>% 
+      st_coordinates(),
+  to =  st_geometry(
+    hub_location[[i]]) %>%
+    st_centroid() %>%
+    st_transform(crs = 4326) %>% 
+      st_coordinates()
+) %>% 
+  as.numeric())
+
+list_to_add_to[[i]] <- list_to_add_to[[i]] %>% mutate(distance_by_bicycle = dodgr_dists(net_bicycle[[i]], from = st_geometry(
+    list_to_add_to[[i]]) %>%
+    st_centroid() %>%
+    st_transform(crs = 4326) %>% 
+      st_coordinates(),
+  to =  st_geometry(
+    hub_location[[i]]) %>%
+    st_centroid() %>%
+    st_transform(crs = 4326) %>% 
+      st_coordinates()
+) %>% 
+  as.numeric())
+
+list_to_add_to[[i]] <- list_to_add_to[[i]] %>% mutate(distance_by_motorcar = dodgr_dists(net_motorcar[[i]], from = st_geometry(
+    list_to_add_to[[i]]) %>%
+    st_centroid() %>%
+    st_transform(crs = 4326) %>% 
+      st_coordinates(),
+  to =  st_geometry(
+    hub_location[[i]]) %>%
+    st_centroid() %>%
+    st_transform(crs = 4326) %>% 
+      st_coordinates()
+) %>% 
+  as.numeric())
+}
+
+  return(list_to_add_to)
+  
+}
+
+#amenity <- add_dist_function(list_to_add_to = amenity)  
+buildings <- add_dist_function(list_to_add_to = buildings)
+
+
+
+#building_levels <- buildings %>%
+#  bind_rows(.id = "location") %>%  
+#  st_drop_geometry() %>% 
+#  select(building) %>%
+#  unique()
+
+buildings <- buildings %>% 
+  lapply(function(x)
+    x %>% mutate(building = as_factor(building)))
+
+
+## Draw groupings from https://wiki.openstreetmap.org/wiki/Template:Building_typology
+buildings <- buildings %>% 
+  lapply(function(x) 
+    x %>% mutate(building_type_short = building %>%
+           fct_collapse(
+             residential = c("apartments", "barraks", "bungalow", "cabin", "detached", "annexe",  "dormitory", "farm", "ger", "house", "houseboat", "residential", "semidetached_house", "static_caravan", "stilt_house", "terrace", "tree_house"),
+             hotel = "hotel",
+             commerical = c("commercial", "industrial", "kiosk",
+                            "office", "retail", "service", "tourism", "warehouse"),
+             supermarket = "supermarket",
+             civic_amenity = c("bakehouse","bridge", "civic", "clock_tower", "fire_station", "government", "gatehouse", "museum", "public", "toilets"),
+             education = c("college", "kindergarten", "school", "university"),
+             health = c("hospital"),
+             religious = c("religious", "cathedral", "chapel", "church", "convent", "kingdom_hall", "monastery", "mosque", "presbytery", "shrine", "synagogue", "temple"),
+             transport = c("train_station", "transportation"), 
+             mixed_use = c("mixed_use", "retail;residential"),
+             sports = c("grandstand", "pavillion", "riding_hall", "sports_hall", "sports_centre", "stadium"),
+             
+             other = c("allotment_house", "barn", "boathouse", "carport", "conservatory", "cowshed", "digester", "farm_auxiliary", "garage", "garages", "greenhouse", "hangar", "hut", "parking", "roof", "shed", "slurry_tank", "service", "tech_cab", "transformer_tower", "water_tower", "storage_tank", "silo", 
+                           "beach_hut", "bunker", "castle", "construction", "container", "guardhouse", "millitary", "outbuilding", "pagoda", "quonset_hut", "roof", "ruins", "ship", "tent", "tower", "triumphal_arch", "windmill"), 
+             unknown = "yes"
+           ) %>% 
+             factor(levels = c("residential", "hotel", "commerical", "supermarket", "civic_amenity", "education", "health", "religious", "transport", "mixed_use", "sports", "other", "unknown"))))
+    
+##SAVE DATASETS
+list.save(amenity, "data/amenity.rdata")
+list.save(buildings, "data/buildings.rdata")
+list.save(hub_location, "data/hub_location.rdata")
+list.save(maps_of_street_networks, "data/maps_of_street_networks.rdata")
+list.save(net, "data/net.rdata")
+list.save(net_bicycle, "data/net_bicycle.rdata")
+list.save(net_foot, "data/net_foot.rdata")
+list.save(net_motorcar, "data/net_motorcar.rdata")
+list.save(placebb, "data/net_placebb.rdata")
+
+
 
 ```
 
@@ -389,7 +709,7 @@ hub_location_metres <- lapply(hub_location, function(x) x %>%
 
 ```{r load_data_from_osm_analysis, eval = TRUE, echo=FALSE}
 
-
+#amentiy <- list.load("~/WP4_behaviour_nudging_etc/data/amenity.rdata")
 buildings <- list.load(
   "~/WP4_behaviour_nudging_etc/data/buildings.rdata")
 hub_location <- list.load(
@@ -415,29 +735,34 @@ placebb <- list.load(
 map_local <- list()
 distance_map_plot <- 400
 
+crs_local_metres <- 2157
+# Ireland 
+# UK27700
+
+
+hub_location_metres <- lapply(hub_location, function(x) x %>% 
+  st_as_sf(coords = c("lon", "lat"), 
+           crs = 4326) %>%
+  st_transform(crs = crs_local_metres) %>% 
+  st_cast("POINT"))
+
+place_sf <- lapply(hub_location, function(x) x %>% 
+                    st_buffer(dist = 2000) %>%
+                    st_transform(crs = 4326) 
+                  )
+
+
+placebb <- lapply(hub_location, function(x) x %>% 
+                    st_buffer(dist = 2000) %>%
+                    st_transform(crs = 4326) %>%
+                    st_bbox()
+                  )
+
+
+
 placebb_metres <- hub_location_metres %>% lapply(function(x) x %>%  
   st_bbox()) 
 
-for(i in seq_along(placebb_metres)){
-
-#i <- 2
-ylim = c(placebb_metres[[i]][2] %>% 
-    as.numeric() - distance_map_plot,
-    placebb_metres[[i]][4] %>% 
-    as.numeric() + distance_map_plot)
-xlim = c(placebb_metres[[i]][1] %>% 
-    as.numeric() - distance_map_plot,
-    placebb_metres[[i]][3] %>% 
-    as.numeric() + distance_map_plot)
-Poly_Coord_df = data.frame(xlim, ylim)
-poly_as_metres <- Poly_Coord_df %>% 
-  st_as_sf(coords = c("xlim", "ylim"), 
-           crs = crs_local_metres) %>% 
-  st_bbox() %>% 
-  st_as_sfc()
-poly_as_lat_long <- poly_as_metres %>% 
-  st_transform(crs = 4326) %>% 
-  st_as_sf()
   
 # Building tags
 target <- c("religious", "library", "public", "civic", "museum", "stadium", "sports_hall", "sports_centre", "pavillion", "grandstand", "castle")
@@ -470,6 +795,32 @@ toilets <- c("toilets")
 public_transport_station <- c("station")
 public_transport_stop <- c("stop_position", "stop_area", "stop_area_group")
 
+
+
+
+
+
+for(i in seq_along(placebb_metres)){
+
+#i <- 2
+ylim = c(placebb_metres[[i]][2] %>% 
+    as.numeric() - distance_map_plot,
+    placebb_metres[[i]][4] %>% 
+    as.numeric() + distance_map_plot)
+xlim = c(placebb_metres[[i]][1] %>% 
+    as.numeric() - distance_map_plot,
+    placebb_metres[[i]][3] %>% 
+    as.numeric() + distance_map_plot)
+Poly_Coord_df = data.frame(xlim, ylim)
+poly_as_metres <- Poly_Coord_df %>% 
+  st_as_sf(coords = c("xlim", "ylim"), 
+           crs = crs_local_metres) %>% 
+  st_bbox() %>% 
+  st_as_sfc()
+poly_as_lat_long <- poly_as_metres %>% 
+  st_transform(crs = 4326) %>% 
+  st_as_sf()
+
 # Add x and y for icon insertion
 buildings[[i]] <- buildings[[i]] %>%
     mutate(x = (buildings[[i]] %>% sf::st_centroid() %>% st_bbox())[1], 
@@ -479,14 +830,11 @@ buildings[[i]] <- buildings[[i]] %>%
 
 
 map_local[[i]] <- ggplot() + 
- ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
+ ggspatial::annotation_map_tile(type = "cartolight", zoom = 16) +
 # geom_sf(data = poly_as_metres, fill = NA) +
    geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
 #  geom_sf(data = net[[i]], aes())  + 
   geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 1) +
-  geom_sf_text(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 75)) %>% 
-  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
-  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 30) +
   geom_sf(data = buildings[[i]] %>% 
             filter(building_type_short %in% target) %>% 
   st_filter(poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "purple") + 
@@ -497,16 +845,48 @@ map_local[[i]] <- ggplot() +
   st_filter(poly_as_metres, .predicate =  st_intersects), 
     mapping = aes(label = name, geometry = geometry), 
   text.colour = "black", stat = "sf_coordinates", size = 3) +
-  ggimage::geom_image(data = buildings[[i]] %>% 
-                        mutate(x = (buildings[[i]] %>%
-    filter(amenity %in% !!toilets) %>% st_centroid() %>% st_coordinates() %>% as.numeric())[1], 
-    y = (buildings[[i]] %>%
-    filter(amenity %in% !!toilets) %>% 
-      st_centroid() %>% st_coordinates() %>% as.numeric())[2]) %>%
-    filter(amenity %in% !!toilets) %>% 
-      st_filter(poly_as_metres, .predicate =  st_intersects), 
-    mapping =  aes(x = x, y = y), 
-    image="data/osmic-master/amenity/toilets-14.svg") +
+  ### Toilets in buildings
+  ggimage::geom_image(
+    data = buildings[[i]] %>% 
+      mutate(
+        x = (buildings[[i]] %>% filter(amenity %in% !!toilets) %>% 
+               st_centroid() %>% st_coordinates() %>% as.numeric())[1], 
+        y = (buildings[[i]] %>% filter(amenity %in% !!toilets) %>% 
+               st_centroid() %>% st_coordinates() %>% as.numeric())[2]) %>% 
+      filter(amenity %in% !!toilets) %>% st_filter(poly_as_metres, 
+                                                   .predicate =  st_intersects), 
+    mapping =  aes(x, y), image="data/osmic-master/amenity/toilets-14.svg") +
+  ### Hotel
+  ggimage::geom_image(
+    data = buildings[[i]] %>% 
+      mutate(
+        x = (buildings[[i]] %>% filter(amenity %in% !!hotel) %>% 
+               st_centroid() %>% st_coordinates() %>% as.numeric())[1], 
+        y = (buildings[[i]] %>% filter(amenity %in% !!hotel) %>% 
+               st_centroid() %>% st_coordinates() %>% as.numeric())[2]) %>% 
+      filter(amenity %in% !!hotel) %>% st_filter(poly_as_metres, 
+                                                   .predicate =  st_intersects), 
+    mapping =  aes(x, y), image="data/osmic-master/accommodation/hotel-14.svg") +
+  ### Groceries
+  ggimage::geom_image(
+    data = buildings[[i]] %>% 
+      mutate(
+        x = (buildings[[i]] %>% filter(amenity %in% !!groceries) %>% 
+               st_centroid() %>% st_coordinates() %>% as.numeric())[1], 
+        y = (buildings[[i]] %>% filter(amenity %in% !!groceries) %>% 
+               st_centroid() %>% st_coordinates() %>% as.numeric())[2]) %>% 
+      filter(amenity %in% !!groceries) %>% st_filter(poly_as_metres, 
+                                                   .predicate =  st_intersects), 
+    mapping =  aes(x, y), image="data/osmic-master/shop/supermarket-14.svg") +
+  
+  
+  
+  
+  
+  
+  geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
+  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
+  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
   theme(
         axis.title = element_blank(), 
         axis.text.x=element_blank(), #remove x axis labels
@@ -527,13 +907,14 @@ map_local[[i]] <- ggplot() +
   ggspatial::annotation_north_arrow() +
   coord_sf(xlim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
   ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326)
-
 }
 
 
 
-ggsave("graphics/letter_template_map.png", map_by_foot[[1]], width = 6, height = 6, units = "in")
-
+ggsave("graphics/letterkenny_map_local.png", map_local[[1]], width = 6, height = 6, units = "in")
+ggsave("graphics/galway_map_local.png", map_local[[2]], width = 6, height = 6, units = "in")
+ggsave("graphics/waterford_map_local.png", map_local[[3]], width = 6, height = 6, units = "in")
+ggsave("graphics/dublin_map_local.png", map_local[[4]], width = 6, height = 6, units = "in")
 ```
 
 ```{r plot_map, eval=TRUE, include=TRUE, echo=FALSE, fig.fullwidth = FALSE, out.width= "100%"}

@@ -1,5 +1,5 @@
 ---
-title: "Build your own with mobilityHubTools"
+title: "Tactical urbanism for mobility hubs? DIY mapping with mobilityHubTools"
 author:
   - name: James Reynolds
     email: julianj.reynolds@atu.ie
@@ -1433,7 +1433,7 @@ JR = c("X", "X", "X", " ", "X", "X", " ", " ", "X", " ", "X", "X", "X", " "),
 AS = c(" ", " ", " ", "X", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "),
 AV = c(" ", " ", " ", " ", " ", " ", " ", " ", " ", "X", " ", " ", " ", " ")) %>% 
   kable(
-    caption = "Author contribution matrix, as per CRediT (Contribution Roles Taxonomy") 
+    caption = "Author contribution matrix, as per CRediT (Contribution Roles Taxonomy)") 
   
 
 ```

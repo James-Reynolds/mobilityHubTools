@@ -37,7 +37,7 @@ footnote:
       Department of Decision Analytics and Risk at Southampton Business School, University of Southampton, UK
 abstract: | 
 keywords: 
-journal: "CERC 2006"
+journal: "CERC 2026?"
 date: "`r Sys.Date()`"
 classoption: preprint, 3p, authoryear
 bibliography: References.bib, packages.bib
@@ -201,7 +201,7 @@ to more transit supportive landuse patterns in nearby areas.
 The plethora of independent private-sector transport offerings 
 that have recently emerged, 
 including car-share and dockless bike/scooter systems 
-may also have helped towards development of the mobility hub concept.  
+may also have helped towards development of the mobility hub concept. 
 Although driven largely by developments in 
 start-up, technology and communications, and related sectors, 
 various governmental agencies have sought to both: 
@@ -250,7 +250,7 @@ would appear to have largely already 'solved',
 albeit not always fully implemented, 
 the provision support for mobility at a network hub, 
 However, stations tend to be located on land owned 
-or otherwise controlled by railway companies or agencies.  
+or otherwise controlled by railway companies or agencies. 
 As such, 
 facilities, 
 signage, 
@@ -263,7 +263,7 @@ Mobility hubs, in contrast,
 might tend to be located on public road reserves, 
 within parking facilities or otherwise 
 where there may be less clear authority and power to make changes 
-without widespread public, institutional and government approvals or buy-in.  
+without widespread public, institutional and government approvals or buy-in. 
 These may also often require outside expertise 
 and/or involve top-down policy-making 
 in which those making decisions might be somewhat removed 
@@ -291,7 +291,7 @@ Perhaps of more relevance, however, is the field of tactical urbanism,
 which adopts many such bottom-up and grassroots approaches 
 to defining and re-imaging public spaces, 
 especially those spaces 
-within road reserves and related to transport systems.  
+within road reserves and related to transport systems. 
 Tactical urbanism refers to a range of approaches, 
 often unsanctioned, 
 for making changes to public environments. 
@@ -416,7 +416,7 @@ open data and the widespread availability of open source software, however,
 there is the possibilty of developing location-bespoke, but generalised, 
 mapping and similar tools 
 useful for practitioners or others wishing to 'mobility hub-erise' 
-some part of the urban environment.  
+some part of the urban environment. 
 The methods used in this research 
 to firstly define what such tools might do, 
 and then to deliver a software package 
@@ -795,7 +795,7 @@ business park or new housing development hubs;
 suburb/mini-hubs; 
 small market town/village hubs; 
 and tourism hubs"
-along with suggested components for each.  
+along with suggested components for each. 
 Further types might included the 'shared' and 'electric' forms of mobility hub, 
 as in the ROBUST sites, 
 wherein the offered modes are 
@@ -806,14 +806,14 @@ whether there is a need to differentiate between electric hubs (or 'e-hubs')
 where the electrification involves on-site recharging, 
 as at ROBUST and for many e-cars, 
 and hubs where electric vehicles are dockless or otherwise 'recharged' 
-through the replacement of battery packs with those powered up elsewhere.  
+through the replacement of battery packs with those powered up elsewhere. 
 As discussed earlier, 
 \citet{Meigs:2023aa} and \citet{Zhang:2022aa} 
 discuss some of the problems associated with this first form of electrification, 
 while \cite{Reynolds:0ab} highlight the constraints 
 of access to power infrastructure 
 and issues related to electrical connections for the latter, 
-which might limit location choice and extend implementation timelines.  
+which might limit location choice and extend implementation timelines. 
 Guidance from \cite{CoMoUK:0ab} suggests a timeline of 12 to 15 months 
 to step through 
 consultation, design, stakeholder engagement, tendering and construction, 
@@ -849,21 +849,12 @@ the creation and rapid development of user information products
 to support bottom-up, tactical urbanist and iterative approaches.  
 
 
-
-
-
-
 ## Development
 
-As shown in Figure \ref{fig:bristol_images} and  \ref{fig:bristol_images_panels}, the various elements the Bristol hubs are linked through visual cues provided by the elevated green cube markers and matching iconography on the information panel and local maps. Even though some components of some of the hubs may not be immediately visible from the main panel and/or separated by up to around 30-50 metres, this iconography appears to provide consistent, logical and clear local wayfinding around the hub facilities themselves.  As discussed in relation to the previous 'discovery' phase, however, some facilities (e.g. toilets) are shown on parts of the main informational panels (the top and the map), but not marked in the physical world (i.e. with the green cubes), while other elements such as cafes, groceries shops and similar are only shown on the maps.  
+A starting point for Development is to recreate the Bristol style of hub imformation, mapping and similar elements.  Here this is achieved through the use of Open Streets Map (OSM) data sets and mapping tiles, as well as various software packages within the R programming language. Figures \ref{fig:local_map_example} 
+and \ref{fig:area_map_example} show outputs for Letterkenny and Galway respectively, while Figure \ref{fig:dundrum_mock_up} shows an example of how a complete information panel might appear.  
 
-
-
-Figure \ref{fig:andrew_road_images}, top-left and bottom-left, show various hub elements (e.g. electric car charges, bike docks) on more temporary signage, including: (top-left) replaceable poster of the type typical at transit stops; and (bottom-left) a banner sign printed on flexible materials. Notably, the Andrew Road hub is billed as a "Local Travel Point pilot" and at the time of the site visit there was no information provided about the, at the time incomplete, electric car charging facilities. This might imply that information at Andrew Road is to be updated as the pilot progress, and the mobility offer or other elements change.  This contrasts to the permanency of the mapping and information in Bristol (Figure \ref{fig:bristol_images_panels}), which includes iconography and descriptive text detailing the hub offerings and providing information about nearby services. Such examples from the cases might highlight the value to practitioners, activists and others of easily updatable mapping and informational products 
-
-## Recreating Bristol elements
-
-A starting point for Development is to recreate the Bristol style of hub imformation, mapping and similar elements.  Here this is achieved through the use of Open Streets Map (OSM) data sets and mapping tiles, as well as various software packages within the R programming language.  Icons are drawn from \cite{Pousson:2022aa} 
+<!--- Icons are drawn from \cite{Pousson:2022aa}-->
 
 
 <!-- \cite{Glanznig:2025aa} and \cite{Koc:2026aa} -->
@@ -1017,91 +1008,8 @@ buildings <- lapply(placebb, function(x) x %>% opq() %>%
   add_osm_feature(key = "building") %>%
   osmdata_sf())
 list.save(buildings, "data/buildings_260607.rdata")
-#buildings <- list.load("data/buildings_260417.rdata")
+buildings <- list.load("~/WP4_behaviour_nudging_etc/data/buildings_260417.rdata")
 
-## examine and filter building points
-buildings_points <- lapply(buildings, function(x) bind_rows(x$osm_points))
-# remove rows that are all NA except for the OSM ID
-buildings_points <- lapply(buildings_points, function(x) x[rowSums(is.na((x %>% st_drop_geometry()))) != ncol((x %>% st_drop_geometry()))-1, ])
-# remove where amenity is not relevant
-buildings_points <- lapply(
-  buildings_points, function(x) 
-    x[!(x$amenity %in% c(
-      "bicycle_parking", "bicycle_repair_station", "bicycle_wash",
-      "bus_station", "compressed_air", 
-      "charging_station", "ferry_terminal", 
-      "grit_bin", "motorcycle_parking", 
-      "parking", "parking_entrance", "parking_space", 
-      "taxi", "wrighbridge", 
-      "atm", "payment_termnial", 
-      "baby_hatch", "fountain", "public_bookcase", "stage", "post_box",
-      "bbq", "bench", "check_in", "dog_toilet", "dressing_room",
-      "drinking_water", "give_box", "lounge", "mailroom", 
-      "parcel_locker", "shelter", "shower", "telephone", 
-      "toilets", "water_point", "watering_place", 
-      "sanitary_dump_station", "recycling", 
-      "waste_basket", "waste_disposal", 
-      "baking_oven", "clock", "grave_yard", 
-      "hunting_stand", "kneipp_water_cure", "lounger", 
-      "photo_booth", "place_of_mourning", 
-      "vending_machine", "hydrant")), ])
-# remove where entrance is main, as the building address should be on the building itself
-buildings_points <- lapply(
-  buildings_points, function(x) 
-    x[!(x$entrance %in% c(
-      "main")), ])
-# remove historic monuments and similar
-buildings_points <- lapply(
-  buildings_points, function(x) 
-    x[!(x$historic %in% c(
-      "aircraft", "anchor", "aqueduct", "archaelogical_site", 
-      "battlefield", "bomb_crater", "boundary_stone", "bullaun_stone", 
-      "cannon", "castle_wall", "cattle_crush", "charcoal_pile", 
-      "city_gate", "citywalls", "district", "epigraph", 
-      "gallows", "high_cross", "highwater_mark", "lavoir", 
-      "lime_kiln", "locomotive", "machine", "memorial", 
-      "milestone", "millstone", "mine", "minecart", 
-      "monument", "ogham_stone", "optical_telegraph", "pilloty", 
-      "pound", "railway_car", "road", "ruins", "rune_stone", 
-      "shieling", "ship", "stone", "tank", "tomb", "vehicle", 
-      "wayside_cross", "wayside_shrine", "wreck")), ])
-# remove various man-made objects
-buildings_points <- lapply(buildings_points, function(x) x[!(x$man_made %in% c(
-      "adit", "advertising", "antenna", "avalanche_protection",
-      "beacon", "beehive", "borehole", "breakwater", "bridge", 
-      "bunker_silo", "cairn", "carpet_hanger", "cellar_entrance", 
-      "charge_point", "chiller", "chimney", "clarifier", "clearcut", 
-      "column", "communications_tower", "compass_rose", "compressor", 
-      "cooling", "cooling_tower", "courtyard", "crane", 
-      "cross", "cutline", "dolphin", "dovecote", "dyke", 
-      "embankment", "flagpole", "flare", "footwear_decontamination", 
-      "frost_fan", "fuel_pump", "gantry", "gas_well", "gasometer", 
-      "geoglyph", "goods_conveyor", "groyne", "guard_stone", 
-      "guy_wire", "heap", "hongsalmun", "iljumun", "insect_hotel", 
-      "kiln", "manhole", "mast", "maypole", "milk_churn_stand", 
-      "mineshaft", "monitoring_station", "nesting_site", "obelisk", 
-      "offshore_platform", "oil_gas_separator", "oxidation_ditch", 
-      "paifang", "petroleum_well", "pier", "pipeline", "planter", 
-      "pump", "pumping_station", "quay", "reservioir_covered", 
-      "satellite_dish", "sewer_vent", "sign", "silo", "snow_fence", 
-      "spoil_heap", "spring_box", "storage_tank", "street_cabinet",
-      "stupa", "surveillance", "survey_point", "tailings_pond", 
-      "telescope", "torii", "threshing_floor", "trough", 
-      "utility_pole", "ventilation_shaft", "video_wall", 
-      "water_tap", "water_tower", "water_well", "watermill", 
-      "wildlife_crossing", "windpump"))])
-# remove where point is a survey marker, as not relevant to mail-out
-buildings_points <- lapply(
-  buildings_points, function(x) 
-    x[(is.na(x$survey_point)), ])
-buildings_points <- lapply(
-  buildings_points, function(x) 
-    x[(is.na(x$`survey_point:structure`)), ])
-# remove where point is tourism, but not relevant to mail-out
-buildings_points <- lapply(
-  buildings_points, function(x) 
-    x[!(x$tourism %in% c(
-      "artwork", "camp_pitch", "picnic_site","viewpoint")), ])
 
 
 
@@ -1136,79 +1044,6 @@ buildings$waterford <- buildings$waterford %>%
 buildings$dundrum <- buildings$dundrum %>% 
   mutate(distance_to_hub = st_distance(buildings$dundrum, hub_location$dundrum))
 
-
-## NEXT Use dodgr to obtain distance by network
-net <- lapply(placebb, function(x) dodgr_streetnet(x))
-list.save(net, "data/net.rdata")
-net <- list.load("data/net.rdata")
-net_foot <- lapply(net, function(x) weight_streetnet (x, wt_profile = "foot"))
-net_bicycle <- lapply(net, function(x) weight_streetnet (x, wt_profile = "bicycle"))
-net_motorcar <- lapply(net, function(x) weight_streetnet (x, wt_profile = "motorcar"))
-
-maps_of_street_networks <- lapply(net, function(x) osm_basemap (x, bg = "gray95") %>%
-    add_osm_objects (x, col = "gray5") %>%
-    add_axes () %>%
-    print_osm_map ())
-
-
-# Add distance by foot, bike and car
-add_dist_function <- function (list_to_add_to){
-  
-  for(i in seq_along(placebb)){
-list_to_add_to[[i]] <- list_to_add_to[[i]] %>% mutate(distance_by_foot = dodgr_dists(net_foot[[i]], from = st_geometry(
-    list_to_add_to[[i]]) %>%
-    st_centroid() %>%
-    st_transform(crs = 4326) %>% 
-      st_coordinates(),
-  to =  st_geometry(
-    hub_location[[i]]) %>%
-    st_centroid() %>%
-    st_transform(crs = 4326) %>% 
-      st_coordinates()
-) %>% 
-  as.numeric())
-
-list_to_add_to[[i]] <- list_to_add_to[[i]] %>% mutate(distance_by_bicycle = dodgr_dists(net_bicycle[[i]], from = st_geometry(
-    list_to_add_to[[i]]) %>%
-    st_centroid() %>%
-    st_transform(crs = 4326) %>% 
-      st_coordinates(),
-  to =  st_geometry(
-    hub_location[[i]]) %>%
-    st_centroid() %>%
-    st_transform(crs = 4326) %>% 
-      st_coordinates()
-) %>% 
-  as.numeric())
-
-list_to_add_to[[i]] <- list_to_add_to[[i]] %>% mutate(distance_by_motorcar = dodgr_dists(net_motorcar[[i]], from = st_geometry(
-    list_to_add_to[[i]]) %>%
-    st_centroid() %>%
-    st_transform(crs = 4326) %>% 
-      st_coordinates(),
-  to =  st_geometry(
-    hub_location[[i]]) %>%
-    st_centroid() %>%
-    st_transform(crs = 4326) %>% 
-      st_coordinates()
-) %>% 
-  as.numeric())
-}
-
-  return(list_to_add_to)
-  
-}
-
-#amenity <- add_dist_function(list_to_add_to = amenity)  
-buildings <- add_dist_function(list_to_add_to = buildings)
-
-
-
-#building_levels <- buildings %>%
-#  bind_rows(.id = "location") %>%  
-#  st_drop_geometry() %>% 
-#  select(building) %>%
-#  unique()
 
 buildings <- buildings %>% 
   lapply(function(x)
@@ -1258,21 +1093,21 @@ list.save(placebb, "data/net_placebb.rdata")
 
 ```{r load_data_from_osm_analysis, eval = TRUE, echo=FALSE}
 
-amentiy <- list.load("~/WP4_behaviour_nudging_etc/data/amenity.rdata")
+amenity <- list.load("~/WP4_behaviour_nudging_etc/data/amenity.rdata")
 buildings <- list.load(
-  "~/WP4_behaviour_nudging_etc/data/buildings.rdata")
+  "data/buildings.rdata")
 hub_location <- list.load(
   "~/WP4_behaviour_nudging_etc/data/hub_location.rdata")
 maps_of_street_networks <- list.load(
   "~/WP4_behaviour_nudging_etc/data/maps_of_street_networks.rdata")
 net <- list.load(
   "~/WP4_behaviour_nudging_etc/data/net.rdata")
-net_bicycle <- list.load(
-"~/WP4_behaviour_nudging_etc/data/net_bicycle.rdata")
-net_foot <- list.load(
-"~/WP4_behaviour_nudging_etc/data/net_foot.rdata")
-net_motorcar <- list.load(
-  "~/WP4_behaviour_nudging_etc/data/net_motorcar.rdata")
+#net_bicycle <- list.load(
+#"~/WP4_behaviour_nudging_etc/data/net_bicycle.rdata")
+#net_foot <- list.load(
+#"~/WP4_behaviour_nudging_etc/data/net_foot.rdata")
+#net_motorcar <- list.load(
+#  "~/WP4_behaviour_nudging_etc/data/net_motorcar.rdata")
 placebb <- list.load(
   "~/WP4_behaviour_nudging_etc/data/net_placebb.rdata")
 
@@ -1314,14 +1149,22 @@ placebb_metres <- hub_location_metres %>% lapply(function(x) x %>%
 
   
 # Building tags
-target <- c("religious", "library", "public", "civic", "museum", "stadium", "sports_hall", "sports_centre", "pavillion", "grandstand", "castle")
-hotel <- c("hotel")
+target <- c(
+  "bridge", "civic", "clock_tower", "fire_station", "government", "gatehouse", "museum", "public", "castle", "library", 
+#  "college", "kindergarten", "school", "university", 
+            "hospital", 
+             "cathedral", "church", 
+#"religious", "chapel", "convent", "kingdom_hall", "monastery", "mosque", "presbytery", "shrine", "synagogue", "temple", 
+ #           "grandstand", "pavillion", "riding_hall", "sports_hall", "sports_centre", "stadium", 
+#            "guardhouse", "millitary", "tower", "triumphal_arch", "windmill"
+"tower")
+hotel <- c("hotel", "guest_house", "hostel", "motel")
 groceries <- c("kiosk", "supermarket")
 toilets <- c("toilets")
 
 
+
 # Amenity tags
-education <- c("school", "university", "college", "kindergarten")
 bar <- c("bar, biergarten", "pub")
 food <- c("cafe", "fast_food", "food_court", "restaurant")
 ice_cream <- c("ice_cream")
@@ -1345,13 +1188,8 @@ public_transport_station <- c("station")
 public_transport_stop <- c("stop_position", "stop_area", "stop_area_group")
 
 
-
-
-
-
 for(i in seq_along(placebb_metres)){
 
-#i <- 2
 ylim = c(placebb_metres[[i]][2] %>% 
     as.numeric() - distance_map_plot,
     placebb_metres[[i]][4] %>% 
@@ -1372,10 +1210,8 @@ poly_as_lat_long <- poly_as_metres %>%
 
 # Add x and y for icon insertion
 buildings[[i]] <- buildings[[i]] %>%
-    mutate(x = (buildings[[i]] %>% sf::st_centroid() %>% st_bbox())[1], 
-           y = (buildings[[i]] %>% sf::st_centroid() %>% st_bbox())[2])
-
-
+    mutate(x = (buildings[[i]] %>% select(geometry) %>% sf::st_centroid() %>% st_bbox())[1], 
+           y = (buildings[[i]]  %>% select(geometry) %>% sf::st_centroid() %>% st_bbox())[2])
 
 
 map_local[[i]] <- ggplot() + 
@@ -1384,56 +1220,33 @@ map_local[[i]] <- ggplot() +
    geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
 #  geom_sf(data = net[[i]], aes())  + 
   geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 1) +
-  geom_sf(data = buildings[[i]] %>% 
-            filter(building_type_short %in% target) %>% 
-  st_filter(poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "purple") + 
-#  scale_fill_viridis(discrete = TRUE, option = "H") +
-  ggrepel::geom_label_repel(
-    data = buildings[[i]] %>% 
-            filter(building_type_short %in% target) %>% 
-  st_filter(poly_as_metres, .predicate =  st_intersects), 
-    mapping = aes(label = name, geometry = geometry), 
-  text.colour = "black", stat = "sf_coordinates", size = 3) +
-  ### Toilets in buildings
-  ggimage::geom_image(
-    data = buildings[[i]] %>% 
-      mutate(
-        x = (buildings[[i]] %>% filter(amenity %in% !!toilets) %>% 
-               st_centroid() %>% st_coordinates() %>% as.numeric())[1], 
-        y = (buildings[[i]] %>% filter(amenity %in% !!toilets) %>% 
-               st_centroid() %>% st_coordinates() %>% as.numeric())[2]) %>% 
-      filter(amenity %in% !!toilets) %>% st_filter(poly_as_metres, 
-                                                   .predicate =  st_intersects), 
-    mapping =  aes(x, y), image="data/osmic-master/amenity/toilets-14.svg") +
-  ### Hotel
-  ggimage::geom_image(
-    data = buildings[[i]] %>% 
-      mutate(
-        x = (buildings[[i]] %>% filter(amenity %in% !!hotel) %>% 
-               st_centroid() %>% st_coordinates() %>% as.numeric())[1], 
-        y = (buildings[[i]] %>% filter(amenity %in% !!hotel) %>% 
-               st_centroid() %>% st_coordinates() %>% as.numeric())[2]) %>% 
-      filter(amenity %in% !!hotel) %>% st_filter(poly_as_metres, 
-                                                   .predicate =  st_intersects), 
-    mapping =  aes(x, y), image="data/osmic-master/accommodation/hotel-14.svg") +
-  ### Groceries
-  ggimage::geom_image(
-    data = buildings[[i]] %>% 
-      mutate(
-        x = (buildings[[i]] %>% filter(amenity %in% !!groceries) %>% 
-               st_centroid() %>% st_coordinates() %>% as.numeric())[1], 
-        y = (buildings[[i]] %>% filter(amenity %in% !!groceries) %>% 
-               st_centroid() %>% st_coordinates() %>% as.numeric())[2]) %>% 
-      filter(amenity %in% !!groceries) %>% st_filter(poly_as_metres, 
-                                                   .predicate =  st_intersects), 
-    mapping =  aes(x, y), image="data/osmic-master/shop/supermarket-14.svg") +
+   # PLACEHOLDER FOR HOTEL
+geom_sf(data = buildings[[i]] %>% filter(building %in% hotel) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "blue") + 
   
+# TARGET buildings  
+  geom_sf(data = buildings[[i]] %>% filter(building %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    building %in% target) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 3) +
+# TARGET building amenities  
+  geom_sf(data = buildings[[i]] %>% filter(amenity %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    amenity %in% target) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 3) +
   
-  
-  
-  
-  
-  geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
+ 
+  ### Walking radius
+    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
   st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
   st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
   theme(
@@ -1455,18 +1268,128 @@ map_local[[i]] <- ggplot() +
   ggspatial::annotation_scale(location = 'br') + 
   ggspatial::annotation_north_arrow() +
   coord_sf(xlim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
-  ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326)
+  ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326) 
+
+
 }
 
-
-
+  
 ggsave("graphics/letterkenny_map_local.png", map_local[[1]], width = 6, height = 6, units = "in")
 ggsave("graphics/galway_map_local.png", map_local[[2]], width = 6, height = 6, units = "in")
 ggsave("graphics/waterford_map_local.png", map_local[[3]], width = 6, height = 6, units = "in")
 ggsave("graphics/dublin_map_local.png", map_local[[4]], width = 6, height = 6, units = "in")
 ```
-ven
 
+```{r create_area_map, eval=FALSE, include=FALSE, echo=FALSE, fig.fullwidth = TRUE, out.width= "100%"}
+
+map_area <- list()
+distance_map_plot <- 1200
+
+
+for(i in seq_along(placebb_metres)){
+
+ylim = c(placebb_metres[[i]][2] %>% 
+    as.numeric() - distance_map_plot,
+    placebb_metres[[i]][4] %>% 
+    as.numeric() + distance_map_plot)
+xlim = c(placebb_metres[[i]][1] %>% 
+    as.numeric() - distance_map_plot,
+    placebb_metres[[i]][3] %>% 
+    as.numeric() + distance_map_plot)
+Poly_Coord_df = data.frame(xlim, ylim)
+poly_as_metres <- Poly_Coord_df %>% 
+  st_as_sf(coords = c("xlim", "ylim"), 
+           crs = crs_local_metres) %>% 
+  st_bbox() %>% 
+  st_as_sfc()
+poly_as_lat_long <- poly_as_metres %>% 
+  st_transform(crs = 4326) %>% 
+  st_as_sf()
+
+
+map_area[[i]] <- ggplot() + 
+ ggspatial::annotation_map_tile(type = "cartolight", zoom = 14) +
+# geom_sf(data = poly_as_metres, fill = NA) +
+   geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
+#  geom_sf(data = net[[i]], aes())  + 
+  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=1200), fill = NA, colour = "white", size = 1) +
+   # PLACEHOLDER FOR HOTEL
+geom_sf(data = buildings[[i]] %>% filter(building %in% hotel) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "blue") + 
+  
+# TARGET buildings  
+  geom_sf(data = buildings[[i]] %>% filter(building %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    building %in% target) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 1.5) +
+# TARGET building amenities  
+  geom_sf(data = buildings[[i]] %>% filter(amenity %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    amenity %in% target) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 1.5) +
+  
+ 
+  ### Walking radius
+    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 500)), ylim =c(ylim[2] - 200)) %>% 
+  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
+  st_as_sfc(), aes(), label = "15 minute walk", colour = "black", angle = 35, size = 2) +
+  theme(
+        axis.title = element_blank(), 
+        axis.text.x=element_blank(), #remove x axis labels
+        axis.ticks.x=element_blank(), #remove x axis ticks
+        axis.text.y=element_blank(),  #remove y axis labels
+        axis.ticks.y=element_blank(), #remove y axis ticks
+        legend.position="none",
+        legend.text = element_text(size = 8), 
+        legend.title = element_blank(), 
+        legend.key.size = unit(0.5, 'in'),
+        ) + 
+  geom_sf(data = hub_location_metres[[i]], size = 4, colour = "red") + 
+  ggrepel::geom_label_repel(
+    data = hub_location_metres[[i]], mapping = aes(
+      label = "You are here", size = 3, geometry = geometry), 
+    stat = "sf_coordinates") + 
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  coord_sf(xlim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
+  ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326) 
+
+
+}
+
+  
+ggsave("graphics/letterkenny_map_area.png", map_area[[1]], width = 4, height = 4, units = "in")
+ggsave("graphics/galway_map_area.png", map_area[[2]], width = 4, height = 4, units = "in")
+ggsave("graphics/waterford_map_area.png", map_area[[3]], width = 4, height = 4, units = "in")
+ggsave("graphics/dublin_map_area.png", map_area[[4]], width = 4, height = 4, units = "in")
+```
+
+
+```{r local_map_example, out.width = "100%", fig.align = "center", fig.cap = "Local map figure, generated for Letterkenny ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/letterkenny_map_local.png") 
+
+```
+
+```{r area_map_example, out.width = "100%", fig.align = "center", fig.cap = "Area map figure, generated for Galway ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/galway_map_area.png") 
+
+```
+
+
+
+```{r dundrum_mock_up, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+knitr::include_graphics("graphics/dundrum_mock_up.png") 
+
+```
 
 
 
@@ -1474,34 +1397,21 @@ ven
 ### Adjusting and generalising
 
 
-
-
-
-LAT AND LON branding? As per that Collingwood Brew Pub shirt I had.  
-
-
-
-
-Identifying 'a hub' 
-
-Identifying the 'facitiles and services' to be included as 'part' of each hub, be they
-
-
-Connected naming, branding etc. 
-
-Website, posters, banners, leaflets and other informational products that might be generated quickly by practitioners, adovocates or others, and easily maintained and updated. 
-
-
-Dated to show how current the information is.  Version control may also be important.  
-
-More generic parts of the puzzle - maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and (maybe even) growth. 
+Further issues:  
+- LAT AND LON branding? As per that Collingwood Brew Pub shirt I had.  
+- Identifying 'a hub' 
+- Identifying the 'facitiles and services' to be included as 'part' of each hub, be they
+- Connected naming, branding etc. 
+- Website, posters, banners, leaflets and other informational products that might be generated quickly by practitioners, adovocates or others, and easily maintained and updated. 
+- Dated to show how current the information is.  Version control may also be important.  
+- More generic parts of the puzzle - maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and (maybe even) growth. 
 
 
 
 
 
 ## Delivery
-
+Put together in a software package
 
 
 # Discussion

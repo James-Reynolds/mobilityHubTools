@@ -241,7 +241,7 @@ ggsave(file="graphics/map_oxford.png", plot = p1 +
 
  
 
-```{r location_map_london, out.width = "100%", fig.align = "center", fig.cap = "ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r location_map_london, out.width = "100%", fig.align = "center", fig.cap = "London hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.", eval = TRUE, echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
 knitr::include_graphics("graphics/map_london.png") 
 
 ```
@@ -354,7 +354,7 @@ A starting point for Development is to recreate the Bristol style of hub imforma
 
 <!-- \cite{Glanznig:2025aa} and \cite{Koc:2026aa} -->
 
-```{r maps, include=TRUE, echo=FALSE, fig.margin = TRUE, fig.cap = "ROBUST hub locations within the Republic of Ireland", crop = TRUE}
+```{r maps_bristol, include=TRUE, echo=FALSE, fig.margin = TRUE, fig.cap = "ROBUST hub locations within the Republic of Ireland", crop = TRUE}
 
 hub_location <- list(
 #  abbey_wood = tibble(lat = 51.507374018425104, lon =  -2.557977642470572, name = "Abbey Wood"), 
@@ -367,7 +367,7 @@ hub_location <- list(
 
 
 
-```{r extract_osm_data, eval=FALSE, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE }
+```{r extract_osm_data_bristol, eval=FALSE, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE }
 
 crs_local_metres <- 27700
 # Ireland 2157
@@ -454,14 +454,50 @@ while (length (queue) > 0) {
     }
 }
 
-final <- do.call (c, result)
+final_building <- do.call (c, result)
+list.save(final_building, "data/bristol_buildings_260608.rdata")
 
+### amenity               
+queue <- split_bbox (bb)
+result_amenity <- list ()
+
+while (length (queue) > 0) {
+
+    print (queue [[1]])
+
+    opres <- NULL
+    opres <- try ({
+        opq (bbox = queue [[1]], timeout = 25) |>
+            add_osm_feature (key = "amenity") |>
+            osmdata_sf ()
+    })
+
+    if (class (opres) [1] != "try-error") {
+        result <- append (result, list (opres))
+        queue <- queue [-1]
+    } else {
+        bboxnew <- split_bbox (queue [[1]])
+        queue <- append (bboxnew, queue [-1])
+    }
+}
+
+final_amenity <- do.call (c, result_amenity)
+
+
+list.save(final_amenity, "~/data/bristol_amenity_260608.rdata")
+
+
+
+```
+
+
+```{r extract_osm_data_ROBUST_hubs, eval=FALSE, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE }
 
 ##SAVE AS OSMDATA object
 amenity <- lapply(placebb, function(x) x %>% opq() %>%
   add_osm_feature(key = "amenity") %>%
   osmdata_sf())
-list.save(amenity, "data/amenity_260607.rdata")
+list.save(amenity, "~/WP4_behaviour_nudging_etc/data/amenity_260608.rdata")
 #amenity <- list.load("data/amenity_260413.rdata")
 
 buildings <- lapply(placebb, function(x) x %>% opq() %>%
@@ -709,7 +745,7 @@ list.save(placebb, "data/net_placebb.rdata")
 
 ```{r load_data_from_osm_analysis, eval = TRUE, echo=FALSE}
 
-#amentiy <- list.load("~/WP4_behaviour_nudging_etc/data/amenity.rdata")
+amentiy <- list.load("~/WP4_behaviour_nudging_etc/data/amenity.rdata")
 buildings <- list.load(
   "~/WP4_behaviour_nudging_etc/data/buildings.rdata")
 hub_location <- list.load(

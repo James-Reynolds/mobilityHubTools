@@ -57,9 +57,12 @@ output:
 library(devtools)
 library(dplyr)
 library(ggplot2)
+library(gridExtra)
+library(grid)
 library(janitor)
 library(kableExtra)
 library(knitr)
+library(lattice)
 library(magrittr)
 library(osmdata)
 library(osmplotr)
@@ -73,9 +76,6 @@ library(tidyverse)
 library(tufte)
 library(viridis)
 library(tidyverse)
-
-
-
 
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
@@ -1308,7 +1308,7 @@ poly_as_lat_long <- poly_as_metres %>%
 
 
 map_area[[i]] <- ggplot() + 
- ggspatial::annotation_map_tile(type = "cartolight", zoom = 14) +
+ ggspatial::annotation_map_tile(type = "cartolight", zoom = 15) +
 # geom_sf(data = poly_as_metres, fill = NA) +
    geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
 #  geom_sf(data = net[[i]], aes())  + 
@@ -1339,7 +1339,7 @@ geom_sf(data = buildings[[i]] %>% filter(building %in% hotel) %>% st_filter(
   
  
   ### Walking radius
-    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 500)), ylim =c(ylim[2] - 200)) %>% 
+    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 700)), ylim =c(ylim[2] - 175)) %>% 
   st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
   st_as_sfc(), aes(), label = "15 minute walk", colour = "black", angle = 35, size = 2) +
   theme(
@@ -1385,14 +1385,189 @@ knitr::include_graphics("graphics/galway_map_area.png")
 ```
 
 
-
-```{r dundrum_mock_up, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r mock_up_layout, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=FALSE}
 knitr::include_graphics("graphics/dundrum_mock_up.png") 
+
+grid.rect(gp = gpar(lty = "dashed"))
+hub_name <- viewport(x = 0, y = 11.5/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_name")
+hub_facilities <- viewport(x = 0, y = 11/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_facilities")
+direction_information <- viewport(x = 0, y = 10/12, w = 1, h = 1/12, just = c("left", "bottom"), name = "directional_information")
+local_map <- viewport(x = 0, y = 5/12, w = 1, h = 5/12, just = c("left", "bottom"), name = "local_map")
+hub_facilities_details <- viewport(x = 0, y = 3/12, w = 5/9, h = 2/12, just = c("left", "bottom"), name = "hub_facilities_details")
+area_map <- viewport(x = 5/9, y = 3/12, w = 4/9, h = 2/12, just = c("left", "bottom"), name = "area_map") 
+logos <- viewport(x = 5/9, y = 2/12, w = 4/9, h = 1/12, just = c("left", "bottom"), name = "area_map") 
+#vp2 <- viewport(x = 0.5, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom"))
+pushViewport(hub_name)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Dundrum hub: 6.241W, 53.288N", y = 0.5)
+upViewport()
+pushViewport(hub_facilities)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Hub icons go here", y = 0.5)
+upViewport()
+pushViewport(direction_information)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Direction information goes here", y = 0.5)
+upViewport()
+pushViewport(local_map)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Local Map goes here", y = 0.5)
+upViewport()
+pushViewport(hub_facilities_details)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Hub facility details", y = 0.5)
+upViewport()
+pushViewport(area_map)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Area Map goes here", y = 0.5)
+upViewport()
+pushViewport(logos)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Logos etc", y = 0.5)
+popViewport()
+
+dev.copy(pdf, "graphics/layout_test.pdf", width = 12, height = 16)
+dev.off()
+
 
 ```
 
 
+```{r mock_up_layout_with_maps, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=FALSE}
+knitr::include_graphics("graphics/dundrum_mock_up.png") 
 
+
+addImg <- function(
+  obj, # an image file imported as an array (e.g. png::readPNG, jpeg::readJPEG)
+  x = NULL, # mid x coordinate for image
+  y = NULL, # mid y coordinate for image
+  width = NULL, # width of image (in x coordinate units)
+  interpolate = TRUE # (passed to graphics::rasterImage) A logical vector (or scalar) indicating whether to apply linear interpolation to the image when drawing. 
+){
+  if(is.null(x) | is.null(y) | is.null(width)){stop("Must provide args 'x', 'y', and 'width'")}
+  USR <- par()$usr # A vector of the form c(x1, x2, y1, y2) giving the extremes of the user coordinates of the plotting region
+  PIN <- par()$pin # The current plot dimensions, (width, height), in inches
+  DIM <- dim(obj) # number of x-y pixels for the image
+  ARp <- DIM[1]/DIM[2] # pixel aspect ratio (y/x)
+  WIDi <- width/(USR[2]-USR[1])*PIN[1] # convert width units to inches
+  HEIi <- WIDi * ARp # height in inches
+  HEIu <- HEIi/PIN[2]*(USR[4]-USR[3]) # height in units
+  rasterImage(image = obj, 
+    xleft = x-(width/2), xright = x+(width/2),
+    ybottom = y-(HEIu/2), ytop = y+(HEIu/2), 
+    interpolate = interpolate)
+}
+
+
+library(png)
+pic <- readPNG("graphics/dublin_map_local.png")
+dim(pic)
+
+#png(pic, width = 5, height = 4, units = "in", res = 400)
+#  par(mar = c(3,3,0.5,0.5))
+#  image(volcano)
+#  addImg(pic, x = 0.3, y = 0.5, width = 0.2)
+#dev.off()
+
+
+
+
+grid.rect(gp = gpar(lty = "dashed"))
+hub_name <- viewport(x = 0, y = 11.5/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_name")
+hub_facilities <- viewport(x = 0, y = 11/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_facilities")
+direction_information <- viewport(x = 0, y = 10/12, w = 1, h = 1/12, just = c("left", "bottom"), name = "directional_information")
+local_map <- viewport(x = 0, y = 5/12, w = 1, h = 5/12, just = c("left", "bottom"), name = "local_map")
+hub_facilities_details <- viewport(x = 0, y = 3/12, w = 5/9, h = 2/12, just = c("left", "bottom"), name = "hub_facilities_details")
+area_map <- viewport(x = 5/9, y = 3/12, w = 4/9, h = 2/12, just = c("left", "bottom"), name = "area_map") 
+logos <- viewport(x = 5/9, y = 2/12, w = 4/9, h = 1/12, just = c("left", "bottom"), name = "area_map") 
+#vp2 <- viewport(x = 0.5, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom"))
+pushViewport(hub_name)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Dundrum hub: 6.241W, 53.288N", y = 0.5)
+upViewport()
+pushViewport(hub_facilities)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Hub icons go here", y = 0.5)
+upViewport()
+pushViewport(direction_information)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Direction information goes here", y = 0.5)
+upViewport()
+pushViewport(local_map)
+#grid.rect(gp = gpar(col = "grey"))
+grid.arrange(map_local[[4]], ncol=2)
+#grid.text("Local Map goes here", y = 0.5)
+#knitr::include_graphics("graphics/dublin_map_local.png") 
+upViewport()
+pushViewport(hub_facilities_details)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Hub facility details", y = 0.5)
+upViewport()
+pushViewport(area_map)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Area Map goes here", y = 0.5)
+upViewport()
+pushViewport(logos)
+grid.rect(gp = gpar(col = "grey"))
+grid.text("Logos etc", y = 0.5)
+popViewport()
+
+dev.copy(pdf, "graphics/layout_test.pdf", width = 12, height = 16)
+dev.off()
+
+
+```
+```{r mock_up_layout_with_maps_grob, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=FALSE}
+knitr::include_graphics("graphics/dundrum_mock_up.png") 
+
+
+library(gridExtra)
+library(grid)
+library(ggplot2)
+library(lattice)
+p <- qplot(1,1)
+p2 <- xyplot(1~1)
+r <- rectGrob(gp=gpar(fill="grey90"))
+t <- textGrob("text")
+grid.arrange(t, p, p2, r, ncol=2)
+
+gs <- lapply(1:9, function(ii) 
+  grobTree(rectGrob(gp=gpar(fill=ii, alpha=0.5)), textGrob(ii)))
+grid.arrange(grobs=gs, ncol=9, 
+               top="top label", bottom="bottom\nlabel", 
+               left="left label", right="right label")
+grid.rect(gp=gpar(fill=NA))
+
+
+gs[[4]] <- map_local[[4]]
+gs[[9]] <- map_area[[4]]
+
+
+
+lay <- rbind(c(1,1,1,1,1),
+             c(2,2,2,2,2),
+             c(3,3,3,3,3),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(4,4,4,4,4),
+             c(5,5,5,9,9),
+             c(5,5,5,9,9),
+             c(5,5,5,9,9),
+             c(5,5,5,9,9),
+             c(6,7,8,8,8))
+grid.arrange(grobs = gs, layout_matrix = lay)
+
+dev.copy(pdf, "graphics/layout_test.pdf", width = 12, height = 20)
+dev.off()
+
+```
 
 ### Adjusting and generalising
 

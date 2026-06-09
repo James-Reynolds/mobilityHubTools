@@ -851,8 +851,7 @@ to support bottom-up, tactical urbanist and iterative approaches.
 
 ## Development
 
-A starting point for Development is to recreate the Bristol style of hub imformation, mapping and similar elements.  Here this is achieved through the use of Open Streets Map (OSM) data sets and mapping tiles, as well as various software packages within the R programming language. Figures \ref{fig:local_map_example} 
-and \ref{fig:area_map_example} show outputs for Letterkenny and Galway respectively, while Figure \ref{fig:dundrum_mock_up} shows an example of how a complete information panel might appear.  
+Both the Andrew Road and various Bristol mobility hubs feature pedestal-mounted signage that includes: the hub name; iconographic representations of hub facilities; directional indications; and two maps. These maps are, respectively, of the local vicinity (a 5-10 minute walk) of the hub; and the surrounding area (a 15-20 minute walk). A starting point for developing software packages to support creation of further mobility hubs, therefore, would appear to be outputting similar maps of the local and surrounding areas, composited together into a image of similar size to the pedestal signage encountered during the site visits (i.e. around 30cm wide and 50cm tall) along with site naming and other information.
 
 <!--- Icons are drawn from \cite{Pousson:2022aa}-->
 
@@ -1149,9 +1148,7 @@ placebb_metres <- hub_location_metres %>% lapply(function(x) x %>%
 
   
 # Building tags
-target <- c(
-  "bridge", "civic", "clock_tower", "fire_station", "government", "gatehouse", "museum", "public", "castle", "library", 
-#  "college", "kindergarten", "school", "university", 
+target <- c("bridge", "clock_tower", "fire_station", 
             "hospital", 
              "cathedral", "church", 
 #"religious", "chapel", "convent", "kingdom_hall", "monastery", "mosque", "presbytery", "shrine", "synagogue", "temple", 
@@ -1159,9 +1156,10 @@ target <- c(
 #            "guardhouse", "millitary", "tower", "triumphal_arch", "windmill"
 "tower")
 hotel <- c("hotel", "guest_house", "hostel", "motel")
+civic <- c("library", "civic", "government", "gatehouse", "museum", "public", "castle") 
 groceries <- c("kiosk", "supermarket")
 toilets <- c("toilets")
-
+education <- c("college", "kindergarten", "school", "university")
 
 
 # Amenity tags
@@ -1221,10 +1219,38 @@ map_local[[i]] <- ggplot() +
 #  geom_sf(data = net[[i]], aes())  + 
   geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 1) +
    # PLACEHOLDER FOR HOTEL
-geom_sf(data = buildings[[i]] %>% filter(building %in% hotel) %>% st_filter(
+geom_sf(data = buildings[[i]] %>% filter(building %in% education) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "orange") + 
+ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    building %in% education) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 3) +
+geom_sf(data = buildings[[i]] %>% filter(amenity %in% education) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "orange")  +
+ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    amenity %in% target) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 3) +
+geom_sf(data = buildings[[i]] %>% filter(building %in% civic) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
     fill = "blue") + 
-  
+ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    building %in% civic) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 3) +
+geom_sf(data = buildings[[i]] %>% filter(amenity %in% civic) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "blue")  +
+  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    amenity %in% civic) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 3) +
 # TARGET buildings  
   geom_sf(data = buildings[[i]] %>% filter(building %in% target) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
@@ -1374,12 +1400,12 @@ ggsave("graphics/dublin_map_area.png", map_area[[4]], width = 4, height = 4, uni
 ```
 
 
-```{r local_map_example, out.width = "100%", fig.align = "center", fig.cap = "Local map figure, generated for Letterkenny ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r local_map_example, out.width = "100%", fig.align = "center", fig.cap = "Local map figure, generated for Letterkenny ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval = FALSE}
 knitr::include_graphics("graphics/letterkenny_map_local.png") 
 
 ```
 
-```{r area_map_example, out.width = "100%", fig.align = "center", fig.cap = "Area map figure, generated for Galway ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE}
+```{r area_map_example, out.width = "100%", fig.align = "center", fig.cap = "Area map figure, generated for Galway ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval = FALSE}
 knitr::include_graphics("graphics/galway_map_area.png") 
 
 ```
@@ -1472,7 +1498,7 @@ dim(pic)
 
 
 
-grid.rect(gp = gpar(lty = "dashed"))
+grid.rect(gp = gpar(lty = "blank"))
 hub_name <- viewport(x = 0, y = 11.5/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_name")
 hub_facilities <- viewport(x = 0, y = 11/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_facilities")
 direction_information <- viewport(x = 0, y = 10/12, w = 1, h = 1/12, just = c("left", "bottom"), name = "directional_information")
@@ -1517,6 +1543,8 @@ dev.off()
 
 
 ```
+
+
 ```{r mock_up_layout_with_maps_grob, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=FALSE}
 knitr::include_graphics("graphics/dundrum_mock_up.png") 
 
@@ -1525,11 +1553,11 @@ library(gridExtra)
 library(grid)
 library(ggplot2)
 library(lattice)
-p <- qplot(1,1)
-p2 <- xyplot(1~1)
-r <- rectGrob(gp=gpar(fill="grey90"))
-t <- textGrob("text")
-grid.arrange(t, p, p2, r, ncol=2)
+grid.rect(gp = gpar(lty = "blank"))
+
+r <- rectGrob(gp=gpar(fill="darkgreen"))
+
+
 
 gs <- lapply(1:9, function(ii) 
   grobTree(rectGrob(gp=gpar(fill=ii, alpha=0.5)), textGrob(ii)))
@@ -1538,12 +1566,59 @@ grid.arrange(grobs=gs, ncol=9,
                left="left label", right="right label")
 grid.rect(gp=gpar(fill=NA))
 
-
-gs[[4]] <- map_local[[4]]
-gs[[9]] <- map_area[[4]]
-
+hub_name <- grobTree(rectGrob(gp=gpar(fill="darkgreen")), textGrob("Galway e-Mobility Hub: 53.277N, 9.073W", gp=gpar(fontsize=40, col="white", fontface="bold", lty = "blank")))
+gs[[1]] <- grid.arrange(hub_name)
 
 
+
+library(rsvg)
+bitmap <- rsvg_raw('data/osmic-master/transport/shared-car-14.svg', width = 600)
+# Read the bitmap in magick
+shared_car_image <- magick::image_read(bitmap)
+
+bitmap <- rsvg_raw('data/osmic-master/transport/rental-bicycle-14.svg', width = 600)
+# Read the bitmap in magick
+shared_bike_image <- magick::image_read(bitmap)
+
+shared_car_image_grob <- rasterGrob(shared_car_image)
+shared_bike_image_grob <- rasterGrob(shared_bike_image)
+
+
+
+gs[[2]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")), grid.arrange(shared_car_image_grob, shared_bike_image_grob, ncol = 10))
+gs[[3]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")), textGrob("Directions go here", gp=gpar(fontsize=10, col="white")))
+gs[[4]] <- map_local[[2]] 
+
+facilities_grob <- lapply(1:4, function(ii) 
+  grobTree(rectGrob(gp=gpar(fill=ii, alpha=0.5)), textGrob(ii)))
+lay <- rbind(c(1,3),
+             c(2,4)
+             )
+facilities_grob[[1]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")),
+                                grid.arrange(
+                                  shared_bike_image_grob, 
+                                  gridtext::textbox_grob("The Galway hub has shared e-bikes and an e-cargo bike available for short-term hire. Lorem ipsum Dolor iaculis tempor, venenatis a himenaeos tempus nibh neque viverra justo, conubia ultrices!",  gp=gpar(fontsize=7, col="white", lty = "blank")), ncol = 1))
+facilities_grob[[2]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")),
+                                grid.arrange(shared_car_image_grob, 
+                                             textGrob("Available through Enterprise Car Club...", gp=gpar(fontsize=7, col="white", lty = "blank")), ncol = 1))
+
+facilities_grob[[3]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
+                                 
+facilities_grob[[4]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
+gs[[5]] <- grid.arrange(grobs = facilities_grob, layout_matrix = lay) 
+gs[[6]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
+gs[[7]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
+
+
+bitmap <- png::readPNG('graphics/robust-logo-news.png')
+# Read the bitmap in magick
+robust_logo <- magick::image_read(bitmap)
+robust_logo_grob <- rasterGrob(robust_logo)
+gs[[8]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")), grid.arrange(robust_logo_grob))
+
+
+
+gs[[9]] <- map_area[[1]]
 lay <- rbind(c(1,1,1,1,1),
              c(2,2,2,2,2),
              c(3,3,3,3,3),
@@ -1559,9 +1634,9 @@ lay <- rbind(c(1,1,1,1,1),
              c(4,4,4,4,4),
              c(5,5,5,9,9),
              c(5,5,5,9,9),
-             c(5,5,5,9,9),
-             c(5,5,5,9,9),
-             c(6,7,8,8,8))
+             c(6,6,9,9,9),
+             c(6,6,9,9,9),
+             c(8,7,9,9,9))
 grid.arrange(grobs = gs, layout_matrix = lay)
 
 dev.copy(pdf, "graphics/layout_test.pdf", width = 12, height = 20)
@@ -1569,29 +1644,144 @@ dev.off()
 
 ```
 
-### Adjusting and generalising
 
 
-Further issues:  
-- LAT AND LON branding? As per that Collingwood Brew Pub shirt I had.  
-- Identifying 'a hub' 
-- Identifying the 'facitiles and services' to be included as 'part' of each hub, be they
-- Connected naming, branding etc. 
-- Website, posters, banners, leaflets and other informational products that might be generated quickly by practitioners, adovocates or others, and easily maintained and updated. 
-- Dated to show how current the information is.  Version control may also be important.  
-- More generic parts of the puzzle - maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and (maybe even) growth. 
+```{r mock_up_layout_with_maps_grob_output, out.width = "75%", fig.align = "center", fig.cap = "Mockup of hub signage, produced using developed R code. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=TRUE}
+knitr::include_graphics("graphics/layout_test.pdf") 
+
+```
 
 
 
+Figure \ref{fig:mock_up_layout_with_maps_grob_output} shows output software developed during this research, which uses Open Streets Map (OSM) data sets and mapping tiles to generate a mobility hub information panel.  Here the software has been used to create output for the Galway ROBUST e-mobility hub, although as an example the 'surrounding area map' shown is for the Letterkenny ROBUST hub location so as to demonstrate the generalisability of the research outcomes.  
 
+Key features of the developed software include the ability to highlight notable features on the maps. In the local area map example shown various religious and medical buildings are highlighted in purple, while the library is shown in blue and nearby schools in orange. This is largely similar to the approach used in the maps discovered during the site visits, but might allow considerable flexibility for practitioners in choosing between colours, iconography or other symbols. A powerful aspect of adopting the OSM datasets and an automated approach for creating maps is that settings can be adjusted by the user and new maps generated within minutes.  For example, the 'surrounding area map' shown in Figure \ref{fig:mock_up_layout_with_maps_grob_output} a slightly different OSM tile option is selected, and buildings recorded as "pubs" (rather than public buildings) are shown in blue.  
+
+
+```{r create_area_map_small, eval=FALSE, include=FALSE, echo=FALSE, fig.fullwidth = TRUE, out.width= "100%"}
+
+map_area <- list()
+distance_map_plot <- 100
+
+
+for(i in seq_along(placebb_metres)){
+
+ylim = c(placebb_metres[[i]][2] %>% 
+    as.numeric() - distance_map_plot,
+    placebb_metres[[i]][4] %>% 
+    as.numeric() + distance_map_plot)
+xlim = c(placebb_metres[[i]][1] %>% 
+    as.numeric() - distance_map_plot,
+    placebb_metres[[i]][3] %>% 
+    as.numeric() + distance_map_plot)
+Poly_Coord_df = data.frame(xlim, ylim)
+poly_as_metres <- Poly_Coord_df %>% 
+  st_as_sf(coords = c("xlim", "ylim"), 
+           crs = crs_local_metres) %>% 
+  st_bbox() %>% 
+  st_as_sfc()
+poly_as_lat_long <- poly_as_metres %>% 
+  st_transform(crs = 4326) %>% 
+  st_as_sf()
+
+
+map_area[[i]] <- ggplot() + 
+ ggspatial::annotation_map_tile(type = "cartolight", zoom = 17) +
+# geom_sf(data = poly_as_metres, fill = NA) +
+   geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
+#  geom_sf(data = net[[i]], aes())  + 
+  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=100), fill = NA, colour = "white", size = 1) +
+   
+geom_sf(data = buildings[[i]] %>% filter(building %in% civic) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "blue") + 
+geom_sf(data = buildings[[i]] %>% filter(amenity %in% civic) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "blue") + 
+    
+# TARGET buildings  
+  geom_sf(data = buildings[[i]] %>% filter(building %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ggrepel::geom_label_repel(data = buildings[[i]]  %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 2) +
+# TARGET building amenities  
+  geom_sf(data = buildings[[i]] %>% filter(amenity %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+    amenity %in% target) %>% st_filter(
+      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+        label = name, geometry = geometry), 
+    text.colour = "black", stat = "sf_coordinates", size = 2) +
+  
+ 
+  ### Walking radius
+    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 75)), ylim =c(ylim[2] - 35)) %>% 
+  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
+  st_as_sfc(), aes(), label = "100 metres", colour = "black", angle = 45, size = 2) +
+  theme(
+        axis.title = element_blank(), 
+        axis.text.x=element_blank(), #remove x axis labels
+        axis.ticks.x=element_blank(), #remove x axis ticks
+        axis.text.y=element_blank(),  #remove y axis labels
+        axis.ticks.y=element_blank(), #remove y axis ticks
+        legend.position="none",
+        legend.text = element_text(size = 8), 
+        legend.title = element_blank(), 
+        legend.key.size = unit(0.5, 'in'),
+        ) + 
+  geom_sf(data = hub_location_metres[[i]], size = 4, colour = "red") + 
+  ggrepel::geom_label_repel(
+    data = hub_location_metres[[i]], mapping = aes(
+      label = "You are here", size = 3, geometry = geometry), 
+    stat = "sf_coordinates") + 
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  coord_sf(xlim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
+  ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326) 
+
+
+}
+
+  
+ggsave("graphics/letterkenny_map_small.png", map_area[[1]], width = 6, height = 6, units = "in")
+ggsave("graphics/galway_map_small.png", map_area[[2]], width = 6, height = 6, units = "in")
+ggsave("graphics/waterford_map_small.png", map_area[[3]], width = 6, height = 6, units = "in")
+ggsave("graphics/dublin_map_small.png", map_area[[4]], width = 6, height = 6, units = "in")
+```
+
+
+
+```{r mock_up_small, out.width = "100%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=TRUE}
+knitr::include_graphics("graphics/galway_map_small.png") 
+
+
+
+```
+
+
+Figure \ref{fig:mock_up_small} further demonstrates the flexibility of this approach in presenting an 'immediate vicinity' map of the Galway hub. At this or similarly small scales it might be possible to include individual hub elements (i.e. the e-bikes or car share vehicles) so that users can locate the various services and facilities.  This represents an extension of the mapping approaches seen in the site visits, and might perhaps remove the need for signage or other physical elements to mark the location of hub elements (e.g. the green cubes in Bristol).  
+
+As well, at this scale individual elements of the surrounding environment may be more readily apparent to hub users.  In Figure \ref{fig:mock_up_small} the mapping tiles show individual pedestrian footpaths. However, as these and other layers can be obtained from OSM these and other 
+features might similarly be mapped, coloured or otherwise highlighted if desired.  
 
 ## Delivery
-Put together in a software package
+
+The software developed in conjunction with this research is available online at https://github.com/James-Reynolds/mobilityHubTools
 
 
-# Discussion
+## Discussion and conclusions
 
-# Conclusions
+This design-based research has developed a basic suite of mapping and publication software tools that might be used in the context of mobility hubs. The general format and styling is largely based on elements in place at various mobility hubs in Bristol, but as discussed above the flexibility of R might allow users to adjust layouts, styling and other details as desired.  
+
+Another area in which the developed approach appears to provide advantages is due to the use of OSM data.  As well as being freely available, the OSM online platform allows this dataset to be editted by anyone, and there exists a large community of users who contribute, edit and otherwise maintain this information. In using this dataset, this research may assist towards generalisability and use of the study outputs by practitioners (and others) in that the OSM database is accessible and has world wide coverage.  As well, because the OSM dataset is user-editable it may be possible for those who use the outputs of this research to make corrections and additions as appropriate, thereby providing an improved dataset for both the purposes of mobility hub implementation and for other users or use cases. For example, updating data in OSM for the building immediately north-east of the Westside Public Library (Figure \ref{fig:mock_up_small}) might allow that building's name to be displayed on a mobility-hub-related map, yet also add to the completeness of the OSM dataset overall.  
+
+Clearly, there are many avenues for further research in this area. The software might be expanded to automate the production of websites, posters, banners, leaflets and other informational products that might be generated quickly by practitioners, adovocates or others, and so easily maintained and updated. There might be opportunities to develop more generic materials for other purposes, for example: maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and (maybe even) growth. Further development of 'best practices' in mobility hub informational provision might involve additional case studies, especially of non-UK sites, as well as improvements to the base 'hub signage mockup' developed here (e.g. additional text, implementation of symbolic mapping for facilities such as toilets, groceries and cafes, etc.). Furthermore, there may be a need to better understand what facilities and services might best be included as 'part' of a hub, as opposed to those that are mapped as being 'nearby'. More immediately, user testing and further development of the software, and of the software outputs, especially the maps, would seem an important direction for further research efforts in the short term.  
+
+This paper's title asked a question related to the applicability of tactical urbanist approaches to the topic of mobility hubs.  Underlying this may be larger questions related to 'what is a mobility hub' and 'who gets to define and advertise something as being a mobility hub'. Perhaps every railway station, bus or tram stop, shared or micro-mobility facilities or many other places are *already* mobility hubs, but just no one has put up a sign or handed out a leaflet that designates this as being the case? There may be  laws and other impediments limiting the ability of many people to adopt a Do-It-Yourself attitude to designating, advertising or informing others about how somewhere might already be, or have the potential to be, a mobility hub. Where these are less of an issue, however, it is suggested that with the software developed through this research and access to plotting devices, especially those capable of outputing larger size materials (e.g. A0, A1), almost anyone might be able to 'make' a mobility hub in a suitable location. Maybe even just some smaller-sized leaflets or similar materials handed or post-out to a local community might help towards shifting travel behaviours towards more sustainable modes, and encourage those who can to make more use of what mobility services are already offered at a local level.  
 
 
 
@@ -1624,7 +1814,7 @@ knitr::write_bib(file = 'packages.bib')
 ```
  
 
-# Appendicies
+
 
 
 

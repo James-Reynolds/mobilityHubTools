@@ -384,7 +384,7 @@ Leaflets,
 posters for shop windows and community noticeboards, 
 or even resources 
 for a tactical urbanist to launch a 'guerilla marketing' campaign 
-of posters, DIY signage and websites, 
+of posters, Do-It-Yourself (DIY) signage and websites, 
 might be all that is needed to facilitiate bottom-up action 
 and empower communities to define their own hubs 
 and advertise their pre-existing mobility services and related facilities.
@@ -653,27 +653,23 @@ knitr::include_graphics("graphics/marina.png")
 
 ```
  
-Figure \ref{fig:bristol_images_panels} shows the Bristol hubs, 
-which share common design elements including:
-elevated green cubes marking various hub components; 
-seating within parklet-style wooden decked areas; 
-bicycle repair and maintenance facilities; 
-integrated USB A and C charger; 
-and extensive information panels that include local and area-wide maps. 
-Hubs in Brimingham, as shown in Figure \ref{fig:andrew_road_images}, 
-likewise included directions, mapping and iconographic representation 
-of points of interest, 
-facilities and other nearby services 
-incluging some that are not specifically 'part' of a hub . 
+Information panels, maps and other guides to facitilies and services were present at some hubs, but notably not at those in Camden, South Woodford or High Street Wanstead. These locations were all in London, however, and generally close to already existing maps and other information at tube stations, bus stops or  otherwise provided, which may have lessened the need for mobility-hub-specific signage and mapping. Figures \ref{fig:andrew_road_images} and \ref{fig:bristol_images_panels} show selected images of informational panels and signage found at the hubs in Birmingham and Bristol, 
+which shared some common design elements such as including both local and area-wide maps, icongraphic representation of facilities, and directional information. Notably, the Bristol hubs included green cubes mounted overhead hub facilities, which appear likely to assist in finding hub elements in busy urban environments. 
+Mapping and informational material, however, 
+often appeared to include some that are not specifically 'part' of a hub 
+(e.g. toliets within anouther facilities, shops, cafes). 
 This highlights a potential question for implementers: 
-what services and facilities to 'include' as 'part of the hub', versus those that are in close proximity? 
-In the case of the Transport for West Midlands hub at Andrew Road, 
-directional signage to and information about bus services 
+what services and facilities to include as 'part of the hub', versus those that are just 'nearby'? 
+In the case of the Transport for West Midlands hub at Andrew Road 
+(Figure \ref{fig:andrew_road_images})
+directional signage to, 
+and information about, 
+bus services 
 at the nearby Halesowen Bus Station (approx 50m walking distance) 
 is provided, 
 but the hub has a different location-based name and branding identity. 
 
-Some of the hubs include linemarked areas 
+Some of the hubs included linemarked areas 
 for shared e-bike, e-scooter or e-cargobike parking, 
 bicycle parking and secure parking lockers, 
 although the offered facilities and services varied by location.
@@ -682,7 +678,8 @@ weather protection and drinking water
 was also evident at most of the visited hubs, 
 even though many of the parklet-type facilities 
 included steel framing that might have accommodated open-sided roofing or similar.
-This might indicate an emphasis on form over function in some of the element design,
+This might indicate an emphasis on form over function in some 
+design elements,
 whereas one of the hubs in Bristol 
 perhaps provides an example of additional functionality 
 - a containerised "Library of Things" - 
@@ -692,15 +689,11 @@ This may provide an indication of the possibilities
 of using modular components to expand, 
 re-purpose or adjust mobility hubs as situations change 
 (consistent with \citet{Stuart:2002aa}), 
-but a need for signs, 
-informational maps and other elements to adjustable to match. 
-In the case of the "Library of Things", 
-the accompanying green informational sign 
-was of the same design as Figure \ref{fig:bristol_images_panel}. 
-This appeared to date from the original hub implementation, 
-and might be relatively challenging for practitioners, 
-location managers or others to keep 'up to date' 
-once the original graphic designers or implementers have moved on^[See also \citet{Reynolds:2017ah} discussion of 'The Garbage Can Model'.].   
+but a need for signs and 
+maps to be easily adjustable to match, 
+as updating such elements might relatively challenging for practitioners, 
+location managers or others once 
+the original graphic designers or implementers have moved on^[See also \citet{Reynolds:2017ah} discussion of 'The Garbage Can Model'.].   
 
 Overall, the site visits undertaken during the 'Discovery' phase highlight the following key issues: 
 design elements; 
@@ -715,22 +708,19 @@ in terms of branding and
 information^[i.e. Which elements recieve 'green cube' markers in the real world,  
 versus which are just an icon on a map?]. 
 Identity, likewise, appears to interlinked 
-with hub naming^[For example, 
-despite being close to the Halesowen bus station, 
-a major interchange with eight bus stands, 
+with hub naming - for example, 
 the Andrew Road hub is named after 
 a relatively less important connector road 
-that changes name to Highfield Lane a little over 200m to the south west.].  
-Along with naming, 
-the findings discussed about generated through the site visits 
-perhaps also highlight the importance of 
+rather than consolidated to be part of the Halesowen bus station.  
+As well the site visits 
+perhaps also highlighted the importance of 
 maintenance, 
 activity^[c.f. \citet{Jacobs:1961aa} "eye on the street"] 
 and updates to match changing circumstances 
-that might give a hub a sense of 'place'.  
+that might give a hub a sense of 'place'. 
 Hubs in Bristol 
-perhaps highlight this, 
-withl itter, 
+perhaps provide an example
+with litter, 
 non-mobility-related signage, 
 space requisitioned for other purposes, 
 and some sites advertising dockless shared vehicles 
@@ -741,8 +731,7 @@ related to mobility hubs.
 
 ## Definition
 
-As discussed above, 
-findings from the sites visits suggest 
+Findings from the sites visits suggest 
 a wide variety of modes, services and facilities
 might be provided as part of the hub itself, 
 as well as further services and facilities 
@@ -759,15 +748,16 @@ and line-of-sight in defining a mobility hub.
 Although mapping at most hubs provided information 
 about services and facilities within up to around 15 minutes walking distance, 
 hub elements appeared to generally be located within relatively confined areas, 
-generally spanning less than 50 metres^[The Andrew Road hub 
-again provides an example as an outlier, 
+generally spanning less than 50 metres. 
+The Andrew Road hub provides an example 
+towards the upper end,
 with the entirety of the hub and the nearby Halesown Bus Station 
 encompassed within a radius of approximately 70 metres, 
 and spanning slightly less than 200 metres if traversed by foot. 
-Hubs in London provide examples at the other end of the spectrum, 
-with the South Woodford hub taking up approximately 15 metres of kerb space 
-less than 100 metres from the nearest tube station, 
-while some in Camden use space equivalent to only a few car parking spaces.]
+In contrast, the South Woodford hub 
+takes up approximately 15 metres of kerb space 
+and is less than 100 metres from the nearest tube station, 
+while some in Camden use space equivalent to only a few car parking spots. 
 
 Definitions of the facilities, 
 services and modes necessary 
@@ -798,13 +788,8 @@ where the electrification involves on-site recharging,
 as at ROBUST and for many e-cars, 
 and hubs where electric vehicles are dockless or otherwise 'recharged' 
 through the replacement of battery packs with those powered up elsewhere. 
-As discussed earlier, 
-\citet{Meigs:2023aa} and \citet{Zhang:2022aa} 
-discuss some of the problems associated with this first form of electrification, 
-while \cite{Reynolds:0ab} highlight the constraints 
-of access to power infrastructure 
-and issues related to electrical connections for the latter, 
-which might limit location choice and extend implementation timelines. 
+
+
 Guidance from \cite{CoMoUK:0ab} suggests a timeline of 12 to 15 months 
 to step through 
 consultation, design, stakeholder engagement, tendering and construction, 
@@ -814,8 +799,7 @@ This guidance also suggests that budgets i
 n the vicinity of 250k to 650k pounds \cite{CoMoUK:0ac}; 
 and that 
 "mobility hubs work best when part of a wider sustainable transport network 
-that provides  active travel, public transport and shared transport options" \cite{CoMoUK:0aa}.  
-
+that provides  active travel, public transport and shared transport options" \cite{CoMoUK:0aa}. 
 The design problem here, therefore, 
 appears be to allow creation of mobility hubs that: 
 incorporate existing modes, facilities and services; 
@@ -826,8 +810,7 @@ using minimal resources,
 incremental approaches that allow expansion one-hub-at-a-time, 
 and that are scaleable; 
 and allow for rapid iteration, 
-revision or adjustment to account for changing circumstances.  
-
+revision or adjustment to account for changing circumstances. 
 There are limits, however, 
 to what can be achieved in the context of this research study, 
 suggesting that the focus here should be on designing tools 
@@ -842,7 +825,7 @@ to support bottom-up, tactical urbanist and iterative approaches.
 
 ## Development
 
-Both the Andrew Road and various Bristol mobility hubs feature pedestal-mounted signage that includes: the hub name; iconographic representations of hub facilities; directional indications; and two maps. These maps are, respectively, of the local vicinity (a 5-10 minute walk) of the hub; and the surrounding area (a 15-20 minute walk). A starting point for developing software packages to support creation of further mobility hubs, therefore, would appear to be outputting similar maps of the local and surrounding areas, composited together into a image of similar size to the pedestal signage encountered during the site visits (i.e. around 30cm wide and 50cm tall) along with site naming and other information.
+Both the Andrew Road and various Bristol mobility hubs feature pedestal-mounted signage that includes: the hub name; iconographic representations of hub facilities; directional indications; and two maps. These maps are, respectively, of the local vicinity (a 5-10 minute walk) of the hub; and the surrounding area (a 15-20 minute walk). A starting point for developing software packages to support creation of further mobility hubs, therefore, would appear to be outputting similar maps of the local and surrounding areas, composited together into a image of similar size to the pedestal signage encountered during the site visits along with site naming and other information.
 
 <!--- Icons are drawn from \cite{Pousson:2022aa}-->
 
@@ -1642,16 +1625,15 @@ dev.off()
 
 
 
-```{r mock_up_layout_with_maps_grob_output, out.width = "75%", fig.align = "center", fig.cap = "Mockup of hub signage, produced using developed R code. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=TRUE}
+```{r mock_up_layout_with_maps_grob_output, out.width = "50%", fig.align = "center", fig.cap = "Mockup of hub signage, produced using developed R code. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=TRUE}
 knitr::include_graphics("graphics/layout_test.pdf") 
 
 ```
 
 
 
-Figure \ref{fig:mock_up_layout_with_maps_grob_output} shows output software developed during this research, which uses Open Streets Map (OSM) data sets and mapping tiles to generate a mobility hub information panel.  Here the software has been used to create output for the Galway ROBUST e-mobility hub, although as an example the 'surrounding area map' shown is for the Letterkenny ROBUST hub location so as to demonstrate the generalisability of the research outcomes.  
-
-Key features of the developed software include the ability to highlight notable features on the maps. In the local area map example shown various religious and medical buildings are highlighted in purple, while the library is shown in blue and nearby schools in orange. This is largely similar to the approach used in the maps discovered during the site visits, but might allow considerable flexibility for practitioners in choosing between colours, iconography or other symbols. A powerful aspect of adopting the OSM datasets and an automated approach for creating maps is that settings can be adjusted by the user and new maps generated within minutes.  For example, the 'surrounding area map' shown in Figure \ref{fig:mock_up_layout_with_maps_grob_output} a slightly different OSM tile option is selected, and buildings recorded as "pubs" (rather than public buildings) are shown in blue.  
+Figure \ref{fig:mock_up_layout_with_maps_grob_output} shows output software developed during this research, which uses Open Streets Map (OSM) data sets and mapping tiles to generate a mobility hub information panel.  Here the software has been used to create output for the Galway ROBUST e-mobility hub, although as an example the 'surrounding area map' shown is for the Letterkenny ROBUST hub location so as to demonstrate the generalisability of the research outcomes. 
+Key features of the developed software include the ability to highlight points of interest: in Figure \ref{fig:mock_up_layout_with_maps_grob_output} various religious and medical buildings are highlighted in purple, while the library is shown in blue and nearby schools in orange. This is largely similar to the approach used in the maps discovered during the site visits, but might allow considerable flexibility for practitioners in choosing between colours, iconography or other symbols. A powerful aspect of adopting the OSM datasets and an automated approach for creating maps is that settings can be adjusted by the user and new maps generated within minutes.  For example, the 'surrounding area map' shown in Figure \ref{fig:mock_up_layout_with_maps_grob_output} a slightly different OSM tile option is selected, and buildings recorded as "pubs" (rather than public buildings) are shown in blue.  
 
 
 ```{r create_area_map_small, eval=FALSE, include=FALSE, echo=FALSE, fig.fullwidth = TRUE, out.width= "100%"}
@@ -1743,15 +1725,15 @@ geom_sf(data = buildings[[i]] %>% filter(amenity %in% civic) %>% st_filter(
 }
 
   
-ggsave("graphics/letterkenny_map_small.png", map_area[[1]], width = 6, height = 6, units = "in")
-ggsave("graphics/galway_map_small.png", map_area[[2]], width = 6, height = 6, units = "in")
-ggsave("graphics/waterford_map_small.png", map_area[[3]], width = 6, height = 6, units = "in")
-ggsave("graphics/dublin_map_small.png", map_area[[4]], width = 6, height = 6, units = "in")
+ggsave("graphics/letterkenny_map_small.png", map_area[[1]], width = 3, height = 3, units = "in")
+ggsave("graphics/galway_map_small.png", map_area[[2]], width = 3, height = 3, units = "in")
+ggsave("graphics/waterford_map_small.png", map_area[[3]], width = 3, height = 3, units = "in")
+ggsave("graphics/dublin_map_small.png", map_area[[4]], width = 3, height = 3, units = "in")
 ```
 
 
 
-```{r mock_up_small, out.width = "100%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=TRUE}
+```{r mock_up_small, out.width = "100%", fig.align = "center", fig.cap = "Immediate hub vicinity mockup. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=TRUE}
 knitr::include_graphics("graphics/galway_map_small.png") 
 
 
@@ -1759,25 +1741,21 @@ knitr::include_graphics("graphics/galway_map_small.png")
 ```
 
 
-Figure \ref{fig:mock_up_small} further demonstrates the flexibility of this approach in presenting an 'immediate vicinity' map of the Galway hub. At this or similarly small scales it might be possible to include individual hub elements (i.e. the e-bikes or car share vehicles) so that users can locate the various services and facilities.  This represents an extension of the mapping approaches seen in the site visits, and might perhaps remove the need for signage or other physical elements to mark the location of hub elements (e.g. the green cubes in Bristol).  
-
-As well, at this scale individual elements of the surrounding environment may be more readily apparent to hub users.  In Figure \ref{fig:mock_up_small} the mapping tiles show individual pedestrian footpaths. However, as these and other layers can be obtained from OSM these and other 
+Figure \ref{fig:mock_up_small} further demonstrates the flexibility of this approach in presenting an 'immediate vicinity' map of the Galway hub. At this or similarly small scales it might be possible to include individual hub elements (i.e. the e-bikes or car share vehicles) so that users can locate the various services and facilities.  This represents an extension of the mapping approaches seen in the site visits, and might perhaps remove the need for signage or other physical elements to mark the location of hub elements (e.g. the green cubes in Bristol). As well, at this scale individual elements of the surrounding environment may be more readily apparent to hub users.  In Figure \ref{fig:mock_up_small} the mapping tiles show individual pedestrian footpaths. However, as these and other layers can be obtained from OSM these and other 
 features might similarly be mapped, coloured or otherwise highlighted if desired.  
 
 ## Delivery
 
-The software developed in conjunction with this research is available online at https://github.com/James-Reynolds/mobilityHubTools
+The software developed in conjunction with this research is available online at <TO BE INCLUDED AFTER PEER REVIEW. CODE INCLUDED IN SUBMISSION>
 
 
 ## Discussion and conclusions
 
-This design-based research has developed a basic suite of mapping and publication software tools that might be used in the context of mobility hubs. The general format and styling is largely based on elements in place at various mobility hubs in Bristol, but as discussed above the flexibility of R might allow users to adjust layouts, styling and other details as desired.  
+This design-based research has developed a basic suite of mapping and publication software tools that might be used in the context of mobility hubs. The general format and styling is largely based on elements in place at various mobility hubs in Bristol, but as discussed above the flexibility of R might allow users to adjust layouts, styling and other details as desired. Another area in which the developed approach appears to provide advantages is due to the use of OSM data.  As well as being freely available, the OSM online platform allows this dataset to be edited by anyone, and there exists a large community of users who contribute, edit and otherwise maintain this information. In using this dataset this research may assist towards generalisability and use of the study outputs by practitioners in that the OSM database is accessible and has worldwide coverage.  As well, because the OSM dataset is user-editable it may be possible for those who use the outputs of this research to make corrections and additions as appropriate, thereby providing an improved dataset for both the purposes of mobility hub implementation and for other users or use cases. For example, updating data in OSM for the building immediately north-east of the Westside Public Library (Figure \ref{fig:mock_up_small}) might allow that building's name to be displayed on a mobility-hub-related map, yet also add to the completeness of the OSM dataset overall.  
 
-Another area in which the developed approach appears to provide advantages is due to the use of OSM data.  As well as being freely available, the OSM online platform allows this dataset to be editted by anyone, and there exists a large community of users who contribute, edit and otherwise maintain this information. In using this dataset, this research may assist towards generalisability and use of the study outputs by practitioners (and others) in that the OSM database is accessible and has world wide coverage.  As well, because the OSM dataset is user-editable it may be possible for those who use the outputs of this research to make corrections and additions as appropriate, thereby providing an improved dataset for both the purposes of mobility hub implementation and for other users or use cases. For example, updating data in OSM for the building immediately north-east of the Westside Public Library (Figure \ref{fig:mock_up_small}) might allow that building's name to be displayed on a mobility-hub-related map, yet also add to the completeness of the OSM dataset overall.  
+Clearly, there are many avenues for further research in this area. The software might be expanded to automate the production of websites, posters, banners, leaflets and other informational products that might be generated quickly by practitioners, adovocates or others, and so easily maintained and updated. There might be opportunities to develop more generic materials for other purposes, for example: maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and growth. Further development of 'best practices' in mobility hub informational provision might involve additional case studies, especially of non-UK sites, as well as improvements to the base 'hub signage mockup' developed here (e.g. additional text, implementation of symbolic mapping for facilities such as toilets, groceries and cafes, etc.). Furthermore, there may be a need to better understand what facilities and services might best be included as 'part' of a hub, as opposed to those that are mapped as being 'nearby'. More immediately, user testing and further development of the software, and of the software outputs, especially the maps, would seem an important direction for further research efforts in the short term.  
 
-Clearly, there are many avenues for further research in this area. The software might be expanded to automate the production of websites, posters, banners, leaflets and other informational products that might be generated quickly by practitioners, adovocates or others, and so easily maintained and updated. There might be opportunities to develop more generic materials for other purposes, for example: maintenance schedules, inspection logs, management resources and other items that might help a mobility hub 'product owner' facilitate operations, continuance and (maybe even) growth. Further development of 'best practices' in mobility hub informational provision might involve additional case studies, especially of non-UK sites, as well as improvements to the base 'hub signage mockup' developed here (e.g. additional text, implementation of symbolic mapping for facilities such as toilets, groceries and cafes, etc.). Furthermore, there may be a need to better understand what facilities and services might best be included as 'part' of a hub, as opposed to those that are mapped as being 'nearby'. More immediately, user testing and further development of the software, and of the software outputs, especially the maps, would seem an important direction for further research efforts in the short term.  
-
-This paper's title asked a question related to the applicability of tactical urbanist approaches to the topic of mobility hubs.  Underlying this may be larger questions related to 'what is a mobility hub' and 'who gets to define and advertise something as being a mobility hub'. Perhaps every railway station, bus or tram stop, shared or micro-mobility facilities or many other places are *already* mobility hubs, but just no one has put up a sign or handed out a leaflet that designates this as being the case? There may be  laws and other impediments limiting the ability of many people to adopt a Do-It-Yourself attitude to designating, advertising or informing others about how somewhere might already be, or have the potential to be, a mobility hub. Where these are less of an issue, however, it is suggested that with the software developed through this research and access to plotting devices, especially those capable of outputing larger size materials (e.g. A0, A1), almost anyone might be able to 'make' a mobility hub in a suitable location. Maybe even just some smaller-sized leaflets or similar materials handed or post-out to a local community might help towards shifting travel behaviours towards more sustainable modes, and encourage those who can to make more use of what mobility services are already offered at a local level.  
+This paper's title asked a question related to the applicability of tactical urbanist approaches to the topic of mobility hubs.  Underlying this may be larger questions related to 'what is a mobility hub' and 'who gets to define and advertise something as being a mobility hub'. Perhaps every railway station, bus or tram stop, shared or micro-mobility facilities or many other places are *already* mobility hubs, but just no one has put up a sign or handed out a leaflet that designates this as being the case? There may be  laws and other impediments limiting the ability of many people to adopt a DIY attitude to designating, advertising or informing others about how somewhere might already be, or have the potential to be, a mobility hub. Where these are less of an issue, however, it is suggested that with the software developed through this research and access to plotting devices, especially those capable of outputing larger size materials (e.g. A0, A1), almost anyone might be able to 'make' a mobility hub in a suitable location. Maybe even just some smaller-sized leaflets or similar materials handed or post-out to a local community might help towards shifting travel behaviours towards more sustainable modes, and encourage those who can to make more use of what mobility services are already offered at a local level.  
 
 
 

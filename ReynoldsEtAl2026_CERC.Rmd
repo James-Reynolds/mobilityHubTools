@@ -3,38 +3,37 @@ title: "Tactical urbanism for mobility hubs? DIY mapping with mobilityHubTools"
 author:
   - name: James Reynolds
     email: julianj.reynolds@atu.ie
-    footnote: 3
+    footnote: 1
     correspondingauthor: true
-  - name: Amaya Vega
-    email: amaya.Vega@atu.ie
-    footnote: 2
   - name: Brian McCann
     email: brian.mccann@atu.ie
-    footnote: 3  
+    footnote: 1  
   - name: Noreen Armstrong
-    email: ????
+    email: noreen.armstrong@atu.ie
     footnote: 2
-  - name: Brian Caulfield
-    email: brian.caulfield@tcd.ie
-    affiliation: 
-    footnote: 1
+  - name: Sarbast Molsem
+    email: molsem@tcd.ie
+    footnote: 3
   - name: Agnieszka Stefaniec
     email: a.stefaniec@soton.ac.uk
     footnote: 4
-  - name: Sarbast Molsem
-    email: molsem@tcd.ie
-    footnote: 1
+  - name: Brian Caulfield
+    email: brian.caulfield@tcd.ie
+    affiliation: 
+    footnote: 3
+  - name: Amaya Vega
+    email: amaya.Vega@atu.ie
+    footnote: 2
 
 footnote:
   - code: 1
-    text: "Centre for Transport Research, Dept of Civil, Structural and Environmental Engineering, Trinity College Dublin, Ireland"
+    text: "Atlantic Technological University, Sligo campus, Ireland"
   - code: 2
     text: "Atlantic Technological University, Galway City campus, Ireland"
   - code: 3
-    text: "Atlantic Technological University, Sligo campus, Ireland"
+    text: "Centre for Transport Research, Dept of Civil, Structural and Environmental Engineering, Trinity College Dublin, Ireland"
   - code: 4
-    text: |
-      Department of Decision Analytics and Risk at Southampton Business School, University of Southampton, UK
+    text: "Department of Decision Analytics and Risk at Southampton Business School, University of Southampton, UK"
 abstract: | 
 keywords: 
 journal: "CERC 2026?"
@@ -90,29 +89,27 @@ and sometimes other services and facilities
 are offered. 
 These might provide 
 a range of 
-non-private-and-petrol-driven-car alternatives 
-as part of efforts to shift towards 
+non-private-or-petrol-driven-car alternatives 
+that might help towards 
 more sustainable travel behaviours and transport system outcomes. 
-Having nearby access to 
-shared electric cars, 
+Nearby shared electric cars, 
 bikes and cargo-bikes, 
 e-bikes and e-cargo bikes, 
 or other vehicles 
 might help in shifting towards 
-more walking, cycling and transit-based travel.
-Such hubs might thereby providing alternatives for those, 
+more walking, cycling and transit-based travel 
+through providing options for those,
 more occasional, 
 trips that are otherwise difficult without a car, 
-such as if travelling with luggage, 
+(e.g. travelling with luggage, 
 longer distances 
-or outside typical service times. 
-With a mobility hub nearby 
-households might be able to 
+or outside typical service times). 
+A nearby mobility hub 
+might allow households to
 forgo purchase of 
 a(n additional) car, 
 or transition to electrically-powered modes 
-with lower environmental impacts 
-without the upfront expense.  
+without the upfront expense. 
 Some mobility hubs, 
 such as those in the Greater Toronto and Hamilton Area (GTHA) in Canada, 
 are defined as such by a regional transport authority, 
@@ -125,22 +122,21 @@ for a range of modes and/or other offerings
 in close proximity to each other 
 and with branding as a 'mobility hub' or similar. 
 
-In some cases, 
+In some cases 
 it may be that a range of offerings are already in place, 
 especially where the private sector has already implemented 
-car-, scooter-, bike- or other -share services.  
+car-, scooter-, bike- or other -share services. 
 Converting such places into a 'mobility hub' 
 may be within reach with just a mobility-hub-related name, 
 a press-release or website, 
-and perhaps some minimal physical interventions such as signage and advertising.  
-
+and perhaps some minimal physical interventions such as signage and advertising. 
 However, tools for transforming such locations 
 into 'mobility hubs' 
 do not yet appear to be readily available. 
-Instead, signage, advertising and similar elements 
-appear to have been largely created afresh and bespoke 
-by individual agencies implementing mobility hubs 
-on a per-site basis, 
+Instead, individual agencies implementing mobility hubs 
+appear to have been largely created 
+signage, advertising and similar elements 
+afresh and bespoke by on a site-by-site basis, 
 albeit that some hubs created in groups 
 appear to have similar branding and designs. 
 Such creation might involve graphic design, mapping or similar 
@@ -148,10 +144,9 @@ and so limit the opportunities for
 trials, 
 bottom-up implementation 
 or other low-cost interventions 
-by practitioners or, 
-potentially through tactical urbanism and/or grassroots activism, 
-sustainability-focused advocates or actors 
-from within the general public.  
+by practitioners or 
+(potentially through tactical urbanism and/or grassroots activism) 
+sustainability-focused advocates or other actors.
 
 This paper reports findings from case and design-based research 
 seeking to develop new tools to support low-cost mobility hub implementation. 
@@ -161,48 +156,45 @@ alternatively diverging and coverging
 phases of Discovery, Definition, Development and Delivery 
 (c.f. \cite{UK-Design-Council:0aa}). 
 Exploratory field visits to a range of case study mobility hubs 
-help infom the Discovery and Development phases, 
+help inform the Discovery and Development phases, 
 while a new package of software tools 
 to support mapping and the 
 generation of informational signage and other physical interventions 
 forms the key research outcome 
-of the Delivery phase.  
-Such interventions might allow practitioners or others 
+from the Delivery phase. 
+This software might allow practitioners or others to
 create a temporary mobility hub on a trial basis, 
 or as the first step towards designing and implementing 
-more permanent facilities. 
+more permanent information and mapping. 
 The rest of this paper is structured as follows: 
 the next section outlines the context for this research, 
-including brief discussion of mobility hubs and tactical urbanism.  
+including brief discussion of mobility hubs and tactical urbanism. 
 The research methodology is then described, 
-followed by presentation of the results. 
-These are then discussed 
-prior to a brief conclusion 
-that includes the identification of directions for future research.  
+followed by presentation of the results, 
+which are then briefly discussed 
+in conjunction with a conclusion identifying directions for future research.  
 
 # Research context
-Mobility hubs are sometimes described 
-as part of an emerging approach 
-where shared and micro-mobility offerings 
-might be linked, 
-often with transit, 
+Mobility hubs are an emerging approach 
+where shared and micro-mobility offerings, 
+transit 
+or other offerings are linked 
 to provide a range of options that support more sustainable travel. 
 Early use of the term occured in Toronto, Canada, 
 as part of landuse and transport planning undertaken by Metrolinx 
-and other governmental institutions across the GTHA and surrounds \citep{Salsberg:2010aa, Engel-Yan:2012aa}. 
+and other governmental institutions 
+across the surrounding region \citep{Salsberg:2010aa, Engel-Yan:2012aa}. 
 In "The Big Move" \citep{Metrolinx:2008aa} 
 various transit stations and major interchanges were defined as 
 "mobility hubs" for the purposes of supporting regional travel, 
 modal interchange, 
-and local connections 
-including through transitions 
-to more transit supportive landuse patterns in nearby areas.  
+and transitions to more transit supportive landuse patterns. 
 
 The plethora of independent private-sector transport offerings 
-that have recently emerged, 
-including car-share and dockless bike/scooter systems 
+now available, 
+including car-share and dockless bike/scooter systems, 
 may also have helped towards development of the mobility hub concept. 
-Although driven largely by developments in 
+Although driven largely by 
 start-up, technology and communications, and related sectors, 
 various governmental agencies have sought to both: 
 regulate such offerings; 
@@ -213,32 +205,32 @@ installation of branding and informational signage
 and similar efforts 
 may help to 
 provide geo-spatial context and collectivisation. 
-As well, there have been some emerging problems 
-with some dockless bikes, e-scooters and e-bikes, 
-including with respect to inappropriate parking of vehicles 
-(i.e. blocking footpaths) 
-and the fire safety risks 
+As well, there have been some emerging problems, 
+including with respect to inappropriate parking of 
+dockless bikes/scooters (i.e. blocking footpaths), 
+and risks 
 and environmental impacts 
 of recharging models 
 that rely on batteries being collected and then charged elsewhere, 
 often without the appropriate facilities 
-to deal with electrical loads or battery fires \cite{Meigs:2023aa, Zhang:2022aa}. 
+to deal with electrical loads or battery fires \citep{Meigs:2023aa, Zhang:2022aa}. 
 Shared electric mobility hubs, 
-such as those currently being trialled in Ireland as part of the ROBUST project \cite{ROBUST:2025aa}, 
+such as those currently being trialled in Ireland as part of the ROBUST project \citep{ROBUST:2025aa}, 
 may provide solutions to such problems 
 by shifting the recharging of vehicles to be at a hub itself 
 where appropriate parking, electrical connections and other equipment 
 (importantly for fires involving lithium batteries) are outside 
 and typically unenclosed.
 
-Some challenges, however, 
-for implementers and communities 
+Other challenges
+for implementers and communities, however, 
 may relate to the difficulty of developing mobility hubs, 
 including the planning processes and funding acquisition necessary 
 to build new facilities. 
-Of course, there may be nothing especially new, 
-other than the name, 
-about mobility hubs given that railway stations have existing for over a century. 
+Of course, 
+other than the name 
+there may be nothing new about mobility hubs - 
+railway stations have existing for over a century. 
 Often containing 
 waiting areas and information, 
 cafes, 
@@ -247,8 +239,9 @@ interchange with other modes such as buses,
 and many other facilities 
 the 19th, 20th and current iterations of railway stations 
 would appear to have largely already 'solved', 
-albeit not always fully implemented, 
-the provision support for mobility at a network hub, 
+many of the problems related to how to 
+support mobility at a network hub 
+(albeit that these solutions might not always be fully implemented). 
 However, stations tend to be located on land owned 
 or otherwise controlled by railway companies or agencies. 
 As such, 
@@ -260,7 +253,7 @@ and most other aspects of the station environment
 might be largely under the control of a single institution, 
 or only a small number of closely-related agencies. 
 Mobility hubs, in contrast, 
-might tend to be located on public road reserves, 
+might tend to be located in public road reserves, 
 within parking facilities or otherwise 
 where there may be less clear authority and power to make changes 
 without widespread public, institutional and government approvals or buy-in. 
@@ -269,22 +262,22 @@ and/or involve top-down policy-making
 in which those making decisions might be somewhat removed 
 from the real mobility needs of individual communities, 
 or who may adopt 'one size fits all' approaches 
-that might lack responsiveness to local context. 
+lacking responsiveness to local context. 
 
-Public policy analysis has long since focused on such non-rational factors 
+Research in public policy analysis has long been examining on such non-rational factors
 and how they might influence decision-making, 
 but these tend to be overlooked in transport policy research \citep{Marsden:2017aa}. 
-Instititionalism, 
+Instutionalism, 
 political approaches, 
 incrementalism and other public policy models, 
 however, 
-are clearly applicable to transport systems\citep{Reynolds:2017ah}. 
+are clearly applicable to transport systems (see for example \citet{Reynolds:2017ah}). 
 Important within these are the top-down, bottom-up and hybrid theories of implementation, 
 which emphasise the influence that street-level bureaucrats can wield 
 to obtain outcomes that respond to their local needs and context, 
 including sometimes outcomes 
-that might be in opposition to central policy directions. F
-urther exploration of this topic may be beyond the scope of this paper, 
+that might be in opposition to central policy directions. 
+Further exploration of this topic may be beyond the scope of this paper, 
 but the extensive body of research related to the Advocacy Coalition Framework (including \citet{Sabatier:1986aa,Sabatier:1987aa,Sabatier:1988aa,Sabatier:1993aa,Weible:2009aa,Weible:2007aa}) provides insights and theory.  
 
 Perhaps of more relevance, however, is the field of tactical urbanism, 
@@ -292,30 +285,29 @@ which adopts many such bottom-up and grassroots approaches
 to defining and re-imaging public spaces, 
 especially those spaces 
 within road reserves and related to transport systems. 
-Tactical urbanism refers to a range of approaches, 
+Tactical urbanism 
+can involve making changes to public environments, 
 often unsanctioned, 
-for making changes to public environments. 
-These sometimes seek to question what urban space or is for 
-or the legitimacy of how it is allocated, 
-such as in the case of "PARKing Day". 
-This started as lunchtime  take over of an on-street car parking space 
+that sometimes question what urban space is for 
+or the legitimacy of how it is allocated. 
+"PARKing Day" provides an example, 
+having started as lunchtime take over of an on-street car parking space 
 by an architecture firm, 
 who rolled out some green grass and a park bench, 
 paid the parking meter, 
 and in doing so questioned the validity of using such spaces 
-for storing vehicles instead of as a paklet for people. 
-"PARKing Day" is now an annual event seeking, 
+for storing vehicles instead of as a parklet for people. 
+This has since grown into an annual event seeking, 
 like the World Naked Bike Ride and Critical Mass, 
 to demonstrate the possibility of change and question the legitimacy of the (car-dominated) status quo 
 \citep{Lydon:2012aa,Davidson:2013aa,Lydon:2015aa,Blumgart:2016ab, Ride:2009aa, Morhayim:2012aa, Longhurst:2015aa}. 
-
 Similar 'pop-up' or protest-based approaches 
 have helped legitimise bicycle lanes, 
 delegitimise car-use of bus lanes, 
-and being used as more mainstream 
+and are sometimes used as more mainstream 
 ways (amongst engineers and planners) 
-to help build public and institutional support for new transit lanes
-\citep{Fucoloro:2013aa,News:2019ab, TransitCenter:2018ab, Transportation-Studies:2019aa}. 
+to help build public and institutional support for implementation, 
+including for the installation of transit lanes \citep{Fucoloro:2013aa,News:2019ab, TransitCenter:2018ab, Transportation-Studies:2019aa}. 
 These build on or have similarities to various earlier approaches 
 including street-reclaiming 
 \citep{Dobson:2023ae,Engwicht:1999aa,Fotel:2009aa,Institute:2015aa}, 
@@ -328,7 +320,7 @@ and Network Operation Planning approaches \citep{Delbosc:2018aa}.
 Despite the many names, 
 variations and focii of these 
 and other interventional and decision-making approaches, 
-the call from \cite{Marsden:2017aa} 
+the call from \citet{Marsden:2017aa} 
 to "pay greater attention to context,
 politics, power, resources and legitimacy" 
 retains relevance. 
@@ -336,17 +328,15 @@ Participating in unsanctioned activities,
 especially for minorities or others 
 who might attract higher levels of attention from authorities, 
 can be a risk that might limit engagement 
-in tactical urbanism or similar activities \cite{Douglas:2018aa}. 
+in tactical urbanism or similar activities \citep{Douglas:2018aa}. 
 Intersections between illegality, illegitimacy and the ill-enforced 
 similarly exist in the context of street art and its place on a continuum 
-including commissioned murals, 
+that includes commissioned murals, 
 counter-culturism and the \emph{avant-garde}, 
 graffiti and vandalism. 
 \citet{Killen:2017aa,Killen:2021aa} explore these topics 
 in the context of trains, but 
-this, and related larger questions related to 'what is art', 
-are not covered here. 
-Of relevance, however,
+of relevance here, however,
 are questions relating to who is allowed to post 
 a public notice, 
 define a 'mobility hub' 
@@ -354,17 +344,16 @@ or otherwise share knowledge about transport options,
 local facilities and services, and connecting modes. 
 
 Engineers, planners, operational managers, communications teams 
-and others within transport agencies and governmental instutitions 
-typically have less need to engage in tactical-urbanist-type implementation. 
-They may already have legitimate authority 
+and others 
+may have less need to engage in tactical-urbanist-type implementation 
+given that they might already have legitimate authority 
 to make changes to the built environment, 
 at least within the scope of their employment and remit. 
 However, pop-ups, trials, bottom-up and incremental approaches to implementation 
 may still be of use, or even necessary, 
 for such actors when seeking legitimacy for 
-new, unusual or just controversial interventions, 
-or if power is vested in political representatives or otherwise. 
-\citet{Reynolds:2020aa,Reynolds:2021ab} defines these 
+new, unusual or just controversial interventions. 
+\citet{Reynolds:2020aa,Reynolds:2021ab} define these 
 as 'pragmatic strategies for legitimation *through* implementation' 
 based on case research of such approaches helping in the implementation of 
 Bus Rapid Transit in Curitiba 
@@ -372,14 +361,14 @@ and other forms of transit priority in Zurich, Melbourne and Toronto.
 Other strategies include building legitimacy *before* implementation 
 using technical evaluation, vision-based planning 
 and/or public decision-making processes; 
-or by avoiding impacts on those who might seek to delegitimise change. 
+or avoiding impacts on those who might seek to delegitimise change. 
 
 Basic signage, linemarking or the public display of travel information 
 would appear likely to be relatively easy for many practitioners 
-to implement within their own institutional setting.  
+to implement within their own institutional setting. 
 What may be lacking, however, are tools and standarised approaches 
 to mobility hub information provision 
-for quick and relatively easy adaptation to local contexts.  
+for quick and relatively easy adaptation to local contexts. 
 Likewise, for activists, 
 practitioners wishing to affect change 
 outside the remit of their specific employment suituation, 
@@ -389,7 +378,7 @@ This might be particularly relevant for the 'creation' of a mobility hub
 out of already existing and geographically-proximate facilitates, 
 which might not be immediately obvious to travellers 
 but something 
-often informally well-known and readily apparent 
+informally well-known and readily apparent 
 to those with local knowledge of the geography and community. 
 Leaflets, 
 posters for shop windows and community noticeboards, 
@@ -398,13 +387,14 @@ for a tactical urbanist to launch a 'guerilla marketing' campaign
 of posters, DIY signage and websites, 
 might be all that is needed to facilitiate bottom-up action 
 and empower communities to define their own hubs 
-and advertise their pre-existing mobility services and related facilities. 
+and advertise their pre-existing mobility services and related facilities.
+
 What appears to be lacking in the research literature, 
 or in practice, 
-are the tools to produce the sorts of maps, analysis and interpretations 
+are the tools to quickly and easily 
+produce the sorts of maps, analysis and interpretations 
 that might support the definition of a place as a hub 
 and the communciation of its existing and potential mobility and other offerings. 
-
 Mapping, signage and similar interventions 
 in both the physical and virtual 
 might usually tend to be produced on a bespoke 
@@ -430,13 +420,14 @@ are therefore descrbed in the following.
 \citet{Coxon:2018aa,Coxon:2021ab} outline 
 various industrial design approaches and tools, 
 as well as discussing their relevance and potential applicability 
-to transport systems.  
+to transport systems. 
 Notable amongst these is the Double Diamond, 
 which involves iteration across 
-four phases: alternating between diverging (1) Discovery 
+four phases alternating between: 
+diverging (1) Discovery 
 and then converging (2) Definition phases; 
 followed by diverging (3) Development 
-and convergence to (4) Delivery of a design output \citep{UK-Design-Council:0aa}.  
+and convergence to (4) Delivery of a design output \citep{UK-Design-Council:0aa}. 
 This study adopts this approach 
 together with case studies of existing mobility hubs. 
 
@@ -613,12 +604,12 @@ it is open source and freely available,
 therefore supporting goals of developing an accessible suite of tools; 
 it has an extensive set of packages for geospatial analysis and mapping, 
 including *sf* [@R-sf], 
-and the *ggspatial* and *osmdata* [@R-ggspatial, @R-osmdata] packages; 
+and the *osmdata* [@R-osmdata] packages; 
 and there is a large community of users 
 who might help support those with less experience in troubleshooting, 
 but who are also responsible 
 for the development and maintenance of a wide range of packages, 
-including: the *tidyverse* [@tidyverse2019] and many and others 
+including: the *tidyverse* [@tidyverse2019] and many others 
 used in code development for this research.  
 
 # Results
@@ -1213,11 +1204,11 @@ buildings[[i]] <- buildings[[i]] %>%
 
 
 map_local[[i]] <- ggplot() + 
- ggspatial::annotation_map_tile(type = "cartolight", zoom = 16) +
+ ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
 # geom_sf(data = poly_as_metres, fill = NA) +
    geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
 #  geom_sf(data = net[[i]], aes())  + 
-  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 1) +
+  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) +
    # PLACEHOLDER FOR HOTEL
 geom_sf(data = buildings[[i]] %>% filter(building %in% education) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
@@ -1620,7 +1611,13 @@ gs[[8]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")), grid.arr
 
 gs[[9]] <- map_area[[1]]
 lay <- rbind(c(1,1,1,1,1),
+             c(1,1,1,1,1),
              c(2,2,2,2,2),
+             c(3,3,3,3,3),
+             c(3,3,3,3,3),
+             c(3,3,3,3,3),
+             c(3,3,3,3,3),
+             c(3,3,3,3,3),
              c(3,3,3,3,3),
              c(4,4,4,4,4),
              c(4,4,4,4,4),
@@ -1634,12 +1631,11 @@ lay <- rbind(c(1,1,1,1,1),
              c(4,4,4,4,4),
              c(5,5,5,9,9),
              c(5,5,5,9,9),
-             c(6,6,9,9,9),
-             c(6,6,9,9,9),
-             c(8,7,9,9,9))
+             c(6,6,6,9,9),
+             c(8,7,7,9,9))
 grid.arrange(grobs = gs, layout_matrix = lay)
 
-dev.copy(pdf, "graphics/layout_test.pdf", width = 12, height = 20)
+dev.copy(pdf, "graphics/layout_test.pdf", width = 12, height = 27)
 dev.off()
 
 ```
@@ -1792,9 +1788,9 @@ tibble(Component = c("Conceptualization", "Data Curation", "Formal Analysis", "F
 #       Description = c("Ideas; formulation or evolution of overarching research goals and aims.", "Management activities to annotate (produce metadata), scrub data and maintain research data (including software code, where it is necessary for interpreting the data itself) for initial use and later reuse.",  "Application of statistical, mathematical, computational, or other formal techniques to analyze or synthesize study data.", "Acquisition of the financial support for the project leading to this publication.", "Conducting a research and investigation process, specifically performing the experiments, or data/evidence collection.", "Development or design of methodology; creation of models.", "Management and coordination responsibility for the research activity planning and execution.", "Provision of study materials, reagents, materials, patients, laboratory samples, animals, instrumentation, computing resources, or other analysis tools.", "Programming, software development; designing computer programs; implementation of the computer code and supporting algorithms; testing of existing code components.", "Oversight and leadership responsibility for the research activity planning and execution, including mentorship external to the core team.", "Verification, whether as a part of the activity or separate, of the overall replication/reproducibility of results/experiments and other research outputs.", "Preparation, creation and/or presentation of the published work, specifically visualization/data presentation.", "Creation and/or presentation of the published work, specifically writing the initial draft (including substantive translation).", "Preparation, creation and/or presentation of the published work by those from the original research group, specifically critical review, commentary or revision – including pre- or post-publication stages."), 
 `NA` = c(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "),
 BC = c(" ", " ", " ", "X", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "),
-BM = c(" ", " ", " ", " ", " ", " ", " ", " ", " ", "X", " ", " ", " ", " "),
+BM = c(" ", " ", " ", " ", " ", " ", " ", " ", " ", "X", " ", " ", " ", "X"),
 SM = c(" ", " ", " ", " ", " ", " ", "X", " ", " ", " ", " ", " ", " ", " "),
-JR = c("X", "X", "X", " ", "X", "X", " ", " ", "X", " ", "X", "X", "X", " "),
+JR = c("X", "X", "X", " ", "X", "X", " ", " ", "X", " ", "X", "X", "X", "X"),
 AS = c(" ", " ", " ", "X", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "),
 AV = c(" ", " ", " ", " ", " ", " ", " ", " ", " ", "X", " ", " ", " ", " ")) %>% 
   kable(

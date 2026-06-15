@@ -1598,10 +1598,6 @@ lay <- rbind(c(1,1,1,1,1),
              c(2,2,2,2,2),
              c(3,3,3,3,3),
              c(3,3,3,3,3),
-             c(3,3,3,3,3),
-             c(3,3,3,3,3),
-             c(3,3,3,3,3),
-             c(3,3,3,3,3),
              c(4,4,4,4,4),
              c(4,4,4,4,4),
              c(4,4,4,4,4),
@@ -1618,7 +1614,7 @@ lay <- rbind(c(1,1,1,1,1),
              c(8,7,7,9,9))
 grid.arrange(grobs = gs, layout_matrix = lay)
 
-dev.copy(pdf, "graphics/layout_test.pdf", width = 12, height = 27)
+dev.copy(png, "graphics/layout_test.png", width = 1200, height = 2400)
 dev.off()
 
 ```
@@ -1749,7 +1745,7 @@ features might similarly be mapped, coloured or otherwise highlighted if desired
 The software developed in conjunction with this research is available online at <TO BE INCLUDED AFTER PEER REVIEW. CODE INCLUDED IN SUBMISSION>
 
 
-## Discussion and conclusions
+# Discussion and conclusions
 
 This design-based research has developed a basic suite of mapping and publication software tools that might be used in the context of mobility hubs. The general format and styling is largely based on elements in place at various mobility hubs in Bristol, but as discussed above the flexibility of R might allow users to adjust layouts, styling and other details as desired. Another area in which the developed approach appears to provide advantages is due to the use of OSM data.  As well as being freely available, the OSM online platform allows this dataset to be edited by anyone, and there exists a large community of users who contribute, edit and otherwise maintain this information. In using this dataset this research may assist towards generalisability and use of the study outputs by practitioners in that the OSM database is accessible and has worldwide coverage.  As well, because the OSM dataset is user-editable it may be possible for those who use the outputs of this research to make corrections and additions as appropriate, thereby providing an improved dataset for both the purposes of mobility hub implementation and for other users or use cases. For example, updating data in OSM for the building immediately north-east of the Westside Public Library (Figure \ref{fig:mock_up_small}) might allow that building's name to be displayed on a mobility-hub-related map, yet also add to the completeness of the OSM dataset overall.  
 

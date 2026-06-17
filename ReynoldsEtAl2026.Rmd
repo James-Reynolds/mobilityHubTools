@@ -1223,6 +1223,45 @@ placebb <- lapply(hub_location_metres, function(x) x %>%
 placebb_metres <- hub_location_metres %>% lapply(function(x) x %>%  
   st_bbox()) 
 
+# Amenity data
+amenity_categories <- tibble(
+  category = c(
+    rep("Sustenance", 8), 
+    rep("Education", 15),
+    rep("Transportation", 24), 
+    rep("Financial", 6), 
+    rep("Healthcare", 9), 
+    rep("Entertainment, Arts and Culture", 21), 
+    rep("Public Service", 9), 
+    rep("Facilities", 16), 
+    rep("Waste Management", 5), 
+    rep("Others", 25)),
+  value = c(
+    "bar", "biergarten", "cafe", "fast_food", "food_court", "ice_cream", "pub", "restaurant", 
+    "college", "dancing_school", "driving_school", "first_aid_school", "kindergarten", "language_school", "library", "surf_school", "toy_library", "research_institute", "training", "music_school", "school", "traffic_park", "university", 
+    "bicycle_parking", "bicycle_repair_station", "bicycle_rental", "bicycle_wash", "boat_rental", "boat_storage", "boat_sharing", "bus_station", "car_rental", "car_sharing", "car_wash", "compressed_air", "vehicle_inspection", "charging_station", "driver_training", "ferry_terminal", "fuel", "grit_bin", "motorcycle_parking", "parking", "parking_entrance", "parking_space", "taxi", "weighbridge",
+    "atm", "payment_terminal", "bank", "bureau_de_change", "money_transfert", "payment_centre", 
+    "baby_hatch", "clinic", "dentist", "doctors", "hospital", "nursing_home", "pharmacy", "social_facility", "veterinary", 
+    "arts_centre", "brothel", "casino", "cinema", "community_centre", "conference_centre", "events_venue", "exhibition_centre", "fountain", "gambling", "love_hotel", "music_venue", "nightclub", "planetarium", "public_bookcase", "social_centre", "stage", "stripclub", "studio", "swingerclub", "theatre",
+    "courthouse", "fire_station", "police", "post_box", "post_depot", "post_office", "prison", "ranger_station", "townhall",
+    "bbq", "bench", "check_in", "dog_toilet", "dressing_room", "drinking_water", "give_box", "lounge", "mailroom", "parcel_locker", "shelter", "shower", "telephone", "toilets", "water_point", "watering_place", 
+    "sanitay_dump_station", "recycling", "waste_basket", "waste_disposal", "waste_transfer_station",
+    "animal_boarding", "animal_breeding", "animal_shelter", "animal_training", "baking_oven", "clock", "crematorium", "dive_centre", "funeral_hall", "grave_yard", "hunting_stand", "internet_cafe", "kitchen", "knelpp_water_cure", "lounger", "marketplace", "monastery", "mortuary", "photo_booth", "place_of_mourning", "place_of_workship", "public_bath", "refugee_site", "vending_machine", "hydrant"),
+  icon_filename = c(
+    "40px-Bar-16.svg.png", "40px-Biergarten-16.svg.png", "40px-Cafe-16.svg.png", "40px-Fast-food-16.svg.png", "40px-Restaurant-14.svg.png", "40px-Ice-cream-14.svg.png", "40px-Pub-16.svg.png", "40px-Restaurant-14.svg.png",
+    rep(NA, 6), "40px-Library-16.svg.png", rep(NA, 8),
+    "40px-Parking-bicycle-16.svg.png", "40px-Bicycle_repair_station-14.svg.png", "40px-Rental-bicycle-16.svg.png", NA, "40px-Boat_rental-14.svg.png", NA, "40px-Boat_rental-14.svg.png", "40px-Bus_station-14.svg.png", "40px-Rental-car-16.svg.png", 
+    "40px-Rental-car-16.svg.png", "40px-Car_wash-14.svg.png", NA, "40px-Vehicle_inspection-14.svg.png", "40px-Charging_station.16.svg.png", NA, "40px-Ferry-icon.svg.png", "40px-Fuel-16.svg.png", NA, "40px-Parking-motorcycle-16.svg.png", "40px-Parking-16.svg.png", "40px-Parking_entrance_multi-storey_14", NA, "40px-Taxi-16.svg.png", NA, 
+    "40px-Atm-14.svg.png", NA, "40px-Bank-16.svg.png", "40px-Bureau_de_change-14.svg.png", NA, NA, 
+    NA, "40px-Doctors-14.svg.png", "40px-Dentist-14.svg.png", "40px-Doctors-14.svg.png", "40px-Hospital-14.svg.png", NA, "40px-Pharmacy-14.svg.png", "40px-Social_facility-14.svg.png", "40px-Veterinary-14.svg.png", 
+    "40px-Arts_centre.svg.png", NA, "40px-Casino-14.svg.png", "40px-Cinema-16.svg.png", "40px-Community_centre-14.svg.png", rep(NA, 3), "40px-Fountain-14.svg.png", rep(NA, 3), "40px-Nightclub-16.svg.png", NA,  "40px-Public_bookcase-14.svg.png", rep(NA, 5), "40px-Theatre-16.svg.png", 
+    "40px-Courthouse-16.svg.png", "40px-Fire-station-16.svg.png", "40px-Police-16.svg.png", "40px-Post_box-12.svg.png", NA, "40px-Post_box-12.svg.png", "40px-Prison-16.svg.png", NA, "40px-Town-hall-16.svg.png", 
+    "40px-Bbq-14.svg.png", "40px-Bench-16.svg.png", rep(NA, 3), "40px-Drinking-water-16.svg.png", rep(NA, 4), "40px-Shelter-14.svg.png", "40px-Shower-14.svg.png", "40px-Telephone.16.svg.png", "40px-Toilets-16.svg.png", rep(NA, 2), 
+    NA, "40px-Recycling-16.svg.png", "40px-Waste-basket-12.svg.png", "40px-Waste_disposal-14.svg.png", NA, 
+    rep(NA, 10), "40px-Hunting-stand-16.svg.png", "40px-Internet_cafe-14.svg.png", rep(NA, 3), "40px-Marketplace-14.svg.png", rep(NA, 5),  "40px-Public_bath.svg.png", rep(NA, 3)))
+
+
+
   
 # Building tags
 target <- c("bridge", "clock_tower", "fire_station", 
@@ -1280,10 +1319,17 @@ poly_as_lat_long <- poly_as_metres %>%
   st_transform(crs = 4326) %>% 
   st_as_sf()
 
+
+
 # Add x and y for icon insertion
-buildings[[i]] <- buildings[[i]] %>%
-    mutate(x = (buildings[[i]] %>% select(geometry) %>% sf::st_centroid() %>% st_bbox())[1], 
-           y = (buildings[[i]]  %>% select(geometry) %>% sf::st_centroid() %>% st_bbox())[2])
+amenity[[i]]$x <- (amenity[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,1]
+amenity[[i]]$y <- (amenity[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,2]             
+buildings[[i]]$x <- (buildings[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,1]
+buildings[[i]]$y <- (buildings[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,2]             
+# Add lat and lon for icon insertion
+amenity[[i]]$lon <- (amenity[[i]] %>% select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,1]
+amenity[[i]]$lat <- (amenity[[i]] %>% select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,2]
+
 
 
 # filter out all NA rows in the amenity df
@@ -1291,71 +1337,184 @@ df <- amenity[[i]] %>% filter(amenity %in% c(bar, food, bicycle_parking, bus, ca
     poly_as_metres, .predicate =  st_intersects) 
 df <- df[ , -which(names(df) %in% c("osm_id"))]
 amenity_df <- subset(df, rowSums(is.na(df %>% st_drop_geometry())) != ncol(df %>% st_drop_geometry()))
+# join to icons
+amenity_df <- amenity_df %>% left_join(amenity_categories, by = join_by(amenity == value))
 
-map_local[[i]] <- ggplot() + 
- ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
+map_local[[i]] <- 
+ggplot() + 
+  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
+#  geom_sf(data = poly_as_metres, fill = NA) +
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  geom_sf(data = buildings[[i]] %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white") +
+  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 
+geom_sf(data = buildings[[i]] %>% filter(building %in% education | amenity %in% education) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "orange") + 
+geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civic) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "blue") + 
+  geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ### Walking radius
+    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
+  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
+  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
+  geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
+  geom_image(
+    data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
+    aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
+  coord_sf(crs = 4326) +
+  theme(
+        axis.title = element_blank(), 
+        axis.text.x=element_blank(), #remove x axis labels
+        axis.ticks.x=element_blank(), #remove x axis ticks
+        axis.text.y=element_blank(),  #remove y axis labels
+        axis.ticks.y=element_blank(), #remove y axis ticks
+        legend.position="none",
+        legend.text = element_text(size = 8), 
+        legend.title = element_blank(), 
+        legend.key.size = unit(0.5, 'in'),
+        ) 
+
+
+
+
+
+filename <- (hub_location_metres %>% names())[i]
+q1 <- c("ggsave('graphics/", filename, "_map_local.png'", ", map_local[[i]], width = 6, height = 6, units = 'in')")
+q1 <- paste(q1,collapse="")
+str2expression(q1) %>% eval()
+
+}
+
+
+```
+ggplot() + 
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + geom_image(
+    data = amenity_df,
+    aes(x = x, y = y, image = "data/osmic-master/amenity/toilets.png"))
+
+
+
+ggplot() + 
+  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
+#  geom_sf(data = poly_as_metres, fill = NA) +
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  geom_sf(data = buildings[[i]] %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white") +
+  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 
+geom_sf(data = buildings[[i]] %>% filter(building %in% education | amenity %in% education) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "orange") + 
+geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civic) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "blue") + 
+  geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% target) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
+    fill = "purple") + 
+  ### Walking radius
+    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
+  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
+  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
+  geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
+  geom_image(
+    data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
+    aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
+  coord_sf(crs = 4326) +
+  theme(
+        axis.title = element_blank(), 
+        axis.text.x=element_blank(), #remove x axis labels
+        axis.ticks.x=element_blank(), #remove x axis ticks
+        axis.text.y=element_blank(),  #remove y axis labels
+        axis.ticks.y=element_blank(), #remove y axis ticks
+        legend.position="none",
+        legend.text = element_text(size = 8), 
+        legend.title = element_blank(), 
+        legend.key.size = unit(0.5, 'in'),
+        ) 
+
+
+
+
++ 
+  ggrepel::geom_label_repel(
+    data = hub_location_metres[[i]] %>% st_transform(crs=crs_local_metres), mapping = aes(
+      label = "You are here", size = 7, geometry = geometry), 
+    stat = "sf_coordinates") 
+
+
+
+ggplot() + 
+   geom_sf(data = buildings[[i]] %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white")
+  
+  
+  
+  geom_image(
+    data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
+    aes(x = x, y = y, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = "")))  
+
+
+
++
+  coord_sf(xlim = (poly_as_lat_long %>% st_transform(crs=crs_local_metres) %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
+  ylim = (poly_as_lat_long %>% st_transform(crs=crs_local_metres) %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = crs_local_metres)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
 # geom_sf(data = poly_as_metres, fill = NA) +
-   geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow() +
+  geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
 #  geom_sf(data = net[[i]], aes())  + 
   geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) +
    # PLACEHOLDER FOR HOTEL
-geom_sf(data = buildings[[i]] %>% filter(building %in% education) %>% st_filter(
+geom_sf(data = buildings[[i]] %>% filter(building %in% education | amenity %in% education) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
     fill = "orange") + 
-ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    building %in% education) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 3) +
-geom_sf(data = buildings[[i]] %>% filter(amenity %in% education) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "orange")  +
-ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    amenity %in% target) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 3) +
-geom_sf(data = buildings[[i]] %>% filter(building %in% civic) %>% st_filter(
+geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civic) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
     fill = "blue") + 
-ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    building %in% civic) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 3) +
-geom_sf(data = buildings[[i]] %>% filter(amenity %in% civic) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "blue")  +
-  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    amenity %in% civic) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 3) +
-# TARGET buildings  
-  geom_sf(data = buildings[[i]] %>% filter(building %in% target) %>% st_filter(
+  geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% target) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
     fill = "purple") + 
-  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    building %in% target) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 3) +
-# TARGET building amenities  
-  geom_sf(data = buildings[[i]] %>% filter(amenity %in% target) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "purple") + 
-  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    amenity %in% target) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 3) +
 
-#Amenities  
-  geom_sf(data = amenity_df, mapping = aes(), fill = "purple") + 
-  ggrepel::geom_label_repel(data = amenity_df, mapping = aes(
-        label = amenity, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 3) +
   
+#Amenities  
+#  geom_sf(data = amenity_df, mapping = aes(), fill = "purple") + 
+  geom_image(
+    data = amenity_df,
+    aes(x = x, y = y, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) +
+ 
+  
+#ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
+#    building %in% c(target, education, civic) | amenity %in% c(target, education, civic)) %>% st_filter(
+#      poly_as_metres, .predicate =  st_intersects), mapping = aes(
+#        label = name, geometry = geometry), 
+#    text.colour = "black", stat = "sf_coordinates", size = 3) +
+#  ggrepel::geom_label_repel(data = amenity_df, mapping = aes(
+#        label = amenity, geometry = geometry), 
+#    text.colour = "black", stat = "sf_coordinates", size = 3) +
+ 
+
   ### Walking radius
     geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
   st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
@@ -1375,364 +1534,13 @@ geom_sf(data = buildings[[i]] %>% filter(amenity %in% civic) %>% st_filter(
   ggrepel::geom_label_repel(
     data = hub_location_metres[[i]], mapping = aes(
       label = "You are here", size = 7, geometry = geometry), 
-    stat = "sf_coordinates") + 
-  ggspatial::annotation_scale(location = 'br') + 
-  ggspatial::annotation_north_arrow() +
-  coord_sf(xlim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
-  ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326) 
-
-filename <- (hub_location_metres %>% names())[i]
-q1 <- c("ggsave('graphics/", filename, "_map_local.png'", ", map_local[[i]], width = 6, height = 6, units = 'in')")
-q1 <- paste(q1,collapse="")
-str2expression(q1) %>% eval()
-
-}
-
-```
-
-```{r create_area_map_richmond, eval=FALSE, include=FALSE, echo=FALSE, fig.fullwidth = TRUE, out.width= "100%"}
-
-map_area <- list()
-distance_map_plot <- 1200
-
-
-for(i in seq_along(placebb_metres)){
-
-ylim = c(placebb_metres[[i]][2] %>% 
-    as.numeric() - distance_map_plot,
-    placebb_metres[[i]][4] %>% 
-    as.numeric() + distance_map_plot)
-xlim = c(placebb_metres[[i]][1] %>% 
-    as.numeric() - distance_map_plot,
-    placebb_metres[[i]][3] %>% 
-    as.numeric() + distance_map_plot)
-Poly_Coord_df = data.frame(xlim, ylim)
-poly_as_metres <- Poly_Coord_df %>% 
-  st_as_sf(coords = c("xlim", "ylim"), 
-           crs = crs_local_metres) %>% 
-  st_bbox() %>% 
-  st_as_sfc()
-poly_as_lat_long <- poly_as_metres %>% 
-  st_transform(crs = 4326) %>% 
-  st_as_sf()
-
-
-map_area[[i]] <- ggplot() + 
- ggspatial::annotation_map_tile(type = "cartolight", zoom = 15) +
-# geom_sf(data = poly_as_metres, fill = NA) +
-   geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
-#  geom_sf(data = net[[i]], aes())  + 
-  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=1200), fill = NA, colour = "white", size = 1) +
-   # PLACEHOLDER FOR HOTEL
-geom_sf(data = buildings[[i]] %>% filter(building %in% hotel) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "blue") + 
-  
-# TARGET buildings  
-  geom_sf(data = buildings[[i]] %>% filter(building %in% target) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "purple") + 
-  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    building %in% target) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 1.5) +
-# TARGET building amenities  
-  geom_sf(data = buildings[[i]] %>% filter(amenity %in% target) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "purple") + 
-  ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-    amenity %in% target) %>% st_filter(
-      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-        label = name, geometry = geometry), 
-    text.colour = "black", stat = "sf_coordinates", size = 1.5) +
-  
- 
-  ### Walking radius
-    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 700)), ylim =c(ylim[2] - 175)) %>% 
-  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
-  st_as_sfc(), aes(), label = "15 minute walk", colour = "black", angle = 35, size = 2) +
-  theme(
-        axis.title = element_blank(), 
-        axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        legend.position="none",
-        legend.text = element_text(size = 8), 
-        legend.title = element_blank(), 
-        legend.key.size = unit(0.5, 'in'),
-        ) + 
-  geom_sf(data = hub_location_metres[[i]], size = 4, colour = "red") + 
-  ggrepel::geom_label_repel(
-    data = hub_location_metres[[i]], mapping = aes(
-      label = "You are here", size = 3, geometry = geometry), 
-    stat = "sf_coordinates") + 
-  ggspatial::annotation_scale(location = 'br') + 
-  ggspatial::annotation_north_arrow() +
+    stat = "sf_coordinates")  +
   coord_sf(xlim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
   ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326) 
 
 
-}
-
-  
-ggsave("graphics/bridge_yarra_map_area.png", map_area[[1]], width = 4, height = 4, units = "in")
-ggsave("graphics/swan_park_map_area.png", map_area[[2]], width = 4, height = 4, units = "in")
-ggsave("graphics/victoria_burnley_map_area.png", map_area[[3]], width = 4, height = 4, units = "in")
 
 ```
-
-
-```{r local_map_example_richmond, out.width = "100%", fig.align = "center", fig.cap = "Local map figure, generated for Letterkenny ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval = FALSE}
-knitr::include_graphics("graphics/letterkenny_map_local.png") 
-
-```
-
-```{r area_map_example_richmond, out.width = "100%", fig.align = "center", fig.cap = "Area map figure, generated for Galway ROBUST hub. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval = FALSE}
-knitr::include_graphics("graphics/galway_map_area.png") 
-
-```
-
-
-```{r mock_up_layout_richmond, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=FALSE}
-
-
-grid.rect(gp = gpar(lty = "dashed"))
-hub_name <- viewport(x = 0, y = 11.5/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_name")
-hub_facilities <- viewport(x = 0, y = 11/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_facilities")
-direction_information <- viewport(x = 0, y = 10/12, w = 1, h = 1/12, just = c("left", "bottom"), name = "directional_information")
-local_map <- viewport(x = 0, y = 5/12, w = 1, h = 5/12, just = c("left", "bottom"), name = "local_map")
-hub_facilities_details <- viewport(x = 0, y = 3/12, w = 5/9, h = 2/12, just = c("left", "bottom"), name = "hub_facilities_details")
-area_map <- viewport(x = 5/9, y = 3/12, w = 4/9, h = 2/12, just = c("left", "bottom"), name = "area_map") 
-logos <- viewport(x = 5/9, y = 2/12, w = 4/9, h = 1/12, just = c("left", "bottom"), name = "area_map") 
-#vp2 <- viewport(x = 0.5, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom"))
-pushViewport(hub_name)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Dundrum hub: 6.241W, 53.288N", y = 0.5)
-upViewport()
-pushViewport(hub_facilities)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Hub icons go here", y = 0.5)
-upViewport()
-pushViewport(direction_information)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Direction information goes here", y = 0.5)
-upViewport()
-pushViewport(local_map)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Local Map goes here", y = 0.5)
-upViewport()
-pushViewport(hub_facilities_details)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Hub facility details", y = 0.5)
-upViewport()
-pushViewport(area_map)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Area Map goes here", y = 0.5)
-upViewport()
-pushViewport(logos)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Logos etc", y = 0.5)
-popViewport()
-
-dev.copy(pdf, "graphics/richmond_layout_test.pdf", width = 12, height = 16)
-dev.off()
-
-
-```
-
-
-```{r mock_up_layout_with_maps_richmond, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=FALSE}
-knitr::include_graphics("graphics/dundrum_mock_up.png") 
-
-
-addImg <- function(
-  obj, # an image file imported as an array (e.g. png::readPNG, jpeg::readJPEG)
-  x = NULL, # mid x coordinate for image
-  y = NULL, # mid y coordinate for image
-  width = NULL, # width of image (in x coordinate units)
-  interpolate = TRUE # (passed to graphics::rasterImage) A logical vector (or scalar) indicating whether to apply linear interpolation to the image when drawing. 
-){
-  if(is.null(x) | is.null(y) | is.null(width)){stop("Must provide args 'x', 'y', and 'width'")}
-  USR <- par()$usr # A vector of the form c(x1, x2, y1, y2) giving the extremes of the user coordinates of the plotting region
-  PIN <- par()$pin # The current plot dimensions, (width, height), in inches
-  DIM <- dim(obj) # number of x-y pixels for the image
-  ARp <- DIM[1]/DIM[2] # pixel aspect ratio (y/x)
-  WIDi <- width/(USR[2]-USR[1])*PIN[1] # convert width units to inches
-  HEIi <- WIDi * ARp # height in inches
-  HEIu <- HEIi/PIN[2]*(USR[4]-USR[3]) # height in units
-  rasterImage(image = obj, 
-    xleft = x-(width/2), xright = x+(width/2),
-    ybottom = y-(HEIu/2), ytop = y+(HEIu/2), 
-    interpolate = interpolate)
-}
-
-
-library(png)
-pic <- readPNG("graphics/bridge_yarra_map_local.png")
-dim(pic)
-
-#png(pic, width = 5, height = 4, units = "in", res = 400)
-#  par(mar = c(3,3,0.5,0.5))
-#  image(volcano)
-#  addImg(pic, x = 0.3, y = 0.5, width = 0.2)
-#dev.off()
-
-
-
-
-grid.rect(gp = gpar(lty = "blank"))
-hub_name <- viewport(x = 0, y = 11.5/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_name")
-hub_facilities <- viewport(x = 0, y = 11/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_facilities")
-direction_information <- viewport(x = 0, y = 10/12, w = 1, h = 1/12, just = c("left", "bottom"), name = "directional_information")
-local_map <- viewport(x = 0, y = 5/12, w = 1, h = 5/12, just = c("left", "bottom"), name = "local_map")
-hub_facilities_details <- viewport(x = 0, y = 3/12, w = 5/9, h = 2/12, just = c("left", "bottom"), name = "hub_facilities_details")
-area_map <- viewport(x = 5/9, y = 3/12, w = 4/9, h = 2/12, just = c("left", "bottom"), name = "area_map") 
-logos <- viewport(x = 5/9, y = 2/12, w = 4/9, h = 1/12, just = c("left", "bottom"), name = "area_map") 
-#vp2 <- viewport(x = 0.5, y = 0, w = 0.5, h = 0.5, just = c("left", "bottom"))
-pushViewport(hub_name)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Dundrum hub: 6.241W, 53.288N", y = 0.5)
-upViewport()
-pushViewport(hub_facilities)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Hub icons go here", y = 0.5)
-upViewport()
-pushViewport(direction_information)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Direction information goes here", y = 0.5)
-upViewport()
-pushViewport(local_map)
-#grid.rect(gp = gpar(col = "grey"))
-grid.arrange(map_local[[4]], ncol=2)
-
-upViewport()
-pushViewport(hub_facilities_details)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Hub facility details", y = 0.5)
-upViewport()
-pushViewport(area_map)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Area Map goes here", y = 0.5)
-upViewport()
-pushViewport(logos)
-grid.rect(gp = gpar(col = "grey"))
-grid.text("Logos etc", y = 0.5)
-popViewport()
-
-dev.copy(pdf, "graphics/richmond_layout_test.pdf", width = 12, height = 16)
-dev.off()
-
-
-```
-
-
-```{r mock_up_layout_with_maps_grob_richmond, out.width = "80%", fig.align = "center", fig.cap = "Mockup of hub signage. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=FALSE}
-
-library(gridExtra)
-library(grid)
-library(ggplot2)
-library(lattice)
-grid.rect(gp = gpar(lty = "blank"))
-
-r <- rectGrob(gp=gpar(fill="darkgreen"))
-
-
-
-gs <- lapply(1:9, function(ii) 
-  grobTree(rectGrob(gp=gpar(fill=ii, alpha=0.5)), textGrob(ii)))
-grid.arrange(grobs=gs, ncol=9, 
-               top="top label", bottom="bottom\nlabel", 
-               left="left label", right="right label")
-grid.rect(gp=gpar(fill=NA))
-
-hub_name <- grobTree(rectGrob(gp=gpar(fill="darkgreen")), textGrob("Galway e-Mobility Hub: 53.277N, 9.073W", gp=gpar(fontsize=40, col="white", fontface="bold", lty = "blank")))
-gs[[1]] <- grid.arrange(hub_name)
-
-
-
-library(rsvg)
-bitmap <- rsvg_raw('data/osmic-master/transport/shared-car-14.svg', width = 600)
-# Read the bitmap in magick
-shared_car_image <- magick::image_read(bitmap)
-
-bitmap <- rsvg_raw('data/osmic-master/transport/rental-bicycle-14.svg', width = 600)
-# Read the bitmap in magick
-shared_bike_image <- magick::image_read(bitmap)
-
-shared_car_image_grob <- rasterGrob(shared_car_image)
-shared_bike_image_grob <- rasterGrob(shared_bike_image)
-
-
-
-gs[[2]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")), grid.arrange(shared_car_image_grob, shared_bike_image_grob, ncol = 10))
-gs[[3]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")), textGrob("Directions go here", gp=gpar(fontsize=10, col="white")))
-gs[[4]] <- map_local[[2]] 
-
-facilities_grob <- lapply(1:4, function(ii) 
-  grobTree(rectGrob(gp=gpar(fill=ii, alpha=0.5)), textGrob(ii)))
-lay <- rbind(c(1,3),
-             c(2,4)
-             )
-facilities_grob[[1]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")),
-                                grid.arrange(
-                                  shared_bike_image_grob, 
-                                  gridtext::textbox_grob("The Galway hub has shared e-bikes and an e-cargo bike available for short-term hire. Lorem ipsum Dolor iaculis tempor, venenatis a himenaeos tempus nibh neque viverra justo, conubia ultrices!",  gp=gpar(fontsize=7, col="white", lty = "blank")), ncol = 1))
-facilities_grob[[2]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")),
-                                grid.arrange(shared_car_image_grob, 
-                                             textGrob("Available through Enterprise Car Club...", gp=gpar(fontsize=7, col="white", lty = "blank")), ncol = 1))
-
-facilities_grob[[3]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
-                                 
-facilities_grob[[4]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
-gs[[5]] <- grid.arrange(grobs = facilities_grob, layout_matrix = lay) 
-gs[[6]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
-gs[[7]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")))
-
-
-bitmap <- png::readPNG('graphics/robust-logo-news.png')
-# Read the bitmap in magick
-robust_logo <- magick::image_read(bitmap)
-robust_logo_grob <- rasterGrob(robust_logo)
-gs[[8]] <- grobTree(rectGrob(gp=gpar(fill="darkgreen", lty = "blank")), grid.arrange(robust_logo_grob))
-
-
-
-gs[[9]] <- map_area[[1]]
-lay <- rbind(c(1,1,1,1,1),
-             c(1,1,1,1,1),
-             c(2,2,2,2,2),
-             c(3,3,3,3,3),
-             c(3,3,3,3,3),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(4,4,4,4,4),
-             c(5,5,5,9,9),
-             c(5,5,5,9,9),
-             c(6,6,6,9,9),
-             c(8,7,7,9,9))
-grid.arrange(grobs = gs, layout_matrix = lay)
-
-dev.copy(png, "graphics/richmond_layout_test.png", width = 1200, height = 2400)
-dev.off()
-
-```
-
-
-
-```{r mock_up_layout_with_maps_grob_output, out.width = "50%", fig.align = "center", fig.cap = "Mockup of hub signage, produced using developed R code. Source: authors.", echo = FALSE, warning=FALSE, message=FALSE, cache=FALSE, eval=TRUE}
-knitr::include_graphics("graphics/richmond_layout_test.pdf") 
-
-```
-
 
 
 

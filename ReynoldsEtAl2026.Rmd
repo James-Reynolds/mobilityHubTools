@@ -1195,7 +1195,9 @@ hub_location <- list.load(
 
 
 map_local <- list()
-distance_map_plot <- 400
+distance_map_plot <- 1000
+distance_map_limits <- 400
+
 
 crs_local_metres <- 20353
 
@@ -1319,6 +1321,25 @@ poly_as_lat_long <- poly_as_metres %>%
   st_transform(crs = 4326) %>% 
   st_as_sf()
 
+ylim_plot_limits = c(placebb_metres[[i]][2] %>% 
+    as.numeric() - distance_map_limits,
+    placebb_metres[[i]][4] %>% 
+    as.numeric() + distance_map_limits)
+xlim_plot_limits = c(placebb_metres[[i]][1] %>% 
+    as.numeric() - distance_map_limits,
+    placebb_metres[[i]][3] %>% 
+    as.numeric() + distance_map_limits)
+Poly_Coord_df_limits = data.frame(xlim_plot_limits, ylim_plot_limits)
+poly_as_metres_limits <- Poly_Coord_df_limits %>% 
+  st_as_sf(coords = c("xlim_plot_limits", "ylim_plot_limits"), 
+           crs = crs_local_metres) %>% 
+  st_bbox() %>% 
+  st_as_sfc()
+poly_as_lat_long_limits<- poly_as_metres_limits %>% 
+  st_transform(crs = 4326) %>% st_bbox() %>% as.vector()
+
+
+
 
 
 # Add x and y for icon insertion
@@ -1366,7 +1387,7 @@ geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civi
   geom_image(
     data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
     aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
-  coord_sf(crs = 4326) +
+  coord_sf(crs = 4326, xlim = c(poly_as_lat_long_limits[1], poly_as_lat_long_limits[3]), ylim = c(poly_as_lat_long_limits[2], poly_as_lat_long_limits[4])) +
   theme(
         axis.title = element_blank(), 
         axis.text.x=element_blank(), #remove x axis labels
@@ -1378,10 +1399,6 @@ geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civi
         legend.title = element_blank(), 
         legend.key.size = unit(0.5, 'in'),
         ) 
-
-
-
-
 
 filename <- (hub_location_metres %>% names())[i]
 q1 <- c("ggsave('graphics/", filename, "_map_local.png'", ", map_local[[i]], width = 6, height = 6, units = 'in')")
@@ -1389,155 +1406,6 @@ q1 <- paste(q1,collapse="")
 str2expression(q1) %>% eval()
 
 }
-
-
-```
-ggplot() + 
-  ggspatial::annotation_scale(location = 'br') + 
-  ggspatial::annotation_north_arrow() +
-  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + geom_image(
-    data = amenity_df,
-    aes(x = x, y = y, image = "data/osmic-master/amenity/toilets.png"))
-
-
-
-ggplot() + 
-  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
-#  geom_sf(data = poly_as_metres, fill = NA) +
-  ggspatial::annotation_scale(location = 'br') + 
-  ggspatial::annotation_north_arrow() +
-  geom_sf(data = buildings[[i]] %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white") +
-  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 
-geom_sf(data = buildings[[i]] %>% filter(building %in% education | amenity %in% education) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "orange") + 
-geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civic) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "blue") + 
-  geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% target) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "purple") + 
-  ### Walking radius
-    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
-  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
-  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
-  geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
-  geom_image(
-    data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
-    aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
-  coord_sf(crs = 4326) +
-  theme(
-        axis.title = element_blank(), 
-        axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        legend.position="none",
-        legend.text = element_text(size = 8), 
-        legend.title = element_blank(), 
-        legend.key.size = unit(0.5, 'in'),
-        ) 
-
-
-
-
-+ 
-  ggrepel::geom_label_repel(
-    data = hub_location_metres[[i]] %>% st_transform(crs=crs_local_metres), mapping = aes(
-      label = "You are here", size = 7, geometry = geometry), 
-    stat = "sf_coordinates") 
-
-
-
-ggplot() + 
-   geom_sf(data = buildings[[i]] %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white")
-  
-  
-  
-  geom_image(
-    data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
-    aes(x = x, y = y, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = "")))  
-
-
-
-+
-  coord_sf(xlim = (poly_as_lat_long %>% st_transform(crs=crs_local_metres) %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
-  ylim = (poly_as_lat_long %>% st_transform(crs=crs_local_metres) %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = crs_local_metres)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
-# geom_sf(data = poly_as_metres, fill = NA) +
-  ggspatial::annotation_scale(location = 'br') + 
-  ggspatial::annotation_north_arrow() +
-  geom_sf(data = buildings[[i]], mapping = aes(), fill = "white") +
-#  geom_sf(data = net[[i]], aes())  + 
-  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) +
-   # PLACEHOLDER FOR HOTEL
-geom_sf(data = buildings[[i]] %>% filter(building %in% education | amenity %in% education) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "orange") + 
-geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civic) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "blue") + 
-  geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% target) %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "purple") + 
-
-  
-#Amenities  
-#  geom_sf(data = amenity_df, mapping = aes(), fill = "purple") + 
-  geom_image(
-    data = amenity_df,
-    aes(x = x, y = y, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) +
- 
-  
-#ggrepel::geom_label_repel(data = buildings[[i]] %>% filter(
-#    building %in% c(target, education, civic) | amenity %in% c(target, education, civic)) %>% st_filter(
-#      poly_as_metres, .predicate =  st_intersects), mapping = aes(
-#        label = name, geometry = geometry), 
-#    text.colour = "black", stat = "sf_coordinates", size = 3) +
-#  ggrepel::geom_label_repel(data = amenity_df, mapping = aes(
-#        label = amenity, geometry = geometry), 
-#    text.colour = "black", stat = "sf_coordinates", size = 3) +
- 
-
-  ### Walking radius
-    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
-  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
-  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
-  theme(
-        axis.title = element_blank(), 
-        axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        legend.position="none",
-        legend.text = element_text(size = 8), 
-        legend.title = element_blank(), 
-        legend.key.size = unit(0.5, 'in'),
-        ) + 
-  geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") + 
-  ggrepel::geom_label_repel(
-    data = hub_location_metres[[i]], mapping = aes(
-      label = "You are here", size = 7, geometry = geometry), 
-    stat = "sf_coordinates")  +
-  coord_sf(xlim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(1,3) %>% unlist() %>% as.numeric()),
-  ylim = (poly_as_lat_long %>% st_bbox() %>% as.numeric() %>% as_tibble() %>% slice(2,4) %>% unlist() %>% as.numeric()), crs = 4326) 
-
 
 
 ```

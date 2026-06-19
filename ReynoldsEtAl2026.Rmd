@@ -56,6 +56,7 @@ output:
 ```{r setup, include=FALSE}
 library(devtools)
 library(dplyr)
+library(ggimage)
 library(ggplot2)
 library(janitor)
 library(kableExtra)
@@ -1064,6 +1065,9 @@ split_bbox <- function (bbox, grid = 2, eps = 0.05) {
 
 final_amenity <- list()
 final_building <- list()
+final_landuse <- list()
+final_leisure <- list()
+
 
 for(i in seq_along(place_sf)){
 
@@ -1121,24 +1125,188 @@ while (length (queue) > 0) {
 }
 final_amenity[[i]] <- do.call (c, result)
 
+
+### lesuire               
+queue <- split_bbox (bb)
+result <- list ()
+
+while (length (queue) > 0) {
+
+    print (queue [[1]])
+
+    opres <- NULL
+    opres <- try ({
+        opq (bbox = queue [[1]], timeout = 25) |>
+            add_osm_feature (key = "leisure") |>
+            osmdata_sf ()
+    })
+
+    if (class (opres) [1] != "try-error") {
+        result <- append (result, list (opres))
+        queue <- queue [-1]
+    } else {
+        bboxnew <- split_bbox (queue [[1]])
+        queue <- append (bboxnew, queue [-1])
+    }
 }
+final_leisure[[i]] <- do.call (c, result)
+
+
+
+### landuse               
+queue <- split_bbox (bb)
+result <- list ()
+
+while (length (queue) > 0) {
+
+    print (queue [[1]])
+
+    opres <- NULL
+    opres <- try ({
+        opq (bbox = queue [[1]], timeout = 25) |>
+            add_osm_feature (key = "landuse") |>
+            osmdata_sf ()
+    })
+
+    if (class (opres) [1] != "try-error") {
+        result <- append (result, list (opres))
+        queue <- queue [-1]
+    } else {
+        bboxnew <- split_bbox (queue [[1]])
+        queue <- append (bboxnew, queue [-1])
+    }
+}
+final_landuse[[i]] <- do.call (c, result)
+
+}
+
 
 names(final_amenity) <- names(place_sf)
 names(final_building) <- names(place_sf)
+names(final_leisure) <- names(place_sf)
+names(final_landuse) <- names(place_sf)
 
-list.save(final_building, "data/richmond_buildings_260614.rdata")
-list.save(final_amenity, "data/richmond_amenity_260614.rdata")
 
+list.save(final_building, "data/richmond_buildings_260619.rdata")
+list.save(final_amenity, "data/richmond_amenity_260619.rdata")
+list.save(final_leisure, "data/richmond_leisure_260619.rdata")
+list.save(final_landuse, "data/richmond_landuse_260619.rdata")
 
+net <- list()
+net <- lapply(placebb, function(x) dodgr::dodgr_streetnet(x))
+list.save(net, "data/richmond_net_260619.rdata")
 
 ```
 
 
+```{r download_osm_data_function, eval=FALSE, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE }
+
+download_osm_data_by_category_function <- function(
+    hub_location = hub_location, crs_local_metres = crs_local_metres, 
+    key = "building")
+{
+### Create hub locations
+hub_location <- lapply(hub_location, function(x) x %>% 
+  st_as_sf(coords = c("lon", "lat"), 
+           crs = 4326) %>%
+  st_transform(crs = crs_local_metres) %>% 
+  st_cast("POINT"))
+
+place_sf <- lapply(hub_location, function(x) x %>% 
+                    st_buffer(dist = 2000) %>%
+                    st_transform(crs = 4326) 
+                  )
+
+placebb <- lapply(hub_location, function(x) x %>% 
+                    st_buffer(dist = 2000) %>%
+                    st_transform(crs = 4326) %>%
+                    st_bbox()
+                  )
+### based on https://github.com/ropensci/osmdata/blob/main/vignettes/query-split.Rmd
+
+split_bbox <- function (bbox, grid = 2, eps = 0.05) {
+    xmin <- bbox ["x", "min"]
+    ymin <- bbox ["y", "min"]
+    dx <- (bbox ["x", "max"] - bbox ["x", "min"]) / grid
+    dy <- (bbox ["y", "max"] - bbox ["y", "min"]) / grid
+
+    bboxl <- list ()
+
+    for (i in 1:grid) {
+        for (j in 1:grid) {
+            b <- matrix (c (
+                xmin + ((i - 1 - eps) * dx),
+                ymin + ((j - 1 - eps) * dy),
+                xmin + ((i + eps) * dx),
+                ymin + ((j + eps) * dy)
+            ),
+            nrow = 2,
+            dimnames = dimnames (bbox)
+            )
+
+            bboxl <- append (bboxl, list (b))
+        }
+    }
+    bboxl
+}
+
+final <- list()
+
+
+for(i in seq_along(place_sf)){
+
+bb_vector <- place_sf[[i]] %>% st_bbox() %>% as.numeric()
+bb <- data.frame(min = bb_vector[1:2], max = bb_vector[3:4])
+rownames(bb) <- c("x", "y")               
+                 
+queue <- split_bbox (bb)
+result <- list ()
+
+while (length (queue) > 0) {
+
+    print (queue [[1]])
+
+    opres <- NULL
+    opres <- try ({
+        opq (bbox = queue [[1]], timeout = 25) |>
+            add_osm_feature (key = key) |>
+            osmdata_sf ()
+    })
+
+    if (class (opres) [1] != "try-error") {
+        result <- append (result, list (opres))
+        queue <- queue [-1]
+    } else {
+        bboxnew <- split_bbox (queue [[1]])
+        queue <- append (bboxnew, queue [-1])
+    }
+}
+final[[i]] <- do.call (c, result)
+}
+
+
+names(final) <- names(place_sf)
+
+return(final)
+}
+
+highway <- download_osm_data_by_category_function(
+    hub_location = hub_location,
+    crs_local_metres = crs_local_metres, 
+    key = "highway")
+
+list.save(highway, "data/richmond_highway_260619.rdata")
+
+```
+
+
+
+
 ```{r extract_osm_data_ROBUST_hubs_richmond, eval=FALSE, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE }
 
-amenity <- list.load("data/richmond_amenity_260614.rdata")
+amenity <- list.load("data/richmond_amenity_260619.rdata")
 
-buildings <- list.load("data/richmond_buildings_260614.rdata")
+buildings <- list.load("data/richmond_buildings_260619.rdata")
 
 #select lines, polygons etc into sf dataframe
 
@@ -1170,12 +1338,32 @@ buildings <- buildings %>%
   lapply(function(x)
     x %>% mutate(building = as_factor(building)))
 
+
+
+landuse <- list.load(
+  "data/richmond_landuse_260619.rdata")
+leisure <- list.load( "data/richmond_leisure_260619.rdata")
+net <- list.load(
+  "data/richmond_net_260619.rdata")
+
+highway <- list.load(
+  "data/richmond_highway_260619.rdata")
+highway<- lapply(highway, function(x) bind_rows(
+  x$osm_points,
+  x$osm_lines, 
+  x$osm_polygons, 
+#  x$osm_multilines,
+#  x$osm_multipolygons
+))
+list.save(highway, "data/richmond_highway.rdata")
+
 ##SAVE DATASETS
 list.save(amenity, "data/richmond_amenity.rdata")
 list.save(buildings, "data/richmond_buildings.rdata")
 list.save(hub_location, "data/richmond_hub_location.rdata")
-list.save(hub_location_metres, "data/richmond_hub_location_metres.rdata")
-
+list.save(landuse, "data/richmond_landuse.rdata")
+list.save(leisure, "data/richmond_leisure.rdata")
+list.save(net, "data/richmond_net.rdata")
 
 ```
 
@@ -1188,6 +1376,10 @@ buildings <- list.load(
   "data/richmond_buildings.rdata")
 hub_location <- list.load(
   "data/richmond_hub_location.rdata")
+landuse <- list.load("data/richmond_landuse.rdata")
+leisure <- list.load("data/richmond_leisure.rdata")
+net <- list.load("data/richmond_net.rdata")
+highway <- list.load("data/richmond_highway.rdata")
 
 ```
 
@@ -1268,8 +1460,7 @@ amenity_categories <- tibble(
 # Building tags
 target <- c("bridge", "clock_tower", "fire_station", 
             "hospital", 
-             "cathedral", "church", "religious", "chapel", "convent", "kingdom_hall", "monastery", "mosque", "presbytery", "shrine", "synagogue", "temple", "grandstand", "pavillion", "riding_hall", "sports_hall", "sports_centre", "stadium", "guardhouse", "millitary", "tower", "triumphal_arch", "windmill", "tower", 
-            "pub", "cafe")
+             "cathedral", "church", "religious", "chapel", "convent", "kingdom_hall", "monastery", "mosque", "presbytery", "shrine", "synagogue", "temple", "grandstand", "pavillion", "riding_hall", "sports_hall", "sports_centre", "stadium", "guardhouse", "millitary", "tower", "triumphal_arch", "windmill", "tower")
 hotel <- c("hotel", "guest_house", "hostel", "motel")
 civic <- c("library", "civic", "government", "gatehouse", "museum", "public", "castle") 
 groceries <- c("kiosk", "supermarket")
@@ -1363,31 +1554,72 @@ amenity_df <- amenity_df %>% left_join(amenity_categories, by = join_by(amenity 
 
 map_local[[i]] <- 
 ggplot() + 
-  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
-#  geom_sf(data = poly_as_metres, fill = NA) +
-  ggspatial::annotation_scale(location = 'br') + 
-  ggspatial::annotation_north_arrow() +
-  geom_sf(data = buildings[[i]] %>% st_filter(
-    poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white") +
-  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 
+#  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
+
+# white building outlines  
+geom_sf(data = poly_as_metres, fill = NA) +
+geom_sf(data = buildings[[i]] %>% st_filter(
+  poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white") +
+
+# roads  
+#geom_sf(data = net[[i]] %>% st_transform(crs = crs_local_metres) %>% st_filter(
+#    poly_as_metres, .predicate =  st_intersects), mapping = aes()) + 
+
+geom_sf(data = highway[[i]] %>% st_transform(crs = crs_local_metres) %>% 
+          filter(highway %in% c("living_street", "motgorway", "motorway_link", "primary", "primary_link", "residential", "secondary", "secondary_link", "service", "tertiary", "tertiary_link", "trunk", "trunk_link")) %>% 
+                   st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes()) + 
+  
+  
+  
+# Hub walking radius  
+geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 
+  
+# Highlighted buildings
 geom_sf(data = buildings[[i]] %>% filter(building %in% education | amenity %in% education) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "orange") + 
+    fill = "purple") + 
 geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civic) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
-    fill = "blue") + 
-  geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% target) %>% st_filter(
+    fill = "purple") + 
+geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% target) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes(), 
     fill = "purple") + 
-  ### Walking radius
-    geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
+### Walking radius
+geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
   st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
   st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
-  geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
-  geom_image(
+
+# Hub location marker
+geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
+
+# Label name of highlighted buildings and some amenities
+ggrepel::geom_label_repel(
+    data = buildings[[i]] %>% 
+            filter(building %in% education | amenity %in% education | building %in% civic | amenity %in% civic | building %in% target | amenity %in% target | amenity %in% bar | amenity %in% post) %>% 
+  st_filter(poly_as_metres_limits, .predicate =  st_intersects), 
+    mapping = aes(label = name, geometry = geometry), text.colour = "black", stat = "sf_coordinates", size = 3) +
+
+
+# Add icon markers for amenities  
+geom_image(
     data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
-    aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
-  coord_sf(crs = 4326, xlim = c(poly_as_lat_long_limits[1], poly_as_lat_long_limits[3]), ylim = c(poly_as_lat_long_limits[2], poly_as_lat_long_limits[4])) +
+    aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = "")), size = 0.03) + 
+
+# Add hub location text  
+ggrepel::geom_label_repel(
+    data = hub_location_metres[[i]], mapping = aes(
+      label = "You are here", size = 7, geometry = geometry), 
+    stat = "sf_coordinates") + 
+  
+# Add 5 minute walk radius text
+geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
+  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
+  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
+  
+    
+# Set limits and themes
+coord_sf(crs = 4326, xlim = c(poly_as_lat_long_limits[1], poly_as_lat_long_limits[3]), ylim = c(poly_as_lat_long_limits[2], poly_as_lat_long_limits[4])) +
   theme(
         axis.title = element_blank(), 
         axis.text.x=element_blank(), #remove x axis labels
@@ -1398,7 +1630,9 @@ geom_sf(data = buildings[[i]] %>% filter(building %in% civic | amenity %in% civi
         legend.text = element_text(size = 8), 
         legend.title = element_blank(), 
         legend.key.size = unit(0.5, 'in'),
-        ) 
+        )   + 
+  ggspatial::annotation_scale(location = 'br') + 
+  ggspatial::annotation_north_arrow()
 
 filename <- (hub_location_metres %>% names())[i]
 q1 <- c("ggsave('graphics/", filename, "_map_local.png'", ", map_local[[i]], width = 6, height = 6, units = 'in')")

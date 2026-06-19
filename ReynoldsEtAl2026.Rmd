@@ -1297,6 +1297,20 @@ highway <- download_osm_data_by_category_function(
 
 list.save(highway, "data/richmond_highway_260619.rdata")
 
+waterway <- download_osm_data_by_category_function(
+    hub_location = hub_location,
+    crs_local_metres = crs_local_metres, 
+    key = "waterway")
+list.save(waterway, "data/richmond_waterway_260619.rdata")
+
+natural <- download_osm_data_by_category_function(
+    hub_location = hub_location,
+    crs_local_metres = crs_local_metres, 
+    key = "natural")
+list.save(natural, "data/richmond_natural_260619.rdata")
+
+
+
 ```
 
 
@@ -1342,7 +1356,28 @@ buildings <- buildings %>%
 
 landuse <- list.load(
   "data/richmond_landuse_260619.rdata")
+landuse<- lapply(landuse, function(x) bind_rows(
+  x$osm_points,
+#  x$osm_lines, 
+  x$osm_polygons, 
+#  x$osm_multilines,
+  x$osm_multipolygons
+))
+
+
 leisure <- list.load( "data/richmond_leisure_260619.rdata")
+leisure <- lapply(leisure, function(x) bind_rows(
+  x$osm_points,
+  x$osm_lines, 
+  x$osm_polygons, 
+  x$osm_multilines,
+#  x$osm_multipolygons
+))
+list.save(leisure, "data/richmond_leisure.rdata")
+
+
+
+
 net <- list.load(
   "data/richmond_net_260619.rdata")
 
@@ -1357,6 +1392,30 @@ highway<- lapply(highway, function(x) bind_rows(
 ))
 list.save(highway, "data/richmond_highway.rdata")
 
+waterway <- list.load(
+  "data/richmond_waterway_260619.rdata")
+waterway<- lapply(waterway, function(x) bind_rows(
+  x$osm_points,
+  x$osm_lines, 
+#  x$osm_polygons, 
+  x$osm_multilines,
+#  x$osm_multipolygons
+))
+list.save(waterway, "data/richmond_waterway.rdata")
+
+natural <- list.load(
+  "data/richmond_natural_260619.rdata")
+natural <- lapply(natural, function(x) bind_rows(
+  x$osm_points,
+  x$osm_lines, 
+  x$osm_polygons, 
+  x$osm_multilines,
+  x$osm_multipolygons
+))
+
+
+
+
 ##SAVE DATASETS
 list.save(amenity, "data/richmond_amenity.rdata")
 list.save(buildings, "data/richmond_buildings.rdata")
@@ -1364,7 +1423,7 @@ list.save(hub_location, "data/richmond_hub_location.rdata")
 list.save(landuse, "data/richmond_landuse.rdata")
 list.save(leisure, "data/richmond_leisure.rdata")
 list.save(net, "data/richmond_net.rdata")
-
+list.save(natural, "data/richmond_natural.rdata")
 ```
 
 
@@ -1380,7 +1439,7 @@ landuse <- list.load("data/richmond_landuse.rdata")
 leisure <- list.load("data/richmond_leisure.rdata")
 net <- list.load("data/richmond_net.rdata")
 highway <- list.load("data/richmond_highway.rdata")
-
+natural <- list.save("data/richmond_natural.rdata")
 ```
 
 ```{r richmond_local_maps, eval = TRUE, echo=FALSE}
@@ -1556,21 +1615,71 @@ map_local[[i]] <-
 ggplot() + 
 #  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
 
+#   
+  
 # white building outlines  
 geom_sf(data = poly_as_metres, fill = NA) +
 geom_sf(data = buildings[[i]] %>% st_filter(
   poly_as_metres, .predicate =  st_intersects), mapping = aes(), fill = "white") +
 
-# roads  
-#geom_sf(data = net[[i]] %>% st_transform(crs = crs_local_metres) %>% st_filter(
-#    poly_as_metres, .predicate =  st_intersects), mapping = aes()) + 
-
+# parks and grassland
+ geom_sf(data = leisure[[i]] %>% filter(
+    leisure %in% c("garden", "pitch", "park", "dog_park")) %>%
+      st_transform(crs = crs_local_metres) %>% 
+      st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "lightgreen") + 
+  geom_sf(data = leisure[[i]] %>%  st_transform(crs = crs_local_metres) 
+        %>% filter(leisure %in% c("nature_reserve", "golf_course")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "darkgreen") + 
+geom_sf(data = landuse[[i]] %>%  st_transform(crs = crs_local_metres) 
+        %>% filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "lightgreen") +   
+  geom_sf(data = landuse[[i]] %>%  st_transform(crs = crs_local_metres) 
+        %>% filter(landuse %in% c("forest", "orchard")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "darkgreen") + 
+  geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+          filter(natural %in% c("grassland")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "lightgreen") +  
+   geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+          filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "darkgreen") +  
+   geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+          filter(natural %in% c("beach", "dune", "sand")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "yellow") +  
+  
+# waterways 
+geom_sf(data = waterway[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+          filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "blue") + 
+geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+          filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
+          st_filter(poly_as_metres, .predicate =  st_intersects), 
+    mapping = aes(), 
+    fill = "blue") +   
+  
+  
+# roads and trails
 geom_sf(data = highway[[i]] %>% st_transform(crs = crs_local_metres) %>% 
-          filter(highway %in% c("living_street", "motgorway", "motorway_link", "primary", "primary_link", "residential", "secondary", "secondary_link", "service", "tertiary", "tertiary_link", "trunk", "trunk_link")) %>% 
-                   st_filter(
+          filter(highway %in% c("living_street", "motgorway", "motorway_link", "primary", "primary_link", "residential", "secondary", "secondary_link", "service", "tertiary", "tertiary_link", "trunk", "trunk_link")) %>% st_filter(
     poly_as_metres, .predicate =  st_intersects), mapping = aes()) + 
-  
-  
+geom_sf(data = highway[[i]] %>%  st_transform(crs = crs_local_metres) %>% 
+          filter(highway %in% c("cycleway", "bridleway", "steps", "path", "cycleway")) %>% st_filter(
+    poly_as_metres, .predicate =  st_intersects), mapping = aes(), colour = "purple") + 
   
 # Hub walking radius  
 geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 

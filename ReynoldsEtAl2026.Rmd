@@ -77,6 +77,24 @@ library(tidyverse)
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 
+
+geometry_to_lonlat <- function(x) {
+  if (any(sf::st_geometry_type(x) != "POINT")) {
+    stop("Selecting non-points isn't implemented.")
+  }
+  coord_df <- sf::st_transform(x, sf::st_crs("+proj=longlat +datum=WGS84")) %>%
+    sf::st_coordinates() %>%
+    dplyr::as_tibble() %>%
+    dplyr::select(X, Y) %>%
+    dplyr::rename(lon = X, lat = Y)
+  out <- sf::st_set_geometry(x, NULL) %>%
+    dplyr::bind_cols(coord_df)
+  return(out)
+}
+
+
+
+
 ```
 
 # Introduction
@@ -996,9 +1014,13 @@ More generic parts of the puzzle - maintenance schedules, inspection logs, manag
 ```{r maps_richmond, include=TRUE, echo=FALSE, fig.margin = TRUE, fig.cap = "ROBUST hub locations within the Republic of Ireland", crop = TRUE}
 
 hub_location <- list(
-  bridge_yarra = tibble(lat = -37.820128191984296, lon =  145.01417871677936, name = "Bridge Rd / Yarra Blvd, 37.820S, 145.014E"), 
- swan_park = tibble(lat = -37.82733466614104, lon =  145.0130046493511, name = "Swan St / Park Gr, 37.827S, 145.013E"), 
-  victoria_burnley = tibble(lat = -37.81144032602634, lon = 145.01009463106672, name = "Victoria St / Burnley St, 37.811S, 145.010E"))
+  bridge_yarra = tibble(lat = -37.820128191984296, lon =  145.01417871677936, name = "Bridge/Yarra 145.014E 37.820S"), 
+ swan_park = tibble(lat = -37.82733466614104, lon =  145.0130046493511, name = "Swan/Park 145.013E 37.827S"), 
+  victoria_burnley = tibble(lat = -37.81144032602634, lon = 145.01009463106672, name = "Victoria/Burnley 145.010E 37.811S"),
+ richmond_station = tibble(lat = -37.823820563148175, lon = 144.98912327248777, name = "Richmond Station Swan/Punt 144.989E 37.824S"), 
+ epworth = tibble(lat = -37.81793006058354, lon = 144.9929175201812, name = "Epworth W Richmond 144.993E 37.818S"), 
+ nRichmond = tibble(lat =-37.809728371979375, lon = 144.992618630655, name = "W Richmond Victoria/Hoddle 144.993E, 37.810S")
+ )
 
 crs_local_metres <- 20353
 
@@ -1035,166 +1057,6 @@ placebb <- lapply(hub_location, function(x) x %>%
                     st_transform(crs = 4326) %>%
                     st_bbox()
                   )
-### based on https://github.com/ropensci/osmdata/blob/main/vignettes/query-split.Rmd
-
-split_bbox <- function (bbox, grid = 2, eps = 0.05) {
-    xmin <- bbox ["x", "min"]
-    ymin <- bbox ["y", "min"]
-    dx <- (bbox ["x", "max"] - bbox ["x", "min"]) / grid
-    dy <- (bbox ["y", "max"] - bbox ["y", "min"]) / grid
-
-    bboxl <- list ()
-
-    for (i in 1:grid) {
-        for (j in 1:grid) {
-            b <- matrix (c (
-                xmin + ((i - 1 - eps) * dx),
-                ymin + ((j - 1 - eps) * dy),
-                xmin + ((i + eps) * dx),
-                ymin + ((j + eps) * dy)
-            ),
-            nrow = 2,
-            dimnames = dimnames (bbox)
-            )
-
-            bboxl <- append (bboxl, list (b))
-        }
-    }
-    bboxl
-}
-
-final_amenity <- list()
-final_building <- list()
-final_landuse <- list()
-final_leisure <- list()
-
-
-for(i in seq_along(place_sf)){
-
-bb_vector <- place_sf[[i]] %>% st_bbox() %>% as.numeric()
-bb <- data.frame(min = bb_vector[1:2], max = bb_vector[3:4])
-rownames(bb) <- c("x", "y")               
-                 
-queue <- split_bbox (bb)
-result <- list ()
-
-while (length (queue) > 0) {
-
-    print (queue [[1]])
-
-    opres <- NULL
-    opres <- try ({
-        opq (bbox = queue [[1]], timeout = 25) |>
-            add_osm_feature (key = "building") |>
-            osmdata_sf ()
-    })
-
-    if (class (opres) [1] != "try-error") {
-        result <- append (result, list (opres))
-        queue <- queue [-1]
-    } else {
-        bboxnew <- split_bbox (queue [[1]])
-        queue <- append (bboxnew, queue [-1])
-    }
-}
-final_building[[i]] <- do.call (c, result)
-
-
-### amenity               
-queue <- split_bbox (bb)
-result <- list ()
-
-while (length (queue) > 0) {
-
-    print (queue [[1]])
-
-    opres <- NULL
-    opres <- try ({
-        opq (bbox = queue [[1]], timeout = 25) |>
-            add_osm_feature (key = "amenity") |>
-            osmdata_sf ()
-    })
-
-    if (class (opres) [1] != "try-error") {
-        result <- append (result, list (opres))
-        queue <- queue [-1]
-    } else {
-        bboxnew <- split_bbox (queue [[1]])
-        queue <- append (bboxnew, queue [-1])
-    }
-}
-final_amenity[[i]] <- do.call (c, result)
-
-
-### lesuire               
-queue <- split_bbox (bb)
-result <- list ()
-
-while (length (queue) > 0) {
-
-    print (queue [[1]])
-
-    opres <- NULL
-    opres <- try ({
-        opq (bbox = queue [[1]], timeout = 25) |>
-            add_osm_feature (key = "leisure") |>
-            osmdata_sf ()
-    })
-
-    if (class (opres) [1] != "try-error") {
-        result <- append (result, list (opres))
-        queue <- queue [-1]
-    } else {
-        bboxnew <- split_bbox (queue [[1]])
-        queue <- append (bboxnew, queue [-1])
-    }
-}
-final_leisure[[i]] <- do.call (c, result)
-
-
-
-### landuse               
-queue <- split_bbox (bb)
-result <- list ()
-
-while (length (queue) > 0) {
-
-    print (queue [[1]])
-
-    opres <- NULL
-    opres <- try ({
-        opq (bbox = queue [[1]], timeout = 25) |>
-            add_osm_feature (key = "landuse") |>
-            osmdata_sf ()
-    })
-
-    if (class (opres) [1] != "try-error") {
-        result <- append (result, list (opres))
-        queue <- queue [-1]
-    } else {
-        bboxnew <- split_bbox (queue [[1]])
-        queue <- append (bboxnew, queue [-1])
-    }
-}
-final_landuse[[i]] <- do.call (c, result)
-
-}
-
-
-names(final_amenity) <- names(place_sf)
-names(final_building) <- names(place_sf)
-names(final_leisure) <- names(place_sf)
-names(final_landuse) <- names(place_sf)
-
-
-list.save(final_building, "data/richmond_buildings_260619.rdata")
-list.save(final_amenity, "data/richmond_amenity_260619.rdata")
-list.save(final_leisure, "data/richmond_leisure_260619.rdata")
-list.save(final_landuse, "data/richmond_landuse_260619.rdata")
-
-net <- list()
-net <- lapply(placebb, function(x) dodgr::dodgr_streetnet(x))
-list.save(net, "data/richmond_net_260619.rdata")
 
 ```
 
@@ -1203,7 +1065,7 @@ list.save(net, "data/richmond_net_260619.rdata")
 
 download_osm_data_by_category_function <- function(
     hub_location = hub_location, crs_local_metres = crs_local_metres, 
-    key = "building")
+    key = key)
 {
 ### Create hub locations
 hub_location <- lapply(hub_location, function(x) x %>% 
@@ -1252,7 +1114,6 @@ split_bbox <- function (bbox, grid = 2, eps = 0.05) {
 
 final <- list()
 
-
 for(i in seq_along(place_sf)){
 
 bb_vector <- place_sf[[i]] %>% st_bbox() %>% as.numeric()
@@ -1284,30 +1145,29 @@ while (length (queue) > 0) {
 final[[i]] <- do.call (c, result)
 }
 
-
 names(final) <- names(place_sf)
 
 return(final)
 }
 
-highway <- download_osm_data_by_category_function(
-    hub_location = hub_location,
-    crs_local_metres = crs_local_metres, 
-    key = "highway")
+layers_to_download <- c("amenity", "buildings", "highway", "leisure", "landuse", "natural", "transport", "waterway")
 
-list.save(highway, "data/richmond_highway_260619.rdata")
+for(i in seq_along(layers_to_download)){
+output <- list() 
+ q1 <- c("output <- download_osm_data_by_category_function(hub_location = hub_location, crs_local_metres = crs_local_metres, key = '", layers_to_download[i], "')")
+  q1 <- paste(q1,collapse="")
+  str2expression(q1) %>% eval()
+  q1 <- c("list.save(output, ", "'data/richmond_", layers_to_download[i], "_260623.rdata')")
+  q1 <- paste(q1,collapse="")
+  str2expression(q1) %>% eval()  
+  
+  
+}
 
-waterway <- download_osm_data_by_category_function(
-    hub_location = hub_location,
-    crs_local_metres = crs_local_metres, 
-    key = "waterway")
-list.save(waterway, "data/richmond_waterway_260619.rdata")
+net <- list()
+net <- lapply(placebb, function(x) dodgr::dodgr_streetnet(x))
+list.save(net, "data/richmond_net_260623.rdata")
 
-natural <- download_osm_data_by_category_function(
-    hub_location = hub_location,
-    crs_local_metres = crs_local_metres, 
-    key = "natural")
-list.save(natural, "data/richmond_natural_260619.rdata")
 
 
 
@@ -1515,6 +1375,7 @@ amenity_categories <- tibble(
 
 
 
+
   
 # Building tags
 target <- c("bridge", "clock_tower", "fire_station", 
@@ -1611,35 +1472,10 @@ amenity_df <- subset(df, rowSums(is.na(df %>% st_drop_geometry())) != ncol(df %>
 # join to icons
 amenity_df <- amenity_df %>% left_join(amenity_categories, by = join_by(amenity == value))
 
-# filter out all NA rows in a df function
-filter_out_nas_for_plot <- function(list_to_filter = list_to_filter,
-                                    variable_to_filter_on = variable_to_filter_on, 
-                                    vector_to_match_to = vector_to_match_to, 
-                                    poly_as_metres = poly_as_metres){
-
-q1 <- c("df <- list_to_filter %>% filter(", variable_to_filter_on, " %in% ", vector_to_match_to, ") %>% st_filter(poly_as_metres, .predicate =  st_intersects)")
-q1 <- paste(q1,collapse="")
-str2expression(q1) %>% eval()
-
-df <- df[ , -which(names(df) %in% c("osm_id"))]
-output_df <- subset(df, rowSums(is.na(df %>% st_drop_geometry())) != ncol(df %>% st_drop_geometry()))
-# join to icons
-output_df <- output_df %>% left_join(amenity_categories, by = join_by(amenity == value))
-#### FIGURE OUT AMENITY CATEGORIES IN ABOVE
-}
-
-
-
-
-
-
-
 map_local[[i]] <- 
 ggplot() + 
 #  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
 
-#   
-  
 # white building outlines  
 geom_sf(data = poly_as_metres, fill = NA) +
 geom_sf(data = buildings[[i]] %>% st_filter(
@@ -1741,13 +1577,13 @@ ggrepel::geom_label_repel(
 # Add icon markers for amenities  
 geom_image(
     data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
-    aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = "")), size = 0.03) + 
+    aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
 
 
 # Add icon markers for bus and tram stops
-#geom_image(
-#    data = highway[[i]] %>% st_drop_geometry() %>% filter(highway %in% c("bus_stop")) %>% drop_na(),
-#    aes(x = lon, y = lat, image = "data/osmic-master/transport/bus_stop_14.svg.png", size = 0.03)) + 
+geom_image(
+    data = highway[[i]] %>% filter(highway %in% c("bus_stop")) %>% geometry_to_lonlat(),
+    aes(x = lon, y = lat, image = "data/osm_maps_wiki_icons/40px-Bus_station-14.svg.png")) + 
   
   
   
@@ -1780,6 +1616,9 @@ q1 <- paste(q1,collapse="")
 str2expression(q1) %>% eval()
 
 }
+
+
+
 
 
 ```

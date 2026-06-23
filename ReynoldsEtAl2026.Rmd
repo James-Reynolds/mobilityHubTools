@@ -1447,7 +1447,7 @@ natural <- list.save("data/richmond_natural.rdata")
 
 map_local <- list()
 distance_map_plot <- 1000
-distance_map_limits <- 400
+distance_map_limits <- 350
 
 
 crs_local_metres <- 20353
@@ -1611,6 +1611,29 @@ amenity_df <- subset(df, rowSums(is.na(df %>% st_drop_geometry())) != ncol(df %>
 # join to icons
 amenity_df <- amenity_df %>% left_join(amenity_categories, by = join_by(amenity == value))
 
+# filter out all NA rows in a df function
+filter_out_nas_for_plot <- function(list_to_filter = list_to_filter,
+                                    variable_to_filter_on = variable_to_filter_on, 
+                                    vector_to_match_to = vector_to_match_to, 
+                                    poly_as_metres = poly_as_metres){
+
+q1 <- c("df <- list_to_filter %>% filter(", variable_to_filter_on, " %in% ", vector_to_match_to, ") %>% st_filter(poly_as_metres, .predicate =  st_intersects)")
+q1 <- paste(q1,collapse="")
+str2expression(q1) %>% eval()
+
+df <- df[ , -which(names(df) %in% c("osm_id"))]
+output_df <- subset(df, rowSums(is.na(df %>% st_drop_geometry())) != ncol(df %>% st_drop_geometry()))
+# join to icons
+output_df <- output_df %>% left_join(amenity_categories, by = join_by(amenity == value))
+#### FIGURE OUT AMENITY CATEGORIES IN ABOVE
+}
+
+
+
+
+
+
+
 map_local[[i]] <- 
 ggplot() + 
 #  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
@@ -1698,7 +1721,12 @@ geom_sf(data = buildings[[i]] %>% filter(building %in% target | amenity %in% tar
 geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
   st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
   st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
-
+ 
+# Add 5 minute walk radius text
+geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
+  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
+  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
+  
 # Hub location marker
 geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
 
@@ -1715,17 +1743,20 @@ geom_image(
     data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
     aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = "")), size = 0.03) + 
 
+
+# Add icon markers for bus and tram stops
+#geom_image(
+#    data = highway[[i]] %>% st_drop_geometry() %>% filter(highway %in% c("bus_stop")) %>% drop_na(),
+#    aes(x = lon, y = lat, image = "data/osmic-master/transport/bus_stop_14.svg.png", size = 0.03)) + 
+  
+  
+  
 # Add hub location text  
 ggrepel::geom_label_repel(
     data = hub_location_metres[[i]], mapping = aes(
       label = "You are here", size = 7, geometry = geometry), 
     stat = "sf_coordinates") + 
-  
-# Add 5 minute walk radius text
-geom_sf_label(data = data.frame(xlim = c(mean(xlim - 250)), ylim =c(ylim[2] - 100)) %>% 
-  st_as_sf(coords = c("xlim", "ylim"), crs = crs_local_metres) %>%  
-  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
-  
+ 
     
 # Set limits and themes
 coord_sf(crs = 4326, xlim = c(poly_as_lat_long_limits[1], poly_as_lat_long_limits[3]), ylim = c(poly_as_lat_long_limits[2], poly_as_lat_long_limits[4])) +

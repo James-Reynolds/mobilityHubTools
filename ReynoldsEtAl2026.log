@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.15)  5 JUN 2026 12:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.15)  20 JUL 2026 11:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -926,37 +926,29 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 {/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
 al/texlive/2024/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/202
 4/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}] [2] [3] [4]
-<graphics/map_london.png, id=261, 542.025pt x 542.025pt>
+<graphics/map_london.png, id=269, 542.025pt x 542.025pt>
 File: graphics/map_london.png Graphic file (type png)
 <use graphics/map_london.png>
 Package pdftex.def Info: graphics/map_london.png  used on input line 442.
 (pdftex.def)             Requested size: 468.0pt x 468.01811pt.
-<graphics/map_birmingham.png, id=262, 542.025pt x 180.675pt>
+<graphics/map_birmingham.png, id=270, 542.025pt x 180.675pt>
 File: graphics/map_birmingham.png Graphic file (type png)
 <use graphics/map_birmingham.png>
 Package pdftex.def Info: graphics/map_birmingham.png  used on input line 451.
 (pdftex.def)             Requested size: 468.0pt x 156.00603pt.
-<graphics/map_bristol.png, id=263, 542.025pt x 180.675pt>
+<graphics/map_bristol.png, id=271, 542.025pt x 180.675pt>
 File: graphics/map_bristol.png Graphic file (type png)
 <use graphics/map_bristol.png>
 Package pdftex.def Info: graphics/map_bristol.png  used on input line 460.
 (pdftex.def)             Requested size: 468.0pt x 156.00603pt.
-<graphics/map_oxford.png, id=264, 542.025pt x 180.675pt>
+<graphics/map_oxford.png, id=272, 542.025pt x 180.675pt>
 File: graphics/map_oxford.png Graphic file (type png)
 <use graphics/map_oxford.png>
 Package pdftex.def Info: graphics/map_oxford.png  used on input line 469.
 (pdftex.def)             Requested size: 468.0pt x 156.00603pt.
 
-Package natbib Warning: Citation `wickham2023r' on page 5 undefined on input li
-ne 503.
-
-
 Package natbib Warning: Citation `R-ggspatial' on page 5 undefined on input lin
 e 512.
-
-
-Package natbib Warning: Citation `R-osmdata' on page 5 undefined on input line 
-512.
 
 
 Package natbib Warning: Citation `R-gtfstools' on page 5 undefined on input lin
@@ -966,22 +958,22 @@ e 521.
 Package natbib Warning: Citation `R-tidytransit' on page 5 undefined on input l
 ine 521.
 
-<graphics/camden.png, id=274, 2419.0375pt x 2399.96625pt>
+<graphics/camden.png, id=286, 2419.0375pt x 2399.96625pt>
 File: graphics/camden.png Graphic file (type png)
 <use graphics/camden.png>
 Package pdftex.def Info: graphics/camden.png  used on input line 531.
 (pdftex.def)             Requested size: 468.0pt x 464.27457pt.
-<graphics/south_woodford.png, id=275, 2122.93124pt x 1188.44pt>
+<graphics/south_woodford.png, id=287, 2122.93124pt x 1188.44pt>
 File: graphics/south_woodford.png Graphic file (type png)
 <use graphics/south_woodford.png>
 Package pdftex.def Info: graphics/south_woodford.png  used on input line 540.
 (pdftex.def)             Requested size: 468.0pt x 261.9835pt.
-<graphics/wanstead.png, id=276, 2385.91376pt x 2304.61pt>
+<graphics/wanstead.png, id=288, 2385.91376pt x 2304.61pt>
 File: graphics/wanstead.png Graphic file (type png)
 <use graphics/wanstead.png>
 Package pdftex.def Info: graphics/wanstead.png  used on input line 549.
 (pdftex.def)             Requested size: 468.0pt x 452.05214pt.
-<graphics/andrew_road.png, id=277, 2489.3pt x 3521.155pt>
+<graphics/andrew_road.png, id=289, 2489.3pt x 3521.155pt>
 File: graphics/andrew_road.png Graphic file (type png)
 <use graphics/andrew_road.png>
 Package pdftex.def Info: graphics/andrew_road.png  used on input line 558.
@@ -989,12 +981,12 @@ Package pdftex.def Info: graphics/andrew_road.png  used on input line 558.
 
 LaTeX Warning: Float too large for page by 59.48798pt on input line 563.
 
-<graphics/Bristol.001.png, id=278, 2410.00375pt x 2552.53625pt>
+<graphics/Bristol.001.png, id=290, 2410.00375pt x 2552.53625pt>
 File: graphics/Bristol.001.png Graphic file (type png)
 <use graphics/Bristol.001.png>
 Package pdftex.def Info: graphics/Bristol.001.png  used on input line 567.
 (pdftex.def)             Requested size: 468.0pt x 495.65883pt.
-<graphics/Bristol.002.png, id=279, 2329.70375pt x 3135.715pt>
+<graphics/Bristol.002.png, id=291, 2329.70375pt x 3135.715pt>
 File: graphics/Bristol.002.png Graphic file (type png)
 <use graphics/Bristol.002.png>
 Package pdftex.def Info: graphics/Bristol.002.png  used on input line 576.
@@ -1002,7 +994,7 @@ Package pdftex.def Info: graphics/Bristol.002.png  used on input line 576.
 
 LaTeX Warning: Float too large for page by 27.40701pt on input line 581.
 
-<graphics/marina.png, id=280, 2301.59875pt x 2046.64626pt>
+<graphics/marina.png, id=292, 2301.59875pt x 2046.64626pt>
 File: graphics/marina.png Graphic file (type png)
 <use graphics/marina.png>
 Package pdftex.def Info: graphics/marina.png  used on input line 585.
@@ -1019,15 +1011,20 @@ t line 656.
 
 [9 <./graphics/south_woodford.png>] [10 <./graphics/wanstead.png>] [11 <./graph
 ics/andrew_road.png>] [12 <./graphics/Bristol.001.png>] [13 <./graphics/Bristol
-.002.png>] [14 <./graphics/marina.png>] [15] [16] (./ReynoldsEtAl2026.bbl
-Underfull \hbox (badness 1412) in paragraph at lines 101--104
+.002.png>] [14 <./graphics/marina.png>] [15]
+
+Package natbib Warning: Citation `Pousson:2022aa' on page 16 undefined on input
+ line 823.
+
+[16] (./ReynoldsEtAl2026.bbl [17]
+Underfull \hbox (badness 1412) in paragraph at lines 97--100
 []\T1/lmr/m/n/8 (+20) Charles Dob-son.  The cit-i-zen's hand-book; street re-cl
 aim-ing, un-dated.  URL []$\T1/lmtt/m/n/8 http : / / www . citizenshandbook . o
 rg /
  []
 
-[17]
-Underfull \hbox (badness 1014) in paragraph at lines 152--157
+
+Underfull \hbox (badness 1014) in paragraph at lines 148--153
 []\T1/lmr/m/n/8 (+20) Tom Fu-col-oro.  Guer-rilla road safety group 'po-litely'
  in-stalls il-le-gal bike lane pro-tec-tors on cherry street, 2013.
  []
@@ -1045,16 +1042,16 @@ L3 programming layer <2024-02-20>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `ReynoldsEtAl2026.out' has not changed.
-(rerunfilecheck)             Checksum: 79FF9FB88C57946B537D2B21E70A87EA;1638.
+(rerunfilecheck)             Checksum: 9D3CEC787EF0A040DC21169E26A360AD;1960.
  ) 
 Here is how much of TeX's memory you used:
- 18102 strings out of 474116
- 292222 string characters out of 5743682
- 1957187 words of memory out of 5000000
- 39816 multiletter control sequences out of 15000+600000
- 616205 words of font info for 182 fonts, out of 8000000 for 9000
+ 18122 strings out of 474116
+ 292579 string characters out of 5743682
+ 1956187 words of memory out of 5000000
+ 39829 multiletter control sequences out of 15000+600000
+ 616335 words of font info for 183 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,10n,79p,1013b,701s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,10n,79p,1013b,681s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/lo
 cal/texlive/2024/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive
 /2024/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2024/texmf
@@ -1065,10 +1062,10 @@ fb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/lm/lmri8.pfb></usr/lo
 cal/texlive/2024/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive
 /2024/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2024/texmf
 -dist/fonts/type1/public/lm/lmtt8.pfb>
-Output written on ReynoldsEtAl2026.pdf (19 pages, 84455851 bytes).
+Output written on ReynoldsEtAl2026.pdf (19 pages, 86789433 bytes).
 PDF statistics:
- 506 PDF objects out of 1000 (max. 8388607)
- 447 compressed objects within 5 object streams
- 113 named destinations out of 1000 (max. 500000)
- 27304 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 532 PDF objects out of 1000 (max. 8388607)
+ 473 compressed objects within 5 object streams
+ 118 named destinations out of 1000 (max. 500000)
+ 27320 words of extra memory for PDF output out of 29859 (max. 10000000)
 

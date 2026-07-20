@@ -607,7 +607,7 @@ building[[i]] <- building[[i]][!(building[[i]] %>% st_geometry_type() == "POINT"
 # set variables
 map_local <- list()
 distance_map_plot <- 1000
-distance_map_limits <- 350
+distance_map_limits <- 450
 
 hub_location_metres <- lapply(hub_location, function(x) x %>% 
   st_as_sf(coords = c("lon", "lat"), 
@@ -748,11 +748,11 @@ poly_as_lat_long_limits<- poly_as_metres_limits %>%
 # Add x and y and lat and lon for icon insertion function
 
 add_x_y_lat_lon <- function(df) {
-df$x <- (df %>% select(osm_id)  %>% st_transform(crs=crs_local_metres) %>% sf::st_centroid() %>% st_coordinates())[,1]
-df$y <- (df %>% select(osm_id) %>% st_transform(crs=crs_local_metres) %>% sf::st_centroid() %>% st_coordinates())[,2]             
+df$x <- (df %>% dplyr::select(osm_id)  %>% st_transform(crs=crs_local_metres) %>% sf::st_centroid() %>% st_coordinates())[,1]
+df$y <- (df %>% dplyr::select(osm_id) %>% st_transform(crs=crs_local_metres) %>% sf::st_centroid() %>% st_coordinates())[,2]             
 # Add lat and lon for icon insertion
-df$lon <- (df %>% select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,1]
-df$lat <- (df %>% select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,2]
+df$lon <- (df %>% dplyr::select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,1]
+df$lat <- (df %>% dplyr::select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,2]
 
 return(df)
 }
@@ -778,165 +778,179 @@ amenity_df <- subset(df, rowSums(is.na(df %>% st_drop_geometry())) != ncol(df %>
 # join to icons
 amenity_df <- amenity_df %>% left_join(amenity_categories, by = join_by(amenity == value))
 
-map_local[[i]] <- 
-ggplot() + 
-#  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
-
-# white building outlines  
-geom_sf(data = building[[i]] %>% 
-          st_crop(poly_as_metres_limits), mapping = aes(), fill = "white") +
-
-# Highlighted buildings
-geom_sf(data = building[[i]] %>% 
-          filter(building %in% civic | amenity %in% civic) %>%
-          st_crop(poly_as_metres_limits) , mapping = aes(), 
-    fill = "purple") + 
+  map_local[[i]] <- 
+  ggplot() + 
+  #  ggspatial::annotation_map_tile(type = "osm", zoom = 16) +
   
-# parks and grassland
- geom_sf(data = leisure[[i]] %>% filter(
-    leisure %in% c("garden", "pitch", "park", "dog_park")) %>%
-      st_transform(crs = crs_local_metres) %>% 
-      st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "lightgreen") + 
-  geom_sf(data = leisure[[i]] %>%  st_transform(crs = crs_local_metres) 
-        %>% filter(leisure %in% c("nature_reserve", "golf_course")) %>%
-          st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "darkgreen") + 
-geom_sf(data = landuse[[i]] %>%  st_transform(crs = crs_local_metres) 
-        %>% filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
-          st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "lightgreen") +   
-  geom_sf(data = landuse[[i]] %>%  st_transform(crs = crs_local_metres) 
-        %>% 
-          filter(landuse %in% c("forest", "orchard")) %>%
-          st_crop(poly_as_metres_limits),
-    mapping = aes(), 
-    fill = "darkgreen") + 
-  geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
-          filter(natural %in% c("grassland")) %>%
-          st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "lightgreen") +  
-   geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
-          filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
-          st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "darkgreen") +  
-   geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
-          filter(natural %in% c("beach", "dune", "sand")) %>%
-          st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "yellow") +    
-# waterways 
-
-geom_sf(data = waterway[[i]] %>%  st_transform(crs = crs_local_metres) %>% 
-          filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
-          st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "blue") + 
-geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>% 
-          filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
-          st_crop(poly_as_metres_limits), 
-    mapping = aes(), 
-    fill = "blue") +   
+  # white building outlines  
+  geom_sf(data = building[[i]] %>% 
+            st_crop(poly_as_metres_limits), mapping = aes(), fill = "white") +
   
-  
-# roads, trails and railways
-geom_sf(data = highway[[i]] %>% 
-          st_transform(crs = crs_local_metres) %>% 
-          filter(highway %in% c("living_street", "motgorway", "motorway_link", "primary", "primary_link", "residential", "secondary", "secondary_link", "service", "tertiary", "tertiary_link", "trunk", "trunk_link")) %>% 
-          st_crop(poly_as_metres_limits), 
-        mapping = aes()) + 
-geom_sf(data = highway[[i]] %>%  
-          st_transform(crs = crs_local_metres) %>% 
-          filter(highway %in% c("cycleway", "bridleway", "steps", "path", "cycleway")) %>% 
-          st_crop(poly_as_metres_limits), 
-        mapping = aes(), colour = "purple") + 
-geom_sf(data = railway[[i]] %>%  st_transform(crs = crs_local_metres) %>% 
-          filter(railway %in% c("rail", "tram")) %>% 
-          st_crop(poly_as_metres_limits), 
-        mapping = aes(), colour = "black", line = 4) +   
-  
-# Hub walking radius  
-geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 
-  # Add 5 minute walk radius text
-geom_sf_label(data = data.frame(
-  x = (hub_location_metres[[i]] %>% st_coordinates() %>% as.data.frame())[1,1] - 250,
-  y =  (hub_location_metres[[i]] %>% st_coordinates() %>% as.data.frame())[1,2] +300) %>%
-  st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%  
-  st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
-
-# Add icon markers for amenities  
-geom_image(
-    data = amenity_df %>% 
-      st_crop(poly_as_metres_limits) %>%
-      st_drop_geometry() %>% 
-      dplyr::select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
-    aes(x = x, y = y, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
-
-# Add icon markers for bus and tram stops and railways
-geom_image(
-    data = highway[[i]][(highway[[i]] %>% st_geometry_type() == "POINT"),] %>% 
-      filter(highway %in% c("bus_stop")) %>% 
-      st_crop(poly_as_metres_limits),
-    aes(x = x, y = y, image = "data/osm_maps_wiki_icons/40px-Bus_station-14.svg.png")) + 
-geom_image(
-    data = railway[[i]][(railway[[i]] %>% st_geometry_type() == "POINT"),] %>%
-      filter(railway %in% c("tram_stop")) %>% 
-      st_crop(poly_as_metres_limits),
-    aes(x = x, y = y, image = "data/osm_maps_wiki_icons/40px-Bus_station-14.svg.png")) + 
-geom_image(
-    data = railway[[i]] %>%
-      filter(railway %in% c("station")) %>% 
-      st_crop(poly_as_metres_limits) %>% 
-      st_centroid(),
-    aes(x = x, y = y, image = "data/osm_maps_wiki_icons/40px-Bus_station-14.svg.png")) +   
-  
-# Hub location marker
-geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
-
-# Label name of highlighted building and some amenities
-ggrepel::geom_label_repel(
-    data = amenity[[i]] %>% 
-            filter(
-              amenity %in% education | amenity %in% civic | 
-                amenity %in% target | 
-                amenity %in% bar | amenity %in% post) %>% 
- st_crop(poly_as_metres_limits),
-    mapping = aes(label = name, geometry = geometry), text.colour = "black", stat = "sf_coordinates", size = 3) +
-
-  
-  
-# Add hub location text  
-ggrepel::geom_label_repel(
-    data = hub_location_metres[[i]], mapping = aes(
-      label = "You are here", size = 7, geometry = geometry), 
-    stat = "sf_coordinates") + 
- 
+  # Highlighted buildings
+  geom_sf(data = building[[i]] %>% 
+            filter(amenity %in% c("place_of_worship", "community_centre") | 
+                     building %in% c("school")) %>%
+            st_crop(poly_as_metres_limits) , mapping = aes(), 
+      fill = "purple") + 
     
-# Set limits and themes
-#coord_sf(crs = 4326, xlim = c(poly_as_lat_long_limits[1], poly_as_lat_long_limits[3]), ylim = c(poly_as_lat_long_limits[2], poly_as_lat_long_limits[4])) +
-  theme(
-        axis.title = element_blank(), 
-        axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(), #remove y axis ticks
-        legend.position="none",
-        legend.text = element_text(size = 8), 
-        legend.title = element_blank(), 
-        legend.key.size = unit(0.5, 'in'),
-        )   + 
-  ggspatial::annotation_scale(location = 'br') + 
-  ggspatial::annotation_north_arrow()
+  # parks and grassland
+   geom_sf(data = leisure[[i]] %>% filter(
+      leisure %in% c("garden", "pitch", "park", "dog_park")) %>%
+        st_transform(crs = crs_local_metres) %>% 
+        st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "lightgreen") + 
+    geom_sf(data = leisure[[i]] %>%  st_transform(crs = crs_local_metres) 
+          %>% filter(leisure %in% c("nature_reserve", "golf_course")) %>%
+            st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "darkgreen") + 
+  geom_sf(data = landuse[[i]] %>%  st_transform(crs = crs_local_metres) 
+          %>% filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
+            st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "lightgreen") +   
+    geom_sf(data = landuse[[i]] %>%  st_transform(crs = crs_local_metres) 
+          %>% 
+            filter(landuse %in% c("forest", "orchard")) %>%
+            st_crop(poly_as_metres_limits),
+      mapping = aes(), 
+      fill = "darkgreen") + 
+    geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+            filter(natural %in% c("grassland")) %>%
+            st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "lightgreen") +  
+     geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+            filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
+            st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "darkgreen") +  
+     geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>%
+            filter(natural %in% c("beach", "dune", "sand")) %>%
+            st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "yellow") +    
+  # waterways 
+  
+  geom_sf(data = waterway[[i]] %>%  st_transform(crs = crs_local_metres) %>% 
+            filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
+            st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "blue") + 
+  geom_sf(data = natural[[i]] %>%  st_transform(crs = crs_local_metres) %>% 
+            filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
+            st_crop(poly_as_metres_limits), 
+      mapping = aes(), 
+      fill = "blue") +   
+    
+    
+  # roads, trails and railways
+  geom_sf(data = highway[[i]] %>% 
+            st_transform(crs = crs_local_metres) %>% 
+            filter(highway %in% c("living_street", "motgorway", "motorway_link", "primary", "primary_link", "residential", "secondary", "secondary_link", "service", "tertiary", "tertiary_link", "trunk", "trunk_link")) %>% 
+            st_crop(poly_as_metres_limits), 
+          mapping = aes()) + 
+  geom_sf(data = highway[[i]] %>%  
+            st_transform(crs = crs_local_metres) %>% 
+            filter(highway %in% c("cycleway", "bridleway", "steps", "path", "cycleway", "footway")) %>% 
+            st_crop(poly_as_metres_limits), 
+          mapping = aes(), colour = "purple") + 
+  geom_sf(data = railway[[i]] %>%  st_transform(crs = crs_local_metres) %>% 
+            filter(railway %in% c("rail", "tram")) %>% 
+            st_crop(poly_as_metres_limits), 
+          mapping = aes(), colour = "black", line = 4) +   
+    
+  # Hub walking radius  
+  geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) + 
+    # Add 5 minute walk radius text
+  geom_sf_label(data = data.frame(
+    x = (hub_location_metres[[i]] %>% st_coordinates() %>% as.data.frame())[1,1] - 250,
+    y =  (hub_location_metres[[i]] %>% st_coordinates() %>% as.data.frame())[1,2] +300) %>%
+    st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%  
+    st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
+  
+  # Add icon markers for amenities  
+  #geom_image(
+  #    data = amenity_df %>% 
+  #      st_crop(poly_as_metres_limits) %>%
+  #      st_drop_geometry() %>% 
+  #      dplyr::select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
+  #    aes(x = x, y = y, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
+  
+  # Add icon markers for convenience stores 
+  geom_image(
+      data = building[[i]] %>%
+        filter(shop %in% c("convenience")) %>% 
+        st_crop(poly_as_metres_limits) %>% 
+        st_centroid(),
+      aes(x = x, y = y, image = "data/osmic-master/shop/supermarket-14.png"), size = 0.02) +
+    
+  # Add icon markers for bus and tram stops and railways
+  geom_image(
+      data = highway[[i]][(highway[[i]] %>% st_geometry_type() == "POINT"),] %>% 
+        filter(highway %in% c("bus_stop")) %>% 
+        st_crop(poly_as_metres_limits),
+      aes(x = x, y = y, image = "data/osmic-master/transport/bus_stop_14.svg.png", ), size = 0.01) + 
+  geom_image(
+      data = railway[[i]][(railway[[i]] %>% st_geometry_type() == "POINT"),] %>%
+        filter(railway %in% c("tram_stop")) %>% 
+        st_crop(poly_as_metres_limits),
+      aes(x = x, y = y, image = "data/osmic-master/transport/tram-stop-14.svg.png"), size = 0.01) + 
+  geom_image(
+      data = railway[[i]] %>%
+        filter(railway %in% c("station")) %>% 
+        st_crop(poly_as_metres_limits) %>% 
+        st_centroid(),
+      aes(x = x, y = y, image = "data/osmic-master/transport/railway-station-14.svg.png"), size = 0.01) +   
+    
+  # Hub location marker
+  geom_sf(data = hub_location_metres[[i]], size = 8, colour = "red") +
+  
+  ggrepel::geom_label_repel(
+      data = building[[i]] %>% 
+           filter(amenity %in% c("place_of_worship", "community_centre") | 
+                     building %in% c("school")) %>%
+        st_crop(poly_as_metres_limits),
+      mapping = aes(label = name, geometry = geometry), text.colour = "black", stat = "sf_coordinates", size = 3) +
+  
+  ggrepel::geom_label_repel(
+      data = amenity[[i]] %>% 
+           filter(amenity %in% c("school")) %>%
+        st_crop(poly_as_metres_limits),
+      mapping = aes(label = name, geometry = geometry), text.colour = "black", stat = "sf_coordinates", size = 3) +
 
-filename <- (hub_location_metres %>% names())[i]
-q1 <- c("ggsave('graphics/", filename, "_map_local.png'", ", map_local[[i]], width = 5, height = 5, units = 'in')")
-q1 <- paste(q1,collapse="")
-str2expression(q1) %>% eval()
+    
+    
+        
+    
+  # Add hub location text  
+  ggrepel::geom_label_repel(
+      data = hub_location_metres[[i]], mapping = aes(
+        label = "You are here", size = 7, geometry = geometry), 
+      stat = "sf_coordinates") + 
+   
+      
+  # Set limits and themes
+  #coord_sf(crs = 4326, xlim = c(poly_as_lat_long_limits[1], poly_as_lat_long_limits[3]), ylim = c(poly_as_lat_long_limits[2], poly_as_lat_long_limits[4])) +
+    theme(
+          axis.title = element_blank(), 
+          axis.text.x=element_blank(), #remove x axis labels
+          axis.ticks.x=element_blank(), #remove x axis ticks
+          axis.text.y=element_blank(),  #remove y axis labels
+          axis.ticks.y=element_blank(), #remove y axis ticks
+          legend.position="none",
+          legend.text = element_text(size = 8), 
+          legend.title = element_blank(), 
+          legend.key.size = unit(0.5, 'in'),
+          )   + 
+    ggspatial::annotation_scale(location = 'br') + 
+    ggspatial::annotation_north_arrow()
+  
+  filename <- (hub_location_metres %>% names())[i]
+  q1 <- c("ggsave('graphics/", filename, "_map_local.png'", ", map_local[[i]], width = 8, height = 8, units = 'in')")
+  q1 <- paste(q1,collapse="")
+  str2expression(q1) %>% eval()
 
 }
 
@@ -1112,7 +1126,9 @@ process_osm_list_function(
 
 ```
 
-```{r build_richmond_local_maps, eval = TRUE, echo=FALSE}
+
+
+```{r build_richmond_local_maps, eval = FALSE, echo=FALSE}
 #amenity <- list.load("data/richmond_amenity.rdata")
 #building <- list.load("data/richmond_building.rdata")
 #highway <- list.load("data/richmond_highway.rdata")
@@ -1277,13 +1293,13 @@ poly_as_lat_long_limits<- poly_as_metres_limits %>%
 
 
 # Add x and y for icon insertion
-amenity[[i]]$x <- (amenity[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,1]
-amenity[[i]]$y <- (amenity[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,2]             
-building[[i]]$x <- (building[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,1]
-building[[i]]$y <- (building[[i]] %>% select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,2]             
+amenity[[i]]$x <- (amenity[[i]] %>% dplyr::select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,1]
+amenity[[i]]$y <- (amenity[[i]] %>% dplyr::select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,2]             
+building[[i]]$x <- (building[[i]] %>% dplyr::select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,1]
+building[[i]]$y <- (building[[i]] %>% dplyr::select(osm_id) %>% sf::st_centroid() %>% st_coordinates())[,2]             
 # Add lat and lon for icon insertion
-amenity[[i]]$lon <- (amenity[[i]] %>% select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,1]
-amenity[[i]]$lat <- (amenity[[i]] %>% select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,2]
+amenity[[i]]$lon <- (amenity[[i]] %>% dplyr::select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,1]
+amenity[[i]]$lat <- (amenity[[i]] %>% dplyr::select(osm_id) %>% st_transform(crs=4326) %>% sf::st_centroid() %>% st_coordinates())[,2]
 
 
 
@@ -1371,9 +1387,9 @@ geom_sf(data = hub_location_metres[[i]] %>% st_buffer(dist=400), fill = NA, colo
   # Add 5 minute walk radius text
 geom_sf_label(data = data.frame(
   x = hub_location_metres[[i]] %>% st_coordinates() %>% as.data.frame() %>% 
-    select(X) %>% as.numeric() - 250,
+    dplyr::select(X) %>% as.numeric() - 250,
   y =  hub_location_metres[[i]] %>% st_coordinates() %>% as.data.frame() %>% 
-    select(Y) %>% as.numeric() + 300) %>%
+    dplyr::select(Y) %>% as.numeric() + 300) %>%
   st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%  
   st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 35) +
   
@@ -1391,7 +1407,7 @@ geom_sf(data = building[[i]] %>% filter(building %in% target | amenity %in% targ
 
 # Add icon markers for amenities  
 geom_image(
-    data = amenity_df %>% st_drop_geometry() %>% select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
+    data = amenity_df %>% st_drop_geometry() %>% dplyr::select(amenity, x, y, lon, lat, icon_filename) %>% drop_na(),
     aes(x = lon, y = lat, image = paste("data/osm_maps_wiki_icons/", icon_filename, sep = ""))) + 
 
 

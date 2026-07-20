@@ -443,7 +443,7 @@ cases a great `depth'.
 
 }
 
-\caption{ROBUST hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.}\label{fig:location_map_london}
+\caption{London hub locations. Source: authors based on Open Street Maps (OSM). OSM data and graphics copyright OSM contributors.}\label{fig:location_map_london}
 \end{figure}
 
 \begin{figure}
@@ -698,9 +698,6 @@ research, in which a formal specification of the design problem to be
 solved in the later Development and Delivery phases of the Double
 Diamond process is developed.
 
-\subsubsection{Characteristics of a `mobility
-hub'}\label{characteristics-of-a-mobility-hub}
-
 As discussed above, findings from the sites visits suggest that there
 are many different forms that a mobility hub might take, with a variety
 of modes offered, services and facilities provided as part of the hub
@@ -739,13 +736,27 @@ with bike repair facilties, and bike parking and/or bike share docking
 interchanges/city hubs\ldots; transport corridor, smaller interchanges
 or linking hubs; business park or ne housing development hubs;
 suburb/mini-hubs; small market town/village hubs; and tourism hubs''
-along with suggested components for each. The accompanying guidance
-\cite{CoMoUK:0ab}, however, suggests: a timeline of 12 to 15 months to
-step through consultation, design, stakeholder engagement, tendering and
-construction; budgets in the vicinity of 250k to 650k pounds
-\cite{CoMoUK:0ac}; and that ``mobility hubs work best when part of a
-wider sustainable transport network that provides active travel, public
-transport and shared transport options'' \cite{CoMoUK:0aa}.
+along with suggested components for each. Further types might included
+the `shared' and `electric' forms of mobility hub, as in the ROBUST
+sites, wherein the offered modes are available for hire and electrically
+powered respectively. It is unclear, however, whether there is a need to
+differentiate between electric hubs (or `e-hubs') where the
+electrification involves on-site recharging, as at ROBUST and for many
+e-cars, and hubs where electric vehicles are dockless or otherwise
+`recharged' through the replacement of battery packs with those powered
+up elsewhere. \cite{Meigs:2023aa} and \cite{Zhang:2022aa} discuss some
+of the problems associated with this first form of electrification,
+while \cite{Reynolds:0ab} highlights the constraints of access to power
+infrastructure and issues related to electrical connections for the
+latter, which might limit location choice and extend implementation
+timelines. Guidance from \cite{CoMoUK:0ab} suggests a timeline of 12 to
+15 months to step through consultation, design, stakeholder engagement,
+tendering and construction, although this appears to relate to either
+unpowered mobility hubs or the former type of electricification. This
+guidance also suggests that budgets in the vicinity of 250k to 650k
+pounds \cite{CoMoUK:0ac}; and that ``mobility hubs work best when part
+of a wider sustainable transport network that provides active travel,
+public transport and shared transport options'' \cite{CoMoUK:0aa}.
 
 The design problem, therefore, appears to relate to determining how to
 create mobility hubs that: incorporate existing modes, facilities and
@@ -802,6 +813,18 @@ and providing information about nearby services. Such examples from the
 cases might highlight the value to practitioners, activists and others
 of easily updatable mapping and informational products
 
+\subsection{Recreating Bristol
+elements}\label{recreating-bristol-elements}
+
+A starting point for Development is to recreate the Bristol style of hub
+imformation, mapping and similar elements. Here this is achieved through
+the use of Open Streets Map (OSM) data sets and mapping tiles, as well
+as various software packages within the R programming language. Icons
+are drawn from \cite{Pousson:2022aa}
+
+\subsubsection{Adjusting and
+generalising}\label{adjusting-and-generalising}
+
 LAT AND LON branding? As per that Collingwood Brew Pub shirt I had.
 
 Identifying `a hub'
@@ -822,6 +845,8 @@ More generic parts of the puzzle - maintenance schedules, inspection
 logs, management resources and other items that might help a mobility
 hub `product owner' facilitate operations, continuance and (maybe even)
 growth.
+
+\subsubsection{Create Richmond maps}\label{create-richmond-maps}
 
 \subsection{Delivery}\label{delivery}
 

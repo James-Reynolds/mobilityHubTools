@@ -1,11 +1,16 @@
 Package: mobilityHubTools
-Title: What the Package Does (One Line, Title Case)
+Title: Tools for making mobility hubs
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("James", "Reynolds", , "james.reynolds@atui.ie", role = c("aut", "cre"))
+Description: Tools for developing maps, information displays and other materials for mobility hubs.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
+Imports: 
+    dplyr,
+    ggplot2,
+    ggrepel,
+    ggspatial,
+    sf

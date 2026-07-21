@@ -264,7 +264,7 @@ TSWLatexianTemp*
 # standalone packages
 *.sta
 
-# Mac DS store 
+# Mac DS store
 .DS_Store
 .Rproj.user
 
@@ -279,13 +279,11 @@ data/*
 # graphics files
 graphics/*
 
-# calculated results files 
+# calculated results files
 results/*
 
-# cache and files
-WP3_before_survey_cache/*
-WP3_before_survey_files/*
-.positai
+# files related to papers
+WP5_mobilityHubTools
 
 # rosm.cache files
 rosm*

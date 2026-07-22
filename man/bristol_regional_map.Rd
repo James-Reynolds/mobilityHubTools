@@ -15,7 +15,7 @@ bristol_regional_map(
   waterway,
   hub_location,
   map_limits = 1500,
-  crs_local_metres = crs_local_metres,
+  crs_local_metres = 27700,
   highlight_building = c("Horfield Library", "Horfield Health Centre"),
   highlight_amenity = c("nill"),
   highlight_leisure = c("Bristol County Ground")

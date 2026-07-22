@@ -23,7 +23,7 @@ bristol_local_map <- function(
     amenity, building, highway, leisure, landuse, natural,  railway,
     waterway, hub_location,
     map_limits = 500,
-    crs_local_metres = crs_local_metres,
+    crs_local_metres = 27700,
     highlight_building = c("North Bristol Advice Centre", "The Hub"),
     highlight_amenity = c("Stoke Park Primary School",
                           "Saint Mary Magdalen and Saint Francis Lockleaze",
@@ -80,7 +80,7 @@ map_local <-
 map_local <- map_local +
 
 # Highlight buildings
-ggplot2::geom_sf(data = building %>% filter(name %in% highlight_buildings) %>%
+ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%
@@ -115,9 +115,8 @@ ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
       sf::st_make_valid() %>%
       sf::st_crop(hub_location %>%
                     sf::st_buffer(dist = map_limits) %>%
-                    sf::st_bbox()), mapping = aes(
-                      label = name, geometry = geometry), mapping = aes(
-      label = name, geometry = geometry),
+                    sf::st_bbox()),
+    mapping = aes(label = name, geometry = geometry),
     stat = "sf_coordinates")
 
 

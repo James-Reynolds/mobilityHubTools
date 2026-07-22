@@ -15,7 +15,7 @@ bristol_local_map(
   waterway,
   hub_location,
   map_limits = 500,
-  crs_local_metres = crs_local_metres,
+  crs_local_metres = 27700,
   highlight_building = c("North Bristol Advice Centre", "The Hub"),
   highlight_amenity = c("Stoke Park Primary School",
     "Saint Mary Magdalen and Saint Francis Lockleaze", "St James Church"),

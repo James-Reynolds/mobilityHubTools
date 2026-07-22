@@ -23,7 +23,7 @@ bristol_regional_map <- function(
     amenity, building, highway, leisure, landuse, natural,  railway,
     waterway, hub_location,
     map_limits = 1500,
-    crs_local_metres = crs_local_metres,
+    crs_local_metres = 27700,
     highlight_building = c("Horfield Library", "Horfield Health Centre"),
     highlight_amenity = c("nill"),
     highlight_leisure = c("Bristol County Ground"))
@@ -92,7 +92,7 @@ map_regional <-
 map_regional <- map_regional +
 
 # Highlight buildings
-ggplot2::geom_sf(data = building %>% filter(name %in% highlight_buildings) %>%
+ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%
@@ -127,8 +127,8 @@ ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
       sf::st_make_valid() %>%
       sf::st_crop(hub_location %>%
                     sf::st_buffer(dist = map_limits) %>%
-                    sf::st_bbox()), mapping = aes(
-      label = name, geometry = geometry),
+                    sf::st_bbox()),
+    mapping = aes(label = name, geometry = geometry),
     stat = "sf_coordinates")
 
   return(map_regional)

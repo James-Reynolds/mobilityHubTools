@@ -13,4 +13,8 @@ Imports:
     ggplot2,
     ggrepel,
     ggspatial,
+    grDevices,
+    grid,
+    gridExtra,
+    magick,
     sf

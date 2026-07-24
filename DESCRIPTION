@@ -17,4 +17,5 @@ Imports:
     grid,
     gridExtra,
     magick,
-    sf
+    sf,
+    tibble

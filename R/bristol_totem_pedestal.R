@@ -165,6 +165,12 @@ lay <- rbind(c(1,1,1,1,1),
              c(6,6,7,8,8))
 gridExtra::grid.arrange(grobs = gs, layout_matrix = lay)
 
+
+grDevices::dev.copy2pdf(file = "layout_test.pdf", width = 17, height = 40.8, fonts = NULL)
+
+
+
+
 grDevices::dev.copy(png, "layout_test.png", width = 1000, height = 2400)
 grDevices::dev.off()
 

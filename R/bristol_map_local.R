@@ -76,8 +76,89 @@ map_local <-
                      map_limits = 500, crs_local_metres = crs_local_metres)
 
 
+## build dataframe with transit stops and other locations to be represented by an icon
+# hub location
+icon_locations <- hub_location %>%
+  sf::st_coordinates() %>%
+  as.data.frame()
+icon_locations$icon_filename <- system.file(
+  "extdata/hub_location.png", package = "mobilityHubTools")
+
+# bus stops
+holding <- data.frame(
+  highway[(highway %>% st_geometry_type() == "POINT"),] %>%
+    filter(highway %in% c("bus_stop")) %>%
+    sf::st_transform(crs = crs_local_metres) %>%
+    sf::st_make_valid() %>%
+    sf::st_crop(hub_location %>%
+                  sf::st_buffer(dist = map_limits) %>%
+                  sf::st_bbox()) %>%
+    st_coordinates())
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+  holding %>% tibble::add_column(
+    icon_filename = system.file("extdata/bristol_bus.png", package = "mobilityHubTools"))
+) else icon_locations
+# railway stations
+holding <- data.frame(
+  railway %>% filter(railway %in% c("station")) %>%
+    sf::st_transform(crs = crs_local_metres) %>%
+    sf::st_make_valid() %>%
+    sf::st_crop(hub_location %>%
+                  sf::st_buffer(dist = map_limits) %>%
+                  sf::st_bbox()) %>%
+    st_coordinates())
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+  holding %>% tibble::add_column(
+    icon_filename = system.file("extdata/bristol_railway.png", package = "mobilityHubTools"))
+) else icon_locations
+# railway stations
+holding <- data.frame(
+  railway %>% filter(railway %in% c("station")) %>%
+    sf::st_transform(crs = crs_local_metres) %>%
+    sf::st_make_valid() %>%
+    sf::st_crop(hub_location %>%
+                  sf::st_buffer(dist = map_limits) %>%
+                  sf::st_bbox()) %>%
+    st_coordinates())
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+  holding %>% tibble::add_column(
+    icon_filename = system.file("extdata/bristol_bus.png", package = "mobilityHubTools"))
+) else icon_locations
+# groceries
+holding <- data.frame(
+  building %>% filter(shop %in% c("convenience", "supermarket")) %>%
+    sf::st_centroid() %>%
+    sf::st_transform(crs = crs_local_metres) %>%
+    sf::st_make_valid() %>%
+    sf::st_crop(hub_location %>%
+                  sf::st_buffer(dist = map_limits) %>%
+                  sf::st_bbox()) %>%
+    st_coordinates())
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+  holding %>% tibble::add_column(
+    icon_filename = system.file("extdata/bristol_supermarket.png", package = "mobilityHubTools"))
+) else icon_locations
+# food
+holding <- data.frame(
+  amenity %>% filter(amenity %in% c("fast_food", "cafe", "food_court", "restaurant")) %>%
+    sf::st_centroid() %>%
+    sf::st_transform(crs = crs_local_metres) %>%
+    sf::st_make_valid() %>%
+    sf::st_crop(hub_location %>%
+                  sf::st_buffer(dist = map_limits) %>%
+                  sf::st_bbox()) %>%
+    st_coordinates())
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+  holding %>% tibble::add_column(
+    icon_filename = system.file("extdata/bristol_food.png", package = "mobilityHubTools"))
+) else icon_locations
 
 
+
+
+
+
+## Puting it all together
 # combine base layers with additional layers
 map_local <- map_local +
 
@@ -92,19 +173,13 @@ ggplot2::geom_sf(data = building %>%
                      ),
                    mapping = aes(), fill = "purple") +
 
-#add bus stops
-  ggimage::geom_image(data = highway[(highway %>% st_geometry_type() == "POINT"),] %>%
-                     filter(highway %in% c("bus_stop")) %>%
-                     sf::st_transform(crs = crs_local_metres) %>%
-                     sf::st_make_valid() %>%
-                     sf::st_crop(hub_location %>%
-                                   sf::st_buffer(dist = map_limits) %>%
-                                   sf::st_bbox()
-                    ) %>% st_coordinates(),
-                   mapping = aes(
-                     x = X, y = Y,
-                     image = system.file(
-                       "extdata/bristol_bus.png", package = "mobilityHubTools"))) +
+
+#add bus stops, railway stations and other icons
+  ggimage::geom_image(data = icon_locations,
+                      mapping = aes(
+                        x = X, y = Y,
+                        image = icon_filename),
+                      size = 0.01) +
 
 # Hub walking radius
 ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) +

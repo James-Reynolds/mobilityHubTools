@@ -34,7 +34,6 @@ bristol_local_map <- function(
 
 
 # wrangle label information
-
 labels <- hub_location
 labels$name <- "You are here"
 
@@ -76,11 +75,15 @@ map_local <-
                      hub_location = hub_location,
                      map_limits = 500, crs_local_metres = crs_local_metres)
 
+
+
+
 # combine base layers with additional layers
 map_local <- map_local +
 
 # Highlight buildings
-ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building) %>%
+ggplot2::geom_sf(data = building %>%
+                   filter(name %in% highlight_building) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%
@@ -89,8 +92,19 @@ ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building) %>%
                      ),
                    mapping = aes(), fill = "purple") +
 
-
-
+#add bus stops
+  ggimage::geom_image(data = highway[(highway %>% st_geometry_type() == "POINT"),] %>%
+                     filter(highway %in% c("bus_stop")) %>%
+                     sf::st_transform(crs = crs_local_metres) %>%
+                     sf::st_make_valid() %>%
+                     sf::st_crop(hub_location %>%
+                                   sf::st_buffer(dist = map_limits) %>%
+                                   sf::st_bbox()
+                    ) %>% st_coordinates(),
+                   mapping = aes(
+                     x = X, y = Y,
+                     image = system.file(
+                       "extdata/bristol_bus.png", package = "mobilityHubTools"))) +
 
 # Hub walking radius
 ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) +

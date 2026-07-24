@@ -2,12 +2,12 @@
 #'
 #' @param file_to_save_to a character string of the file to save the png to
 #' @param hub_name_text the name of the hub
+#' @param icons_to_incude_in_header a list of 10 strings of the location of the icons to include in the header, including blanks
 #' @param directions_image a character string of the location of an image showing directions
 #' @param map_local the output of the bristol_map_local function
 #' @param facilities_image a character string of the location of an image showing details of the hub facilities
 #' @param map_regional the output of the bristol_map_regional function
 #' @param logo_image a character string of the location of an image showing agency logos
-#'
 #' @returns nothing, but outputs a png to the named file
 #' @export
 #'
@@ -15,11 +15,25 @@
 bristol_totem_pedestal <- function(
     file_to_save_to = "layout_test.png",
     hub_name_text = "Gainsborough Square",
-    directions_image = "inst/extdata/bristol_greensborough_directions.png",
+    icons_to_incude_in_header = list(
+      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_bus.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_share_car.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_charging.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_toilets.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
+      system.file("extdata/bristol_blank.png", package = "mobilityHubTools")),
+    directions_image = system.file(
+      "extdata/bristol_greensborough_directions.png", package = "mobilityHubTools"),
     map_local = map_local_test,
-    facilities_image = "inst/extdata/bristol_facilities.png",
+    facilities_image =  system.file(
+      "extdata/bristol_facilities.png", package = "mobilityHubTools"),
     map_regional = map_regional_test,
-    logo_image = "inst/extdata/bristol_blank.png"
+    logo_image =  system.file(
+      "extdata/bristol_blank.png", package = "mobilityHubTools")
     )
 {
 

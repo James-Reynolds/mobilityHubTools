@@ -20,8 +20,23 @@
 #'
 #' @examples
 bristol_regional_map <- function(
-    amenity, building, highway, leisure, landuse, natural,  railway,
-    waterway, hub_location,
+    amenity = rlist::list.load(system.file(
+      "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
+    building = rlist::list.load(system.file(
+      "data/greensborough_building.rdata", package = "mobilityHubTools")),
+    highway = rlist::list.load(system.file(
+      "data/greensborough_highway.rdata", package = "mobilityHubTools")),
+    leisure = rlist::list.load(system.file(
+      "data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+    landuse = rlist::list.load(system.file(
+      "data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+    natural = rlist::list.load(system.file(
+      "data/greensborough_natural.rdata", package = "mobilityHubTools")),
+    railway = rlist::list.load(system.file(
+      "data/greensborough_railway.rdata", package = "mobilityHubTools")),
+    waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+    hub_location = rlist::list.load(system.file(
+      "data/greensborough_hub_location.rdata", package = "mobilityHubTools")),
     map_limits = 1500,
     crs_local_metres = 27700,
     highlight_building = c("Horfield Library", "Horfield Health Centre"),
@@ -36,33 +51,37 @@ labels <- hub_location
 labels$name <- "You are here"
 
 labels <- labels %>%
-  add_row(tibble(name = sort(highlight_building),
-                 geometry = building %>%
-                   arrange(name) %>%
-                   filter(name %in% highlight_building) %>%
-                   st_centroid() %>% st_geometry()))
+  tibble::add_row(tibble::tibble(
+    name = sort(highlight_building),
+    geometry = building %>%
+      dplyr::arrange(name) %>%
+      filter(name %in% highlight_building) %>%
+      sf::st_centroid() %>% sf::st_geometry()))
 
 labels <- labels %>%
-  add_row(tibble(name = sort(highlight_amenity),
-                 geometry = amenity %>%
-                   arrange(name) %>%
-                   filter(name %in% highlight_amenity) %>%
-                   st_centroid() %>% st_geometry()))
+  tibble::add_row(tibble::tibble(
+    name = sort(highlight_amenity),
+    geometry = amenity %>%
+      dplyr::arrange(name) %>%
+      filter(name %in% highlight_amenity) %>%
+      sf::st_centroid() %>% sf::st_geometry()))
 labels <- labels %>%
-  add_row(tibble(name = sort(highlight_leisure),
-                 geometry = leisure %>%
-                 arrange(name) %>%
-                 filter(name %in% highlight_leisure) %>%
-                   st_centroid() %>% st_geometry()))
+  tibble::add_row(tibble::tibble(
+    name = sort(highlight_leisure),
+    geometry = leisure %>%
+      dplyr::arrange(name) %>%
+      filter(name %in% highlight_leisure) %>%
+      sf::st_centroid() %>% sf::st_geometry()))
 labels <- labels %>%
-  add_row(tibble(name = railway %>%
-                   sf::st_drop_geometry() %>%
-                   dplyr::filter(railway == "station") %>%
-                   dplyr::select(name) %>%
-                   unlist(),
-                 geometry = railway %>%
-                   dplyr::filter(railway == "station") %>%
-                   st_centroid() %>% st_geometry()))
+  tibble::add_row(tibble::tibble(
+    name = railway %>%
+      sf::st_drop_geometry() %>%
+      dplyr::filter(railway == "station") %>%
+      dplyr::select(name) %>%
+      unlist(),
+    geometry = railway %>%
+      dplyr::filter(railway == "station") %>%
+      sf::st_centroid() %>% sf::st_geometry()))
 
 
 
@@ -71,7 +90,7 @@ labels <- labels %>%
 map_regional <-
     bristol_map_base(amenity = amenity,
                      building = building %>%
-                       arrange(name) %>%
+                       dplyr::arrange(name) %>%
                        filter(name %in% highlight_building),
                      highway = highway %>%
                        filter(highway %in% c(
@@ -99,7 +118,7 @@ ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building) %>%
                                    sf::st_buffer(dist = map_limits) %>%
                                    sf::st_bbox()
                      ),
-                   mapping = aes(), fill = "purple") +
+                   mapping = ggplot2::aes(), fill = "purple") +
 
 
 
@@ -108,7 +127,7 @@ ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building) %>%
 ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour = "white", size = 2) +
 
 # hub marker
-ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
+ggplot2::geom_sf(data = hub_location, ggplot2::aes(), fill = "red", size = 5) +
 
 # Add 5 minute walk radius text
   ggplot2::geom_sf_label(data = data.frame(
@@ -117,7 +136,7 @@ ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
   y =  hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
     dplyr::select(Y) %>% as.numeric() + 1100) %>%
   sf::st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%
-  sf::st_as_sfc(), aes(), label = "15 minute walk", colour = "black", angle = 45) +
+  sf::st_as_sfc(), ggplot2::aes(), label = "15 minute walk", colour = "black", angle = 45) +
 
 
   # Add hub location and other text
@@ -128,7 +147,7 @@ ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
       sf::st_crop(hub_location %>%
                     sf::st_buffer(dist = map_limits) %>%
                     sf::st_bbox()),
-    mapping = aes(label = name, geometry = geometry),
+    mapping = ggplot2::aes(label = name, geometry = geometry),
     stat = "sf_coordinates")
 
   return(map_regional)

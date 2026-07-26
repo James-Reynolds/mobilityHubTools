@@ -20,8 +20,23 @@
 #'
 #' @examples
 bristol_local_map <- function(
-    amenity, building, highway, leisure, landuse, natural,  railway,
-    waterway, hub_location,
+    amenity = rlist::list.load(system.file(
+      "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
+    building = rlist::list.load(system.file(
+      "data/greensborough_building.rdata", package = "mobilityHubTools")),
+    highway = rlist::list.load(system.file(
+      "data/greensborough_highway.rdata", package = "mobilityHubTools")),
+    leisure = rlist::list.load(system.file(
+      "data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+    landuse = rlist::list.load(system.file(
+      "data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+    natural = rlist::list.load(system.file(
+      "data/greensborough_natural.rdata", package = "mobilityHubTools")),
+    railway = rlist::list.load(system.file(
+      "data/greensborough_railway.rdata", package = "mobilityHubTools")),
+    waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+    hub_location = rlist::list.load(system.file(
+      "data/greensborough_hub_location.rdata", package = "mobilityHubTools")),
     map_limits = 500,
     crs_local_metres = 27700,
     highlight_building = c("North Bristol Advice Centre", "The Hub"),
@@ -38,34 +53,36 @@ labels <- hub_location
 labels$name <- "You are here"
 
 labels <- labels %>%
-  add_row(tibble(name = sort(highlight_building),
+  tibble::add_row(tibble::tibble(name = sort(highlight_building),
                  geometry = building %>%
-                   arrange(name) %>%
+                   dplyr::arrange(name) %>%
                    filter(name %in% highlight_building) %>%
-                   st_centroid() %>% st_geometry()))
+                   sf::st_centroid() %>% sf::st_geometry()))
 
 labels <- labels %>%
-  add_row(tibble(name = sort(highlight_amenity),
+  tibble::add_row(tibble::tibble(name = sort(highlight_amenity),
                  geometry = amenity %>%
-                   arrange(name) %>%
+                   dplyr::arrange(name) %>%
                    filter(name %in% highlight_amenity) %>%
-                   st_centroid() %>% st_geometry()))
+                   sf::st_centroid() %>% sf::st_geometry()))
 labels <- labels %>%
-  add_row(tibble(name = sort(highlight_leisure),
-                 geometry = leisure %>%
-                 arrange(name) %>%
-                 filter(name %in% highlight_leisure) %>%
-                   st_centroid() %>% st_geometry()))
+  tibble::add_row(tibble::tibble(
+    name = sort(highlight_leisure),
+    geometry = leisure %>%
+      dplyr::arrange(name) %>%
+      filter(name %in% highlight_leisure) %>%
+      sf::st_centroid() %>% sf::st_geometry()))
 
 labels <- labels %>%
-  add_row(tibble(name = railway %>%
-                   sf::st_drop_geometry() %>%
-                   dplyr::filter(railway == "station") %>%
-                   dplyr::select(name) %>%
-                   unlist(),
-                 geometry = railway %>%
-                   dplyr::filter(railway == "station") %>%
-                   st_centroid() %>% st_geometry()))
+  tibble::add_row(tibble::tibble(
+    name = railway %>%
+      sf::st_drop_geometry() %>%
+      dplyr::filter(railway == "station") %>%
+      dplyr::select(name) %>%
+      unlist(),
+    geometry = railway %>%
+      dplyr::filter(railway == "station") %>%
+      sf::st_centroid() %>% sf::st_geometry()))
 
 #build base layers
 map_local <-
@@ -86,7 +103,7 @@ icon_locations$icon_filename <- system.file(
 
 # bus stops
 holding <- data.frame(
-  highway[(highway %>% st_geometry_type() == "POINT"),] %>%
+  highway[(highway %>% sf::st_geometry_type() == "POINT"),] %>%
     filter(highway %in% c("bus_stop")) %>%
     sf::st_transform(crs = crs_local_metres) %>%
     sf::st_make_valid() %>%
@@ -94,7 +111,7 @@ holding <- data.frame(
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
     st_coordinates())
-icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_bus.png", package = "mobilityHubTools"))
 ) else icon_locations
@@ -107,7 +124,7 @@ holding <- data.frame(
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
     st_coordinates())
-icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_railway.png", package = "mobilityHubTools"))
 ) else icon_locations
@@ -120,7 +137,7 @@ holding <- data.frame(
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
     st_coordinates())
-icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_bus.png", package = "mobilityHubTools"))
 ) else icon_locations
@@ -134,7 +151,7 @@ holding <- data.frame(
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
     st_coordinates())
-icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_supermarket.png", package = "mobilityHubTools"))
 ) else icon_locations
@@ -148,7 +165,7 @@ holding <- data.frame(
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
     st_coordinates())
-icon_locations <- if(nrow(holding) > 0) icon_locations %>% add_row(
+icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_food.png", package = "mobilityHubTools"))
 ) else icon_locations
@@ -171,12 +188,12 @@ ggplot2::geom_sf(data = building %>%
                                    sf::st_buffer(dist = map_limits) %>%
                                    sf::st_bbox()
                      ),
-                   mapping = aes(), fill = "purple") +
+                   mapping = ggplot2::aes(), fill = "purple") +
 
 
 #add bus stops, railway stations and other icons
   ggimage::geom_image(data = icon_locations,
-                      mapping = aes(
+                      mapping = ggplot2::aes(
                         x = X, y = Y,
                         image = icon_filename),
                       size = 0.01) +
@@ -185,7 +202,7 @@ ggplot2::geom_sf(data = building %>%
 ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) +
 
 # hub marker
-ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
+ggplot2::geom_sf(data = hub_location, ggplot2::aes(), fill = "red", size = 5) +
 
 
 # Add 5 minute walk radius text
@@ -195,7 +212,7 @@ ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
   y =  hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
     dplyr::select(Y) %>% as.numeric() + 288.7) %>%
   sf::st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%
-  sf::st_as_sfc(), aes(), label = "5 minute walk", colour = "black", angle = 45) +
+  sf::st_as_sfc(), ggplot2::aes(), label = "5 minute walk", colour = "black", angle = 45) +
 
   # Add hub location and other text
   ggrepel::geom_label_repel(
@@ -205,7 +222,7 @@ ggplot2::geom_sf(data = hub_location, aes(), fill = "red", size = 5) +
       sf::st_crop(hub_location %>%
                     sf::st_buffer(dist = map_limits) %>%
                     sf::st_bbox()),
-    mapping = aes(label = name, geometry = geometry),
+    mapping = ggplot2::aes(label = name, geometry = geometry),
     stat = "sf_coordinates")
 
 

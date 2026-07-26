@@ -5,15 +5,24 @@
 \title{Build the smaller scale regional map as per the Bristol mobility hub example.}
 \usage{
 bristol_regional_map(
-  amenity,
-  building,
-  highway,
-  leisure,
-  landuse,
-  natural,
-  railway,
-  waterway,
-  hub_location,
+  amenity = rlist::list.load(system.file("data/greensborough_amenity.rdata", package =
+    "mobilityHubTools")),
+  building = rlist::list.load(system.file("data/greensborough_building.rdata", package =
+    "mobilityHubTools")),
+  highway = rlist::list.load(system.file("data/greensborough_highway.rdata", package =
+    "mobilityHubTools")),
+  leisure = rlist::list.load(system.file("data/greensborough_leisure.rdata", package =
+    "mobilityHubTools")),
+  landuse = rlist::list.load(system.file("data/greensborough_landuse.rdata", package =
+    "mobilityHubTools")),
+  natural = rlist::list.load(system.file("data/greensborough_natural.rdata", package =
+    "mobilityHubTools")),
+  railway = rlist::list.load(system.file("data/greensborough_railway.rdata", package =
+    "mobilityHubTools")),
+  waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package =
+    "mobilityHubTools")),
+  hub_location = rlist::list.load(system.file("data/greensborough_hub_location.rdata",
+    package = "mobilityHubTools")),
   map_limits = 1500,
   crs_local_metres = 27700,
   highlight_building = c("Horfield Library", "Horfield Health Centre"),

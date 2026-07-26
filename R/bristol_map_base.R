@@ -17,8 +17,23 @@
 #'
 #' @examples
 bristol_map_base <- function(
-    amenity, building, highway, leisure, landuse, natural,  railway,
-    waterway, hub_location,
+    amenity = rlist::list.load(system.file(
+      "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
+    building = rlist::list.load(system.file(
+      "data/greensborough_building.rdata", package = "mobilityHubTools")),
+    highway = rlist::list.load(system.file(
+      "data/greensborough_highway.rdata", package = "mobilityHubTools")),
+    leisure = rlist::list.load(system.file(
+      "data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+    landuse = rlist::list.load(system.file(
+      "data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+    natural = rlist::list.load(system.file(
+      "data/greensborough_natural.rdata", package = "mobilityHubTools")),
+    railway = rlist::list.load(system.file(
+      "data/greensborough_railway.rdata", package = "mobilityHubTools")),
+    waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+    hub_location = rlist::list.load(system.file(
+      "data/greensborough_hub_location.rdata", package = "mobilityHubTools")),
     map_limits = 500,
     crs_local_metres = 27700
 ){
@@ -32,7 +47,7 @@ bristol_map_base <- function(
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
               ),
-            mapping = aes(), fill = "white") +
+            mapping = ggplot2::aes(), fill = "white") +
 
     # parks and grassland
     ggplot2::geom_sf(data = leisure %>%
@@ -42,7 +57,7 @@ bristol_map_base <- function(
               sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "lightgreen") +
+              ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = landuse %>%
               filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
                 sf::st_transform(crs = crs_local_metres) %>%
@@ -51,7 +66,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "lightgreen") +
+              ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = natural %>%
                 filter(natural %in% c("grassland")) %>%
                 sf::st_transform(crs = crs_local_metres) %>%
@@ -59,7 +74,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "lightgreen") +
+              ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = leisure %>%
                 filter(leisure %in% c("nature_reserve", "golf_course")) %>%
                 sf::st_transform(crs = crs_local_metres) %>%
@@ -67,7 +82,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "darkgreen") +
+              ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = landuse %>%
               filter(landuse %in% c("forest", "orchard")) %>%
                 sf::st_transform(crs = crs_local_metres) %>%
@@ -75,7 +90,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "darkgreen") +
+              ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = natural %>%
                 filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
                 sf::st_transform(crs = crs_local_metres) %>%
@@ -83,7 +98,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "darkgreen") +
+              ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = natural %>%
                 filter(natural %in% c("beach", "dune", "sand")) %>%
                 sf::st_transform(crs = crs_local_metres) %>%
@@ -91,7 +106,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "yellow") +
+              ), mapping = ggplot2::aes(), fill = "yellow") +
     # waterways
     ggplot2::geom_sf(data = waterway %>%
               filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
@@ -100,14 +115,14 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill = "blue") +
+              ), mapping = ggplot2::aes(), fill = "blue") +
     ggplot2::geom_sf(data = natural %>%
               filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
               sf::st_make_valid() %>%
               sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), fill =  "blue")  +
+              ), mapping = ggplot2::aes(), fill =  "blue")  +
 
     # roads, trails and railways
     ggplot2::geom_sf(data = highway %>%
@@ -121,7 +136,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), colour = "black") +
+              ), mapping = ggplot2::aes(), colour = "black") +
     ggplot2::geom_sf(data = highway %>%
               filter(highway %in% c("cycleway", "bridleway", "steps", "path")) %>%
                 sf::st_transform(crs = crs_local_metres) %>%
@@ -129,7 +144,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), colour = "purple") +
+              ), mapping = ggplot2::aes(), colour = "purple") +
 
     ggplot2::geom_sf(data = railway %>%
               filter(railway %in% c("rail", "tram")) %>%
@@ -138,7 +153,7 @@ bristol_map_base <- function(
                 sf::st_crop(hub_location %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
-              ), mapping = aes(), colour = "black", linetype = "dashed") +
+              ), mapping = ggplot2::aes(), colour = "black", linetype = "dashed") +
     theme(
       axis.title = element_blank(),
       axis.text.x=element_blank(), #remove x axis labels

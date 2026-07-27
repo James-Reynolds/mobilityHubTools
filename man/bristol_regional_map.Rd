@@ -25,9 +25,10 @@ bristol_regional_map(
     package = "mobilityHubTools")),
   map_limits = 1500,
   crs_local_metres = 27700,
-  highlight_building = c("Horfield Library", "Horfield Health Centre"),
-  highlight_amenity = c("nill"),
-  highlight_leisure = c("Bristol County Ground")
+  highlight_building_regional = c("Horfield Library", "Horfield Health Centre"),
+  highlight_amenity_regional = c("nill"),
+  highlight_leisure_regional = c("Bristol County Ground"),
+  highlight_landuse_regional = c("Bonnington Walk Playing Fields")
 )
 }
 \arguments{
@@ -53,11 +54,11 @@ bristol_regional_map(
 
 \item{crs_local_metres}{the numeric value representing the crs for local metres}
 
-\item{highlight_building}{character values of the names of buildings to be highlighted and labelled on the map}
+\item{highlight_building_regional}{character values of the names of buildings to be highlighted and labelled on the map}
 
-\item{highlight_amenity}{character values of the names of amenities to be labelled on the map}
+\item{highlight_amenity_regional}{character values of the names of amenities to be labelled on the map}
 
-\item{highlight_leisure}{character values of the names of leisure facilities to be labelled on the map}
+\item{highlight_leisure_regional}{character values of the names of leisure facilities to be labelled on the map}
 }
 \value{
 a ggplot object of a map in the style of the Bristol mobility hubs

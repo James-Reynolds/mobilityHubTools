@@ -5,7 +5,7 @@
 \title{Builds a totem pedestral sign in the style of Bristol mobility hubs}
 \usage{
 bristol_totem_pedestal(
-  file_to_save_to = "layout_test.png",
+  file_to_save_to = "layout_test.pdf",
   hub_name_text = "Gainsborough Square",
   icons_to_incude_in_header = list(system.file("extdata/bristol_blank.png", package =
     "mobilityHubTools"), system.file("extdata/bristol_blank.png", package =

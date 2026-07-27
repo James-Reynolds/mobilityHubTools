@@ -13,7 +13,7 @@
 #'
 #' @examples
 bristol_totem_pedestal <- function(
-    file_to_save_to = "layout_test.png",
+    file_to_save_to = "layout_test.pdf",
     hub_name_text = "Gainsborough Square",
     icons_to_incude_in_header = list(
       system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
@@ -164,14 +164,7 @@ lay <- rbind(c(1,1,1,1,1),
              c(5,5,5,9,9),
              c(6,6,7,8,8))
 gridExtra::grid.arrange(grobs = gs, layout_matrix = lay)
-
-
-grDevices::dev.copy2pdf(file = "layout_test.pdf", width = 17, height = 40.8, fonts = NULL)
-
-
-
-
-grDevices::dev.copy(png, "layout_test.png", width = 1000, height = 2400)
+grDevices::dev.copy2pdf(file = file_to_save_to, width = 17, height = 40.8, fonts = NULL)
 grDevices::dev.off()
 
 

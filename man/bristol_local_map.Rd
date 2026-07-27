@@ -28,7 +28,8 @@ bristol_local_map(
   highlight_building = c("North Bristol Advice Centre", "The Hub"),
   highlight_amenity = c("Stoke Park Primary School",
     "Saint Mary Magdalen and Saint Francis Lockleaze", "St James Church"),
-  highlight_leisure = c("Lockleaze Youth And Play Space", "Gainsborough Square")
+  highlight_leisure = c("Lockleaze Youth And Play Space", "Gainsborough Square"),
+  highlight_landuse = c("Bonnington Walk Playing Fields")
 )
 }
 \arguments{

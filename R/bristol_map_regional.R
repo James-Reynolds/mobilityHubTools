@@ -149,7 +149,7 @@ map_regional <-
 map_regional <- map_regional +
 
 # Highlight buildings
-ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building_regional) %>%
+ggplot2::geom_sf(data = amenity %>% filter(name %in% highlight_amenity_regional) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%
@@ -157,6 +157,16 @@ ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building_regiona
                                    sf::st_bbox()
                      ),
                    mapping = ggplot2::aes(), fill = "purple") +
+
+  ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building_regional) %>%
+                     sf::st_transform(crs = crs_local_metres) %>%
+                     sf::st_make_valid() %>%
+                     sf::st_crop(hub_location %>%
+                                   sf::st_buffer(dist = map_limits) %>%
+                                   sf::st_bbox()
+                     ),
+                   mapping = ggplot2::aes(), fill = "purple") +
+
 
 
 #add railway stations and other icons
@@ -191,7 +201,10 @@ ggplot2::geom_sf(data = hub_location, ggplot2::aes(), fill = "red", size = 5) +
       sf::st_crop(hub_location %>%
                     sf::st_buffer(dist = map_limits) %>%
                     sf::st_bbox()),
-    mapping = ggplot2::aes(label = name, geometry = geometry),
+    mapping = ggplot2::aes(label = stringr::str_wrap(name, 20),
+                           geometry = geometry),
+    nudge_y = 50,
+    size = 2,
     stat = "sf_coordinates")
 
   return(map_regional)

@@ -2,7 +2,7 @@
 #'
 #' @param file_to_save_to a character string of the file to save the png to
 #' @param hub_name_text the name of the hub
-#' @param icons_to_incude_in_header a list of 10 strings of the location of the icons to include in the header, including blanks
+#' @param icons_to_include_in_header a list of 10 strings of the location of the icons to include in the header, including blanks
 #' @param directions_image a character string of the location of an image showing directions
 #' @param map_local the output of the bristol_map_local function
 #' @param facilities_image a character string of the location of an image showing details of the hub facilities
@@ -15,7 +15,7 @@
 bristol_totem_pedestal <- function(
     file_to_save_to = "layout_test.pdf",
     hub_name_text = "Gainsborough Square",
-    icons_to_incude_in_header = list(
+    icons_to_include_in_header = list(
       system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
       system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
       system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
@@ -97,7 +97,7 @@ gs[[1]] <- gridExtra::grid.arrange(hub_name_viewport)
 
 
 #Wrangle icons below hub name
-image <- lapply(icons_to_incude_in_header, function (x) grid::rasterGrob(magick::image_read(x)))
+image <- lapply(icons_to_include_in_header, function (x) grid::rasterGrob(magick::image_read(x)))
 grob_1 <- image[[1]]
 grob_2 <- image[[2]]
 grob_3 <- image[[3]]

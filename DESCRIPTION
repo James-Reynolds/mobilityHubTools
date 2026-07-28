@@ -20,4 +20,5 @@ Imports:
     magick,
     rlist,
     sf,
+    stringr,
     tibble

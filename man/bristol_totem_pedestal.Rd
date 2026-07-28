@@ -7,7 +7,7 @@
 bristol_totem_pedestal(
   file_to_save_to = "layout_test.pdf",
   hub_name_text = "Gainsborough Square",
-  icons_to_incude_in_header = list(system.file("extdata/bristol_blank.png", package =
+  icons_to_include_in_header = list(system.file("extdata/bristol_blank.png", package =
     "mobilityHubTools"), system.file("extdata/bristol_blank.png", package =
     "mobilityHubTools"), system.file("extdata/bristol_blank.png", package =
     "mobilityHubTools"), system.file("extdata/bristol_bus.png", package =
@@ -33,7 +33,7 @@ bristol_totem_pedestal(
 
 \item{hub_name_text}{the name of the hub}
 
-\item{icons_to_incude_in_header}{a list of 10 strings of the location of the icons to include in the header, including blanks}
+\item{icons_to_include_in_header}{a list of 10 strings of the location of the icons to include in the header, including blanks}
 
 \item{directions_image}{a character string of the location of an image showing directions}
 

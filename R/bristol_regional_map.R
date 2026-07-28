@@ -19,6 +19,8 @@
 #' @export
 #'
 #' @examples
+
+
 bristol_regional_map <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
@@ -85,6 +87,24 @@ labels <- labels %>%
                      sf::st_centroid()))
 
 
+### OPTION TO Add cycleway names, but only one in every 20 so as to limit density
+### Still might be a bit messy and probably better to add this text to the regional map manually
+#labels <- labels %>%
+#  tibble::add_row(
+#    tibble::tibble(highway %>%
+#                     filter(highway == "cycleway") %>%
+#                     select(name)  %>%
+#                     filter(!is.na(name)) %>%
+#                     sf::st_centroid())[1:nrow(
+#                       highway %>%
+#                         filter(highway == "cycleway") %>%
+#                         select(name)  %>%
+#                         filter(!is.na(name))
+#                       )%%20!=0,]
+#)
+
+
+
 ## build dataframe with transit stops and other locations to be represented by an icon
 # hub location
 icon_locations <- hub_location %>%
@@ -138,8 +158,7 @@ map_regional <-
                          "secondary", "secondary_link",
                          "tertiary",
                          "tertiary_link",
-                         "trunk", "trunk_link",
-                         "cycleway")) ,
+                         "trunk", "trunk_link")) ,
                      leisure = leisure, landuse = landuse, natural = natural,
                      railway = railway, waterway = waterway,
                      hub_location = hub_location,
@@ -147,6 +166,18 @@ map_regional <-
 
 # combine base layers with additional layers
 map_regional <- map_regional +
+
+# add named cycleways
+ggplot2::geom_sf(data = highway %>%
+                   filter(highway == "cycleway") %>%
+                   filter(!is.na(name))  %>%
+                   sf::st_transform(crs = crs_local_metres) %>%
+                   sf::st_make_valid() %>%
+                   sf::st_crop(hub_location %>%
+                                 sf::st_buffer(dist = map_limits) %>%
+                                 sf::st_bbox()
+                   ),
+                 mapping = ggplot2::aes(), linetype = 2) +
 
 # Highlight buildings
 ggplot2::geom_sf(data = amenity %>% filter(name %in% highlight_amenity_regional) %>%
@@ -183,15 +214,6 @@ ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour
 # hub marker
 ggplot2::geom_sf(data = hub_location, ggplot2::aes(), fill = "red", size = 5) +
 
-# Add 15 minute walk radius text
-  ggplot2::geom_sf_label(data = data.frame(
-  x = hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
-    dplyr::select(X) %>% as.numeric() - 1100,
-  y =  hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
-    dplyr::select(Y) %>% as.numeric() + 1100) %>%
-  sf::st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%
-  sf::st_as_sfc(), ggplot2::aes(), label = "15 minute walk", colour = "black", angle = 45) +
-
 
   # Add hub location and other text
   ggrepel::geom_label_repel(
@@ -205,7 +227,18 @@ ggplot2::geom_sf(data = hub_location, ggplot2::aes(), fill = "red", size = 5) +
                            geometry = geometry),
     nudge_y = 50,
     size = 2,
-    stat = "sf_coordinates")
+    stat = "sf_coordinates") +
+
+
+# Add 15 minute walk radius text
+ggplot2::geom_sf_label(data = data.frame(
+  x = hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
+    dplyr::select(X) %>% as.numeric() - 1100,
+  y =  hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
+    dplyr::select(Y) %>% as.numeric() + 1100) %>%
+    sf::st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%
+    sf::st_as_sfc(), ggplot2::aes(), label = "15 minute walk", colour = "black", angle = 45)
+
 
   return(map_regional)
 }

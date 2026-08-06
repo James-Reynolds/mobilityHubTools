@@ -1,25 +1,26 @@
-#' Build the larger scale local map as per the Bristol mobility hub example.
+#' Build a very small map showing detail of the mobility hub features.
 #'
-#' @param amenity osm layers as sf, with crs set to local metres.
-#' @param building osm layers as sf, with crs set to local metres.
-#' @param highway osm layers as sf, with crs set to local metres.
-#' @param leisure osm layers as sf, with crs set to local metres.
-#' @param landuse osm layers as sf, with crs set to local metres.
-#' @param natural osm layers as sf, with crs set to local metres.
-#' @param railway osm layers as sf, with crs set to local metres.
-#' @param waterway osm layers as sf, with crs set to local metres.
-#' @param hub_location sf point with name of mobility hub and location, with crs set to local metres.
-#' @param map_limits a numeric value setting the extents of the map
-#' @param crs_local_metres the numeric value representing the crs for local metres
-#' @param highlight_building character values of the names of buildings to be highlighted and labelled on the map
-#' @param highlight_amenity character values of the names of amenities to be labelled on the map
-#' @param highlight_leisure character values of the names of leisure facilities to be labelled on the map
+#' @param amenity osm layers as sf.
+#' @param building osm layers as sf.
+#' @param highway osm layers as sf.
+#' @param leisure osm layers as sf.
+#' @param landuse osm layers as sf.
+#' @param natural osm layers as sf.
+#' @param railway osm layers as sf.
+#' @param waterway osm layers as sf.
+#' @param hub_location sf point with name of mobility hub and location.
+#' @param map_limits a numeric value setting the extents of the map in metres
+#' @param crs_local_metres crs for local metres
+#' @param highlight_building character names of buildings to be highlighted and labelled on the map
+#' @param highlight_amenity character names of amenities to be labelled on the map
+#' @param highlight_leisure character names of leisure facilities to be labelled on the map
+#' @param hub_features sf dataframe of individual hub elements (points) and icon file links.
 #'
-#' @returns a ggplot object of a map in the style of the Bristol mobility hubs
+#' @returns a ggplot object of a detailed map of the immediate hub surrounds
 #' @export
 #'
 #' @examples
-bristol_local_map <- function(
+synthesis_detail_map <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
     building = rlist::list.load(system.file(
@@ -37,16 +38,20 @@ bristol_local_map <- function(
     waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
     hub_location = rlist::list.load(system.file(
       "data/greensborough_hub_location.rdata", package = "mobilityHubTools")),
-    map_limits = 500,
+    map_limits = 110,
     crs_local_metres = 27700,
     highlight_building = c("North Bristol Advice Centre", "The Hub"),
-    highlight_amenity = c("Stoke Park Primary School",
-                          "Saint Mary Magdalen and Saint Francis Lockleaze",
-                          "St James Church"),
-    highlight_leisure = c("Lockleaze Youth And Play Space",
-                           "Gainsborough Square"),
-    highlight_landuse = c("Bonnington Walk Playing Fields")
-){
+    highlight_amenity = c("nill"),
+    highlight_leisure = c("Gainsborough Square"),
+    highlight_landuse = c("nill"),
+    hub_features = data.frame(
+      icon_filename = system.file(
+        "extdata/bristol_bike_parking.png", package = "mobilityHubTools"),
+      lat = 51.489995,
+      lon = -2.563052) %>%
+        st_as_sf(coords = c("lon", "lat"), crs = 4326)
+)
+      {
 
 
 # wrangle label information
@@ -86,7 +91,7 @@ labels <- labels %>%
                      sf::st_centroid()))
 
 #build base layers
-map_local <-
+map_detail <-
     bristol_map_base(amenity = amenity, building = building, highway = highway,
                      leisure = leisure, landuse = landuse, natural = natural,
                      railway = railway, waterway = waterway,
@@ -129,43 +134,26 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_railway.png", package = "mobilityHubTools"))
 ) else icon_locations
-# groceries
-holding <- data.frame(
-  building %>% filter(shop %in% c("convenience", "supermarket")) %>%
-    sf::st_centroid() %>%
+# hub features
+holding <- hub_features %>%
     sf::st_transform(crs = crs_local_metres) %>%
     sf::st_make_valid() %>%
     sf::st_crop(hub_location %>%
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
-    st_coordinates())
+    st_coordinates() %>%
+  as.data.frame()
 icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
-  holding %>% tibble::add_column(
-    icon_filename = system.file("extdata/bristol_supermarket.png", package = "mobilityHubTools"))
+  holding %>%
+    tibble::add_column(hub_features %>%
+      st_drop_geometry())
 ) else icon_locations
-# food
-holding <- data.frame(
-  amenity %>% filter(amenity %in% c("fast_food", "cafe", "food_court", "restaurant")) %>%
-    sf::st_centroid() %>%
-    sf::st_transform(crs = crs_local_metres) %>%
-    sf::st_make_valid() %>%
-    sf::st_crop(hub_location %>%
-                  sf::st_buffer(dist = map_limits) %>%
-                  sf::st_bbox()) %>%
-    st_coordinates())
-icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
-  holding %>% tibble::add_column(
-    icon_filename = system.file("extdata/bristol_food.png", package = "mobilityHubTools"))
-) else icon_locations
-
-
-
 
 
 
 ## Puting it all together
 # combine base layers with additional layers
-map_local <- map_local +
+map_detail <- map_detail +
 
 # Highlight buildings
 ggplot2::geom_sf(data = building %>%
@@ -184,23 +172,10 @@ ggplot2::geom_sf(data = building %>%
                       mapping = ggplot2::aes(
                         x = X, y = Y,
                         image = icon_filename),
-                      size = 0.01) +
-
-# Hub walking radius
-ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=400), fill = NA, colour = "white", size = 2) +
+                      size = 0.05) +
 
 # hub marker
 ggplot2::geom_sf(data = hub_location, ggplot2::aes(), fill = "red", size = 5) +
-
-
-# Add 5 minute walk radius text
-  ggplot2::geom_sf_label(data = data.frame(
-  x = hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
-    dplyr::select(X) %>% as.numeric() - 268.7,
-  y =  hub_location %>% sf::st_coordinates() %>% as.data.frame() %>%
-    dplyr::select(Y) %>% as.numeric() + 288.7) %>%
-  sf::st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%
-  sf::st_as_sfc(), ggplot2::aes(), label = "5 minute walk", colour = "black", angle = 45) +
 
   # Add hub location and other text
   ggrepel::geom_label_repel(
@@ -213,7 +188,5 @@ ggplot2::geom_sf(data = hub_location, ggplot2::aes(), fill = "red", size = 5) +
     mapping = ggplot2::aes(label = name, geometry = geometry),
     stat = "sf_coordinates")
 
-
-
-  return(map_local)
+  return(map_detail)
 }

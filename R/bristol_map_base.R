@@ -44,6 +44,7 @@ bristol_map_base <- function(
               sf::st_transform(crs = crs_local_metres) %>%
               sf::st_make_valid() %>%
               sf::st_crop(hub_location %>%
+                        sf::st_transform(crs = crs_local_metres) %>%
                         sf::st_buffer(dist = map_limits) %>%
                         sf::st_bbox()
               ),

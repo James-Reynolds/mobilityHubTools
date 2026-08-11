@@ -137,8 +137,9 @@ gs[[9]] <- map_regional
 
 
 
-# 24 rows, each roughly 100mm high
-# 5 columns, each roughly 200mm wide
+# 24 rows, each roughly 42.5mm high, total height 1.02m, 40.8in
+# 5 columns, each roughly 85mm wide, total width 42.5cm, 17 inches
+# 10 rows x 5 columns is a square
 lay <- rbind(c(1,1,1,1,1),
              c(1,1,1,1,1),
              c(2,2,2,2,2),

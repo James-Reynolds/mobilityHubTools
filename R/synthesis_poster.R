@@ -1,31 +1,49 @@
-#' Builds the synthesis poster
-#'
-#' @param file_to_save_to a character string of the file to save the png to
-#' @param hub_name_text the name of the hub
-#' @param icons_to_include_in_header a list of 5 strings of the location of the icons to include in the header, including blanks
-#' @param directions_image a character string of the location of an image showing directions
-#' @param map_local ggplot of the local map to include
-#' @param points_of_interest_image a character string of the location of an image showing points of interest
-#' @param map_regional ggplot of the regional map to include
-#' @param logo_image a character string of the location of an image showing agency logos
-#' @returns nothing, but outputs a png to the named file
-#' @export
-#'
-#' @examples
 synthesis_poster <- function(
     file_to_save_to = "layout_test.pdf",
-    hub_name_text = "Gainsborough Square",
-    icons_to_include_in_header = list(
+    what_is_this_top_text = "Mobility Hub / Local Travel Point",
+    where_is_it_top_text = "Gainsborough Square",
+    where_is_it_top_text_detail = "Lockleaze, Bristol, BS7 9AP",
+
+# icons from osmic-master
+# electric scooter icon from    https://commons.wikimedia.org/wiki/File:Tabler-icons_scooter-electric.svg
+# electric bike icon from https://www.svgrepo.com/svg/490567/bicycle-electric-2
+       element3_what_is_here_top = list(
       system.file(
-        "extdata/birmingham_icon_blank.png", package = "mobilityHubTools"),
+        "extdata/bus_stop.svg",
+        package = "mobilityHubTools"),
       system.file(
-        "extdata/birmingham_icon_bike.png", package = "mobilityHubTools"),
+        "extdata/bicycle_parking.svg",
+        package = "mobilityHubTools"),
       system.file(
-        "extdata/birmingham_icon_bus.png", package = "mobilityHubTools"),
+        "extdata/bicycle_repair_station.svg",
+        package = "mobilityHubTools"),
       system.file(
-        "extdata/birmingham_icon_blank.png", package = "mobilityHubTools"),
+        "extdata/Tabler-icons_scooter-electric.svg",
+        package = "mobilityHubTools"),
       system.file(
-        "extdata/birmingham_icon_blank.png", package = "mobilityHubTools")),
+        "extdata/bicycle-electric-2.svg",
+        package = "mobilityHubTools"),
+      system.file(
+        "extdata/toilets.svg",
+        package = "mobilityHubTools"),
+      system.file(
+        "extdata/No_image.svg",
+        package = "mobilityHubTools"),
+      system.file(
+        "extdata/No_image.svg",
+        package = "mobilityHubTools"),
+      system.file(
+        "extdata/No_image.svg",
+        package = "mobilityHubTools"),
+      system.file(
+        "extdata/No_image.svg",
+        package = "mobilityHubTools")),
+
+    what_is_this_bottom_text = " What is this: \n Welcome to this Mobility Hub / Local Travel Point,\n a location were shared and other mobility services\n offer a range of travel options. \n\n Where is it:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\n The latitude is 51.4901 and the longitude is -2.5628.\n what3words.com calls this location ruled.trio.warns\n",
+
+
+
+
     directions_image = system.file(
       "extdata/birmingham_directions.png", package = "mobilityHubTools"),
     map_local = synthesis_local_map(),
@@ -36,138 +54,105 @@ synthesis_poster <- function(
       "extdata/bristol_blank.png", package = "mobilityHubTools")
 )
 {
-
-  grid::grid.rect(gp = grid::gpar(lty = "dashed"))
-  hub_name_viewport <- grid::viewport(x = 0, y = 11.5/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_name_viewport")
-  hub_facilities_viewport <- grid::viewport(x = 0, y = 11/12, w = 1, h = 0.5/12, just = c("left", "bottom"), name = "hub_facilities_viewport")
-  direction_information <- grid::viewport(x = 0, y = 10/12, w = 1, h = 1/12, just = c("left", "bottom"), name = "directional_information_viewport")
-  local_map_viewport <- grid::viewport(x = 0, y = 5/12, w = 1, h = 5/12, just = c("left", "bottom"), name = "local_map_viewport")
-  hub_facilities_viewport_details <- grid::viewport(x = 0, y = 3/12, w = 5/9, h = 2/12, just = c("left", "bottom"), name = "hub_facilities_viewport_details")
-  regional_map_viewport <- grid::viewport(x = 5/9, y = 3/12, w = 4/9, h = 2/12, just = c("left", "bottom"), name = "regional_map_viewport")
-  logos_viewport <- grid::viewport(x = 5/9, y = 2/12, w = 4/9, h = 1/12, just = c("left", "bottom"), name = "logos_viewport")
-
-  grid::pushViewport(hub_name_viewport)
-  grid::grid.rect(gp = grid::gpar(col = "white"))
-  grid::grid.text(hub_name_text, y = 0.5)
-  grid::upViewport()
-  grid::pushViewport(hub_facilities_viewport)
-  grid::grid.rect(gp = grid::gpar(col = "white"))
-  grid::grid.text("Hub icons go here", y = 0.5)
-  grid::upViewport()
-  grid::pushViewport(direction_information)
-  grid::grid.rect(gp = grid::gpar(col = "white"))
-  grid::grid.text("Direction information goes here", y = 0.5)
-  grid::upViewport()
-  grid::pushViewport(local_map_viewport)
-  grid::grid.rect(gp = grid::gpar(col = "white"))
-  grid::grid.text("Local Map goes here", y = 0.5)
-  grid::upViewport()
-  grid::pushViewport(hub_facilities_viewport_details)
-  grid::grid.rect(gp = grid::gpar(col = "white"))
-  grid::grid.text("Hub facility details", y = 0.5)
-  grid::upViewport()
-  grid::pushViewport(regional_map_viewport)
-  grid::grid.rect(gp = grid::gpar(col = "white"))
-  grid::grid.text("Area Map goes here", y = 0.5)
-  grid::upViewport()
-  grid::pushViewport(logos_viewport)
-  grid::grid.rect(gp = grid::gpar(col = "white"))
-  grid::grid.text("logos_viewport etc", y = 0.5)
-  grid::popViewport()
-
-
-
-  grid::grid.rect(gp = grid::gpar(lty = "blank"))
-
   r <- grid::rectGrob(gp=grid::gpar(fill="white"))
 
   #Define layout
-  gs <- lapply(1:8, function(ii)
+  gs <- lapply(1:11, function(ii)
     grid::grobTree(
       grid::rectGrob(gp=grid::gpar(fill=ii, alpha=0.5)), grid::textGrob(ii)))
-  gridExtra::grid.arrange(grobs=gs, ncol=9,
+  gridExtra::grid.arrange(grobs=gs, ncol=11,
                           top="top label", bottom="bottom\nlabel",
                           left="left label", right="right label")
   grid::grid.rect(gp=grid::gpar(fill=NA))
 
 
-  #Wrangle icons above hub name
-  image <- lapply(icons_to_include_in_header, function (x) grid::rasterGrob(magick::image_read(x)))
-  grob_1 <- image[[1]]
-  grob_2 <- image[[2]]
-  grob_3 <- image[[3]]
-  grob_4 <- image[[4]]
-  grob_5 <- image[[5]]
-
-  gs[[1]] <- grid::grobTree(
-    grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
-    gridExtra::grid.arrange(
-      grob_1, grob_2, grob_3, grob_4, grob_5,
-      ncol = 5)
-  )
-
-  #Insert Local Travel Point branding
-  hub_name_viewport <- grid::grobTree(
+#Define what this is at top ELEMENT 1 - WHAT IS THIS
+gs[[1]] <- gridExtra::grid.arrange(
+  grid::grobTree(
     grid::rectGrob(
       gp=grid::gpar(fill="white")),
-    grid::textGrob(
-      "Local Travel Point",
-      ,
-      gp=grid::gpar(
-        fontsize=50, col = "black", fontface="bold", lty = "blank")))
-  gs[[2]] <- gridExtra::grid.arrange(hub_name_viewport)
+    grid::textGrob(what_is_this_top_text,
+                   gp=grid::gpar(
+                     fontsize=60,
+                     col="black",
+                     fontface="bold",
+                     lty = "blank"))))
 
+#Define ELEMENT 2 - Where is this
+grobs_for_where_is_it_top <- list()
+grobs_for_where_is_it_top[[1]] <- grid::grobTree(
+  grid::rectGrob(
+    gp=grid::gpar(fill="white", col = NA)),
+  grid::textGrob(where_is_it_top_text,
+                 gp=grid::gpar(
+                   fontsize=100,
+                   col="black",
+                   fontface="bold",
+                   lty = "blank")))
 
-
-
-  #Define hub name
-  hub_name_viewport <- grid::grobTree(
+grobs_for_where_is_it_top[[2]] <-
+  grid::grobTree(
     grid::rectGrob(
-      gp=grid::gpar(fill="white")),
-    grid::textGrob(
-      hub_name_text,
-      gp=grid::gpar(
-        fontsize=70, col = "black", fontface="bold", lty = "blank")))
-  gs[[3]] <- gridExtra::grid.arrange(hub_name_viewport)
+      gp=grid::gpar(fill="white", col = NA)),
+    grid::textGrob(where_is_it_top_text_detail,
+                   gp=grid::gpar(
+                     fontsize=60,
+                     col="black",
+                     fontface="bold",
+                     lty = "blank")))
+gs[[2]] <- gridExtra::grid.arrange(
+  grobs = grobs_for_where_is_it_top,
+  layout_matrix = rbind(c(1,1,1,1,1),
+                          c(1,1,1,1,1),
+                          c(2,2,2,2,2)))
+
+#Wrangle icons below hub name ELEMENT 3
+grob_1 <- svgparser::read_svg(element3_what_is_here_top[[1]])
+grob_2 <- svgparser::read_svg(element3_what_is_here_top[[2]])
+grob_3 <- svgparser::read_svg(element3_what_is_here_top[[3]])
+grob_4 <- svgparser::read_svg(element3_what_is_here_top[[4]])
+grob_5 <- svgparser::read_svg(element3_what_is_here_top[[5]])
+grob_6 <- svgparser::read_svg(element3_what_is_here_top[[6]])
+grob_7 <- svgparser::read_svg(element3_what_is_here_top[[7]])
+grob_8 <- svgparser::read_svg(element3_what_is_here_top[[8]])
+grob_9 <- svgparser::read_svg(element3_what_is_here_top[[9]])
+grob_10 <- svgparser::read_svg(element3_what_is_here_top[[10]])
+
+gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
+                          gridExtra::grid.arrange(grob_1, grob_2, grob_3, grob_4, grob_5, grob_6,
+                                                  grob_7, grob_8, grob_9, grob_10,
+                                                  ncol = 10)
+)
 
 
+#Define ELEMENT 6 - What is this and Where is this (close up)
+gs[[6]] <- gridExtra::grid.arrange(
+    grid::grobTree(
+      grid::rectGrob(
+        gp=grid::gpar(fill="white")),
+      grid::textGrob(what_is_this_bottom_text,
+                     x = 0.01, y=0.95, gp = grid::gpar(fontsize = 18), just = c("left", "top"))))
 
-  # Insert directions image below hub name and icons
-  gs[[4]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
-                            gridExtra::grid.arrange(grid::rasterGrob(magick::image_read(
-                              directions_image)),
-                              ncol = 1))
-
-  gs[[5]] <- map_local
-  # Insert facilities description image below hub name and icons
-  gs[[6]] <- map_local
-  gs[[7]] <- grid::rasterGrob(magick::image_read(points_of_interest_image))
-  gs[[8]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = "blank")),
-                            gridExtra::grid.arrange(grid::rasterGrob(magick::image_read(
-                              logo_image)),
-                              ncol = 1)
-  )
 
 
 
 
   # 24 rows, each roughly 42mm high, total height 1092mm, 43.6 inches
   # 5 columns, each roughly 84mm wide, total width 420mm, 16.8 inches
-  # Two fit side-by-side on a A0 piece of paper, with a little bit to space
+  # Two fit side-by-side on a A0 piece of paper, with a little bit to spare
   # A0 is 841mm wide and 1189mm high, or 33.1 x 46.8in
   # 10 rows x 5 columns is a square
-              # first group of five
+              # first group only four
   lay <- rbind(c(1,1,1,1,1),
-               c(1,1,1,1,1),
                c(2,2,2,2,2),
-               c(3,3,3,3,3),
+               c(2,2,2,2,2),
                c(3,3,3,3,3),
                # second group of five
                c(4,4,4,4,4),
                c(4,4,4,4,4),
-               c(4,4,4,4,4),
-               c(4,4,4,4,4),
-               c(4,4,4,4,4),
+               c(5,5,5,5,5),
+               c(5,5,5,5,5),
+               c(5,5,5,5,5),
                # third group of five
                c(5,5,5,5,5),
                c(5,5,5,5,5),
@@ -177,15 +162,16 @@ synthesis_poster <- function(
                # fourth group of five
                c(5,5,5,5,5),
                c(5,5,5,5,5),
-               c(5,5,5,5,5),
-               c(5,5,5,5,5),
-               c(5,5,5,5,5),
-               # fifth group, only four
-               c(6,6,6,8,8),
-               c(7,7,7,8,8),
-               c(7,7,7,8,8),
-               c(7,7,7,8,8),
-               c(9,9,9,9,9)
+               c(6,6,8,8,8),
+               c(6,6,8,8,8),
+               c(7,7,8,8,8),
+               # fifth group of five
+               c(7,7,8,8,8),
+               c(7,7,8,8,8),
+               c(7,7,8,8,8),
+               c(9,9,9,9,9),
+               c(9,9,9,9,9),
+               c(10,10,10,11,11)
 
                )
   gridExtra::grid.arrange(grobs = gs, layout_matrix = lay)

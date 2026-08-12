@@ -1,12 +1,14 @@
 synthesis_poster <- function(
     file_to_save_to = "layout_test.pdf",
-    what_is_this_top_text = "Mobility Hub / Local Travel Point",
-    where_is_it_top_text = "Gainsborough Square",
-    where_is_it_top_text_detail = "Lockleaze, Bristol, BS7 9AP",
+    element1_what_is_this_top_text = "Mobility Hub / Local Travel Point",
+    element2_where_is_it_top_text = "Gainsborough Square",
+    element2_where_is_it_top_text_detail = "Lockleaze, Bristol, BS7 9AP",
 
 # icons from osmic-master
 # electric scooter icon from    https://commons.wikimedia.org/wiki/File:Tabler-icons_scooter-electric.svg
-# electric bike icon from https://www.svgrepo.com/svg/490567/bicycle-electric-2
+# e-scooter icon from https://www.svgrepo.com/svg/450115/e-scooter
+# accessible toilet icon from https://commons.wikimedia.org/wiki/File:RWBA_Behinderten-WC.svg
+# arrows from https://www.svgrepo.com/svg/31619/next-arrow
        element3_what_is_here_top = list(
       system.file(
         "extdata/bus_stop.svg",
@@ -18,7 +20,7 @@ synthesis_poster <- function(
         "extdata/bicycle_repair_station.svg",
         package = "mobilityHubTools"),
       system.file(
-        "extdata/Tabler-icons_scooter-electric.svg",
+        "extdata/e-scooter-svgrepo-com.svg",
         package = "mobilityHubTools"),
       system.file(
         "extdata/bicycle-electric-2.svg",
@@ -27,7 +29,7 @@ synthesis_poster <- function(
         "extdata/toilets.svg",
         package = "mobilityHubTools"),
       system.file(
-        "extdata/No_image.svg",
+        "extdata/RWBA_Behinderten-WC.svg",
         package = "mobilityHubTools"),
       system.file(
         "extdata/No_image.svg",
@@ -39,20 +41,26 @@ synthesis_poster <- function(
         "extdata/No_image.svg",
         package = "mobilityHubTools")),
 
-    what_is_this_bottom_text = " What is this: \n Welcome to this Mobility Hub / Local Travel Point,\n a location were shared and other mobility services\n offer a range of travel options. \n\n Where is it:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\n The latitude is 51.4901 and the longitude is -2.5628.\n what3words.com calls this location ruled.trio.warns\n",
+    element4_up_what_is_nearby = " Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
+    element4_left_what_is_nearby = " Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n North Bristol Advice Centre",
+    element4_right_what_is_nearby = " Buses: Cameron Walk stop (Route 24, 72 westbound) \n LockLeaze Neighbourhood Trust",
+
+
+test_hub_location = list(
+  gainsborough_square = tibble(
+    lat = 51.4904, lon = -2.5627,
+    name = "Gainsborough Square")) %>%
+  lapply(function(x) x %>%
+           st_as_sf(coords = c("lon", "lat"),
+                    crs = 4326) %>%
+           st_transform(crs =  27700) %>%
+           st_cast("POINT")),
 
 
 
 
-    directions_image = system.file(
-      "extdata/birmingham_directions.png", package = "mobilityHubTools"),
-    map_local = synthesis_local_map(),
-    points_of_interest_image =  system.file(
-      "extdata/bristol_facilities.png", package = "mobilityHubTools"),
-    map_regional = synthesis_local_map(),
-    logo_image =  system.file(
-      "extdata/bristol_blank.png", package = "mobilityHubTools")
-)
+    element6_what_is_this_bottom_text = " What is this: \n Welcome to this Mobility Hub / Local Travel Point,\n a location were shared and other mobility services\n offer a range of travel options. \n\n Where is it:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\n The latitude is 51.4904 and the longitude is -2.5627.\n what3words.com calls this location hero.blend.sock\n")
+
 {
   r <- grid::rectGrob(gp=grid::gpar(fill="white"))
 
@@ -71,7 +79,7 @@ gs[[1]] <- gridExtra::grid.arrange(
   grid::grobTree(
     grid::rectGrob(
       gp=grid::gpar(fill="white")),
-    grid::textGrob(what_is_this_top_text,
+    grid::textGrob(element1_what_is_this_top_text,
                    gp=grid::gpar(
                      fontsize=60,
                      col="black",
@@ -83,7 +91,7 @@ grobs_for_where_is_it_top <- list()
 grobs_for_where_is_it_top[[1]] <- grid::grobTree(
   grid::rectGrob(
     gp=grid::gpar(fill="white", col = NA)),
-  grid::textGrob(where_is_it_top_text,
+  grid::textGrob(element2_where_is_it_top_text,
                  gp=grid::gpar(
                    fontsize=100,
                    col="black",
@@ -94,7 +102,7 @@ grobs_for_where_is_it_top[[2]] <-
   grid::grobTree(
     grid::rectGrob(
       gp=grid::gpar(fill="white", col = NA)),
-    grid::textGrob(where_is_it_top_text_detail,
+    grid::textGrob(element2_where_is_it_top_text_detail,
                    gp=grid::gpar(
                      fontsize=60,
                      col="black",
@@ -125,12 +133,71 @@ gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
 )
 
 
+
+
+#Define ELEMENT 4 - What is nearby
+#element4_up_what_is_nearby = "Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
+#element4_left_what_is_nearby = "Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n North Bristol Advice Centre",
+#element4_right_what_is_nearby = "Buses: Cameron Walk stop (Route 24, 72 westbound) \n LockLeaze Neighbourhood Trust",
+#element4_layout_matrix = rbind(c(1,1,1,1,1),
+#                      c(2,2,2,2,2),
+#                      c(3,3,3,3,3))
+
+
+
+  grobs_for_element4_what_is_nearby_top <- list()
+
+  grobs_for_element4_what_is_nearby_top[[1]] <- grid::grobTree(
+    grid::rectGrob(
+      gp=grid::gpar(fill="white", col = NA)),
+    grid::textGrob(element4_up_what_is_nearby,
+                   gp=grid::gpar(
+                     fontsize=25,
+                     col="black",
+                     fontface="bold",
+                     lty = "blank")),
+
+    gridExtra::grid.arrange(svgparser::read_svg(element3_what_is_here_top[[1]]))
+
+    )
+  grobs_for_element4_what_is_nearby_top[[2]] <- grid::grobTree(
+    grid::rectGrob(
+      gp=grid::gpar(fill="white", col = NA)),
+    grid::textGrob(element4_left_what_is_nearby,
+                   x = 0.05,
+                   y = 0.9,
+                   just = c("left", "top"),
+                   gp=grid::gpar(
+                     fontsize=25,
+                     col="black",
+                     fontface="bold",
+                     lty = "blank")))
+  grobs_for_element4_what_is_nearby_top[[3]] <- grid::grobTree(
+    grid::rectGrob(
+      gp=grid::gpar(fill="white", col = NA)),
+    grid::textGrob(element4_right_what_is_nearby,
+                   x = 0.95,
+                   y = 0.1,
+                   just = c("right", "bottom"),
+                   gp=grid::gpar(
+                     fontsize=25,
+                     col="black",
+                     fontface="bold",
+                     lty = "blank")))
+
+
+gs[[4]] <- gridExtra::grid.arrange(
+  grobs = grobs_for_element4_what_is_nearby_top,
+  layout_matrix = element4_layout_matrix)
+
+
+
 #Define ELEMENT 6 - What is this and Where is this (close up)
 gs[[6]] <- gridExtra::grid.arrange(
     grid::grobTree(
       grid::rectGrob(
         gp=grid::gpar(fill="white")),
-      grid::textGrob(what_is_this_bottom_text,
+      grid::textGrob(element6_what_is_this_bottom_text,
                      x = 0.01, y=0.95, gp = grid::gpar(fontsize = 18), just = c("left", "top"))))
 
 

@@ -155,10 +155,7 @@ gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
                      fontsize=25,
                      col="black",
                      fontface="bold",
-                     lty = "blank")),
-
-    gridExtra::grid.arrange(svgparser::read_svg(element3_what_is_here_top[[1]]))
-
+                     lty = "blank"))
     )
   grobs_for_element4_what_is_nearby_top[[2]] <- grid::grobTree(
     grid::rectGrob(

@@ -41,25 +41,20 @@ synthesis_poster <- function(
         "extdata/No_image.svg",
         package = "mobilityHubTools")),
 
-    element4_up_what_is_nearby = " Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
-    element4_left_what_is_nearby = " Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n North Bristol Advice Centre",
-    element4_right_what_is_nearby = " Buses: Cameron Walk stop (Route 24, 72 westbound) \n LockLeaze Neighbourhood Trust",
-
-
-test_hub_location = list(
-  gainsborough_square = tibble(
-    lat = 51.4904, lon = -2.5627,
-    name = "Gainsborough Square")) %>%
-  lapply(function(x) x %>%
-           st_as_sf(coords = c("lon", "lat"),
-                    crs = 4326) %>%
-           st_transform(crs =  27700) %>%
-           st_cast("POINT")),
+    element4_up_what_is_nearby = "^ Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
+    element4_left_what_is_nearby = "\U2190 Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n\U2190 North Bristol Advice Centre",
+    element4_right_what_is_nearby = "Buses: Cameron Walk stop (Route 24, 72 westbound) \U2192\n LockLeaze Neighbourhood Trust \U2192",
+    element4_layout_matrix = rbind(c(1,1,1,1,1),
+                                   c(2,2,2,2,2),
+                                   c(3,3,3,3,3)),
+    element5_regional_map = synthesis_regional_map(),
 
 
 
 
-    element6_what_is_this_bottom_text = " What is this: \n Welcome to this Mobility Hub / Local Travel Point,\n a location were shared and other mobility services\n offer a range of travel options. \n\n Where is it:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\n The latitude is 51.4904 and the longitude is -2.5627.\n what3words.com calls this location hero.blend.sock\n")
+    element6_what_is_this_bottom_text = " What is this: \n Welcome to this Mobility Hub / Local Travel Point,\n a location were shared and other mobility services\n offer a range of travel options. \n\n Where is it:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\n The latitude is 51.4904 and the longitude is -2.5627.\n what3words.com calls this location hero.blend.sock\n"
+
+)
 
 {
   r <- grid::rectGrob(gp=grid::gpar(fill="white"))
@@ -133,18 +128,6 @@ gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
 )
 
 
-
-
-#Define ELEMENT 4 - What is nearby
-#element4_up_what_is_nearby = "Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
-#element4_left_what_is_nearby = "Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n North Bristol Advice Centre",
-#element4_right_what_is_nearby = "Buses: Cameron Walk stop (Route 24, 72 westbound) \n LockLeaze Neighbourhood Trust",
-#element4_layout_matrix = rbind(c(1,1,1,1,1),
-#                      c(2,2,2,2,2),
-#                      c(3,3,3,3,3))
-
-
-
   grobs_for_element4_what_is_nearby_top <- list()
 
   grobs_for_element4_what_is_nearby_top[[1]] <- grid::grobTree(
@@ -152,7 +135,7 @@ gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
       gp=grid::gpar(fill="white", col = NA)),
     grid::textGrob(element4_up_what_is_nearby,
                    gp=grid::gpar(
-                     fontsize=25,
+                     fontsize=30,
                      col="black",
                      fontface="bold",
                      lty = "blank"))
@@ -165,7 +148,7 @@ gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
                    y = 0.9,
                    just = c("left", "top"),
                    gp=grid::gpar(
-                     fontsize=25,
+                     fontsize=30,
                      col="black",
                      fontface="bold",
                      lty = "blank")))
@@ -177,7 +160,7 @@ gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
                    y = 0.1,
                    just = c("right", "bottom"),
                    gp=grid::gpar(
-                     fontsize=25,
+                     fontsize=30,
                      col="black",
                      fontface="bold",
                      lty = "blank")))
@@ -187,7 +170,7 @@ gs[[4]] <- gridExtra::grid.arrange(
   grobs = grobs_for_element4_what_is_nearby_top,
   layout_matrix = element4_layout_matrix)
 
-
+gs[[5]] <- element5_regional_map
 
 #Define ELEMENT 6 - What is this and Where is this (close up)
 gs[[6]] <- gridExtra::grid.arrange(
@@ -198,7 +181,7 @@ gs[[6]] <- gridExtra::grid.arrange(
                      x = 0.01, y=0.95, gp = grid::gpar(fontsize = 18), just = c("left", "top"))))
 
 
-
+gs[[7]] <- map
 
 
   # 24 rows, each roughly 42mm high, total height 1092mm, 43.6 inches

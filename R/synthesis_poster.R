@@ -52,7 +52,12 @@ synthesis_poster <- function(
 
 
 
-    element6_what_is_this_bottom_text = " What is this: \n Welcome to this Mobility Hub / Local Travel Point,\n a location were shared and other mobility services\n offer a range of travel options. \n\n Where is it:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\n The latitude is 51.4904 and the longitude is -2.5627.\n what3words.com calls this location hero.blend.sock\n"
+    element6_what_is_this_bottom_text = " What is this: \n Welcome to this Mobility Hub / Local Travel Point,\n a location where shared mobility and other services\n offer a range of options to support sustainable travel. \n\n Where is it:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\n The latitude is 51.4904 and the longitude is -2.5627.\n what3words.com calls this location hero.blend.sock\n",
+    element7_hub_elements_map = map,
+    element8_what_is_this_bottom_text = " What is here:\n This mobility hub includes nearby bus stops, bicycle parking and repair \n shared scooters and electric bikes, and toilets (in The Hub).",
+    element10_what_is_this_bottom_text = "What is nearby: \n The Hub and the North Bristol Advice Centre (see above).\n Shops, food and services are across Gainborough Square. \n Further away is Horfield Library and Horfield Health Centre. \n \n How can you travel from here: \n Buses 24, 72, 73 and 77 (far left), \n Ashley Down and Filton Abbey Wd Railway Stations (left centre),\n and the Frome Valley Greenway and Concorde Way (left close)."
+
+
 
 )
 
@@ -60,10 +65,10 @@ synthesis_poster <- function(
   r <- grid::rectGrob(gp=grid::gpar(fill="white"))
 
   #Define layout
-  gs <- lapply(1:11, function(ii)
+  gs <- lapply(1:14, function(ii)
     grid::grobTree(
       grid::rectGrob(gp=grid::gpar(fill=ii, alpha=0.5)), grid::textGrob(ii)))
-  gridExtra::grid.arrange(grobs=gs, ncol=11,
+  gridExtra::grid.arrange(grobs=gs, ncol=14,
                           top="top label", bottom="bottom\nlabel",
                           left="left label", right="right label")
   grid::grid.rect(gp=grid::gpar(fill=NA))
@@ -181,7 +186,45 @@ gs[[6]] <- gridExtra::grid.arrange(
                      x = 0.01, y=0.95, gp = grid::gpar(fontsize = 18), just = c("left", "top"))))
 
 
-gs[[7]] <- map
+gs[[7]] <- element7_hub_elements_map
+
+gs[[8]] <- gridExtra::grid.arrange(
+  grid::grobTree(
+    grid::rectGrob(
+      gp=grid::gpar(fill="white")),
+    grid::textGrob(element8_what_is_this_bottom_text,
+                   x = 0.01, y=0.95, gp = grid::gpar(fontsize = 16), just = c("left", "top"))))
+
+
+gs[[9]] <- hub_surrounds_map
+
+gs[[10]] <- gridExtra::grid.arrange(
+  grid::grobTree(
+    grid::rectGrob(
+      gp=grid::gpar(fill="white")),
+    grid::textGrob(element10_what_is_this_bottom_text,
+                   x = 0.01, y=0.95, gp = grid::gpar(fontsize = 16), just = c("left", "top"))))
+
+
+gs[[11]] <- synthesis_hub_surrounds_map(
+  map_limits = 100,
+  annotation_map_zoom = 17,
+  annotation_map_type = "osmtransport",
+  highlight_building = "")
+
+gs[[12]] <- synthesis_hub_surrounds_map(
+  map_limits = 2000,
+  annotation_map_zoom = 13,
+  annotation_map_type = "osmtransport",
+  highlight_building = "")
+
+
+gs[[13]] <- synthesis_hub_surrounds_map(
+  map_limits = 2000,
+  annotation_map_zoom = 13,
+  annotation_map_type = "opencycle",
+  highlight_building = "")
+
 
 
   # 24 rows, each roughly 42mm high, total height 1092mm, 43.6 inches
@@ -209,16 +252,16 @@ gs[[7]] <- map
                # fourth group of five
                c(5,5,5,5,5),
                c(5,5,5,5,5),
-               c(6,6,8,8,8),
-               c(6,6,8,8,8),
-               c(7,7,8,8,8),
+               c(6,6,9,9,9),
+               c(6,6,9,9,9),
+               c(7,7,9,9,9),
                # fifth group of five
-               c(7,7,8,8,8),
-               c(7,7,8,8,8),
-               c(7,7,8,8,8),
-               c(9,9,9,9,9),
-               c(9,9,9,9,9),
-               c(10,10,10,11,11)
+               c(7,7,9,9,9),
+               c(7,7,9,9,9),
+               c(7,7,9,9,9),
+               c(8,8,8,10,10),
+               c(11,12,13,10,10),
+               c(11,12,13,14,14)
 
                )
   gridExtra::grid.arrange(grobs = gs, layout_matrix = lay)

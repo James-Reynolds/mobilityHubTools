@@ -10,7 +10,7 @@
 #' @param annotation_map_tile_type The background map type (one of that returned by rosm::osm.types, passed to ggspatial::annotation_map_tile) or NA to have no background map
 #' @param annotation_map_tile_zoom The background zoom level (passed to ggspatial::annotation_map_tile)
 #'
-#' @returns the developed synthesis local map
+#' @returns the developed synthesis regional map
 #' @export
 #'
 #' @examples
@@ -35,10 +35,10 @@ synthesis_regional_map <- function(
       "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
     map_limits = 1500,
     crs_local_metres = 27700,
-    annotation_map_tile_type = NA,
-    annotation_map_zoom = 16,
+    annotation_map_tile_type = "osm",
+    annotation_map_zoom = 15,
     highlight_building_regional = c("Horfield Library", "Horfield Health Centre"),
-    highlight_amenity_regional = c("University of the West of England"),
+    highlight_amenity_regional = NA,
     highlight_leisure_regional = c("Bristol County Ground"),
     highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
 {
@@ -218,14 +218,26 @@ if(is.na(annotation_map_tile_type)) {
                         mapping = ggplot2::aes(
                           x = X, y = Y,
                           image = icon_filename),
-                        size = 0.02)
+                        size = 0.02) +
+    # add cycleways
+    ggplot2::geom_sf(data = highway %>%
+                       filter(highway %in% c("pedestrian", "track", "footway", "path",  "cycleway")) %>%
+                       sf::st_transform(crs = crs_local_metres) %>%
+                       sf::st_make_valid() %>%
+                       sf::st_crop(hub_location %>%
+                                     sf::st_buffer(dist = map_limits) %>%
+                                     sf::st_bbox()
+                       ),
+                     mapping = ggplot2::aes(), linetype = 2)
 
 }  else {
-    map <-
-    ggplot2::ggplot() +
-    ggspatial::annotation_map_tile(type = annotation_map_tile_type, zoom = annotation_map_zoom) +
+    map <- ggplot2::ggplot() +
+    ggspatial::annotation_map_tile(
+      type = annotation_map_tile_type,
+      zoom = annotation_map_zoom) +
       # Hub walking radius
       ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour = "black", size = 2)
+
   }
 
 
@@ -240,16 +252,6 @@ map <- map +
                      ),
                    mapping = ggplot2::aes(), fill = "black", size = 10) +
 
-  # add cycleways
-  ggplot2::geom_sf(data = highway %>%
-                     filter(highway %in% c("pedestrian", "track", "footway", "path",  "cycleway")) %>%
-                     sf::st_transform(crs = crs_local_metres) %>%
-                     sf::st_make_valid() %>%
-                     sf::st_crop(hub_location %>%
-                                   sf::st_buffer(dist = map_limits) %>%
-                                   sf::st_bbox()
-                     ),
-                   mapping = ggplot2::aes(), linetype = 2) +
 
   # Highlight buildings
   ggplot2::geom_sf(data = amenity %>% filter(name %in% highlight_amenity_regional) %>%

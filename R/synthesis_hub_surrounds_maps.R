@@ -4,11 +4,13 @@ synthesis_hub_surrounds_map <- function(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
     building = rlist::list.load(system.file(
       "data/greensborough_building.rdata", package = "mobilityHubTools")),
-    map_limits = 120,
+    map_limits = 100,
     crs_local_metres = 27700,
     annotation_map_zoom = 18,
     annotation_map_type = "osm",
-    highlight_building = c("North Bristol Advice Centre", "The Hub")
+    highlight_building = c("North Bristol Advice Centre", "The Hub"),
+    hub_location = rlist::list.load(system.file(
+      "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]]
     )
 {
 

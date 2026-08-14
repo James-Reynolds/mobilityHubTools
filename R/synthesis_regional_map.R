@@ -36,9 +36,10 @@ synthesis_regional_map <- function(
     map_limits = 1500,
     crs_local_metres = 27700,
     annotation_map_tile_type = "osm",
-    annotation_map_zoom = 15,
+    annotation_map_zoom = 14,
     highlight_building_regional = c("Horfield Library", "Horfield Health Centre"),
-    highlight_amenity_regional = NA,
+    highlight_amenity_regional = c("University of the West of England (Frenchay Campus)",
+                                   "St James Church"),
     highlight_leisure_regional = c("Bristol County Ground"),
     highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
 {
@@ -235,7 +236,7 @@ if(is.na(annotation_map_tile_type)) {
     ggspatial::annotation_map_tile(
       type = annotation_map_tile_type,
       zoom = annotation_map_zoom) +
-      # Hub walking radius
+      # Hub walking radius (to set map limits)
       ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour = "black", size = 2)
 
   }
@@ -285,6 +286,9 @@ map <- map +
       sf::st_as_sf(coords = c("x", "y"), crs = crs_local_metres) %>%
       sf::st_as_sfc(), ggplot2::aes(), label = "5 minute walk", colour = "black", angle = 45) +
 
+  # Hub walking radius (to display on top of purple marking)
+  ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour = "black", size = 2) +
+
 
   # Add hub location labels and other text
   ggrepel::geom_label_repel(
@@ -298,6 +302,7 @@ map <- map +
     stat = "sf_coordinates",
     size = 7,
     nudge_y = 70) +
+
 
   # Add 15 minute walk radius text
   ggplot2::geom_sf_label(data = data.frame(
@@ -318,8 +323,6 @@ map <- map +
     legend.text = ggplot2::element_text(size = 8))   +
   ggspatial::annotation_scale(location = 'br') +
   ggspatial::annotation_north_arrow()
-
-
 
   return(map)
 }

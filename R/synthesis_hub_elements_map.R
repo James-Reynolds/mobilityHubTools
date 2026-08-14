@@ -1,19 +1,3 @@
-#' Build the base layers of maps as per the Bristol mobility hub example.
-#'
-#' @param amenity osm layers as sf, with crs set to local metres.
-#' @param building osm layers as sf, with crs set to local metres.
-#' @param highway osm layers as sf, with crs set to local metres.
-#' @param railway osm layers as sf, with crs set to local metres.
-#' @param hub_location sf point with name of mobility hub and location, with crs set to local metres.
-#' @param map_limits a numeric value setting the extents of the map
-#' @param crs_local_metres the crs to use to calculate distances in metres
-#' @param annotation_map_tile_type The background map type (one of that returned by rosm::osm.types, passed to ggspatial::annotation_map_tile) or NA to have no background map
-#' @param annotation_map_tile_zoom The background zoom level (passed to ggspatial::annotation_map_tile)
-#'
-#' @returns the developed synthesis local map
-#' @export
-#'
-#' @examples
 synthesis_hub_elements_map <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
@@ -35,10 +19,52 @@ synthesis_hub_elements_map <- function(
       "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
     map_limits = 100,
     crs_local_metres = 27700,
-    annotation_map_tile_type = NA,
-    annotation_map_zoom = 17,
-    hub_element_locations = test_hub_element_locations$gainsborough_square
+    hub_element_locations = tibble::tibble(
+        lat = c(51.49091020337705,
+                51.490725669406785,
+                51.49028620779843,
+                51.489975,
+                51.490122982307746,
+                51.48995900850345,
+                51.49012161163161,
+                51.49018090729279,
+                51.49015928560444
+        ),
+        lon = c(-2.5638763617435965,
+                -2.562516710126253,
+                -2.5622785784761555,
+                -2.563095,
+                -2.5629193443267115,
+                -2.562930526314595,
+                -2.562804165030892,
+                -2.562311516676315,
+                -2.5624731875894544
+        ),
+        name = c("Gainsborough Sq. Stop A",
+                 "Gainsborough Sq. Stop B",
+                 "Cameron Wk. stop",
+                 NA,
+                 NA,
+                 NA,
+                 NA,
+                 NA,
+                 NA),
+        icon_filename = c(
+          system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
+          system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
+          system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
+          system.file("extdata/bicycle_parking.svg", package = "mobilityHubTools"),
+          system.file("extdata/bicycle_repair_station.svg", package = "mobilityHubTools"),
+          system.file("extdata/e-scooter-svgrepo-com.svg", package = "mobilityHubTools"),
+          system.file("extdata/bicycle-electric-2.svg", package = "mobilityHubTools"),
+          system.file("extdata/toilets.svg", package = "mobilityHubTools"),
+          system.file("extdata/RWBA_Behinderten-WC.svg", package = "mobilityHubTools")
+        )) %>% sf::st_as_sf(coords = c("lon", "lat"),
+                            crs = 4326) %>%
+      sf::st_transform(crs =  27700) %>%
+      sf::st_cast("POINT")
     )
+
 {
 
   #drop points from building layers

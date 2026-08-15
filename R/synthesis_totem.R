@@ -47,20 +47,32 @@ synthesis_totem <- function(
                                    c(2,2,2,2,2),
                                    c(3,3,3,3,3)),
     element5_regional_map = synthesis_regional_map(),
-
-
-
-
     element6_what_is_this_bottom_text = "What is this: \nWelcome to this Mobility Hub / Local Travel Point,\n a location where shared mobility and other services\n offer a range of options to support sustainable travel. \n\nWhat is here: (see left)\nThis mobility hub includes nearby bus stops,\n bicycle parking and a repair station, \n shared scooters and electric bikes, and toilets (in the Hub).",
     element7_hub_elements_map = synthesis_hub_elements_map(),
     element8_what_is_this_bottom_text = "How can you travel from here: (see maps below) \nBuses 24, 77 northbound leave from Gainsborough Square Stop A (left and across the square),\nBuses 24, 72 and 73 eastbound leave from Gainsbourough Square Stop B (in front of you).\n Buses 24, 72 westbound leave from a stop in Cameron Walk (to your right)  \n Ashley Down and Filton Abbey Wd Railway Stations are around a 15 minute walk away (see map below centre).\n The Frome Valley Greenway and Concorde Way are also nearby (see map below right).",
     element9_hub_surrounds_map = synthesis_hub_surrounds_map(),
     element10_what_is_this_bottom_text = "What is nearby: (see maps above)\nThe Hub is accross the street behind you.  \nThe North Bristol Advice Centre is across Gainsborough Square to your left.\nShops, food and services are also across Gainborough Square.\nTo get to St James Church go right along Cameron Walk\n until you get to Romney Avenue.
 \n \nWhere am I:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\nThe latitude is 51.4904 and the longitude is -2.5627.\nwhat3words.com calls this location hero.blend.sock\n\n ",
+
+    element11_transport_map_small = synthesis_hub_surrounds_map(
+  map_limits = 100,
+  annotation_map_zoom = 17,
+  annotation_map_type = "osmtransport",
+  highlight_building = ""),
+
+    element12_transport_map_large = synthesis_hub_surrounds_map(
+  map_limits = 2000,
+  annotation_map_zoom = 13,
+  annotation_map_type = "osmtransport",
+  highlight_building = ""),
+
+    element13_cycle_map = synthesis_hub_surrounds_map(
+  map_limits = 2000,
+  annotation_map_zoom = 13,
+  annotation_map_type = "opencycle",
+  highlight_building = ""),
+
     element14_acknowledgements_text = "Map data from OpenStreetMap, available under the Open Database License. \n © OpenStreetMap contributors. See openstreetmap.org/copyright \n \n Map tiles from: OSM standard layer © OpenStreetMap contributors.; \n and Thunderforest Open CycleMap and Transport layers by Andy Allan, https://www.thunderforest.com/"
-
-
-
 
 
 )
@@ -210,24 +222,11 @@ gs[[10]] <- gridExtra::grid.arrange(
                    x = 0.01, y=0.95, gp = grid::gpar(fontsize = 14), just = c("left", "top"))))
 
 
-gs[[11]] <- synthesis_hub_surrounds_map(
-  map_limits = 100,
-  annotation_map_zoom = 17,
-  annotation_map_type = "osmtransport",
-  highlight_building = "")
+gs[[11]] <- element11_transport_map_small
 
-gs[[12]] <- synthesis_hub_surrounds_map(
-  map_limits = 2000,
-  annotation_map_zoom = 13,
-  annotation_map_type = "osmtransport",
-  highlight_building = "")
+gs[[12]] <- element12_transport_map_large
 
-
-gs[[13]] <- synthesis_hub_surrounds_map(
-  map_limits = 2000,
-  annotation_map_zoom = 13,
-  annotation_map_type = "opencycle",
-  highlight_building = "")
+gs[[13]] <- element13_cycle_map
 
 gs[[14]] <- gridExtra::grid.arrange(
   grid::grobTree(

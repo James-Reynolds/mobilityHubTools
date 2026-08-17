@@ -233,7 +233,7 @@ gs[[14]] <- gridExtra::grid.arrange(
     grid::rectGrob(
       gp=grid::gpar(fill="white")),
     grid::textGrob(element14_acknowledgements_text,
-                   x = 0.95, y=0.0, gp = grid::gpar(fontsize = 10), just = c("right", "bottom"))))
+                   x = 0.95, y=0.05, gp = grid::gpar(fontsize = 10), just = c("right", "bottom"))))
 
 
   # 24 rows, each roughly 42mm high, total height 1092mm, 43.6 inches

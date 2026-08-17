@@ -66,13 +66,23 @@ synthesis_hub_elements_map <- function(
     )
 
 {
-
   #drop points from building layers
     building <- building[!(building %>% sf::st_geometry_type() == "POINT"),]
 
+# convert all inputs to the local crs
+    amenity <- amenity %>%  sf::st_transform(crs =  crs_local_metres)
+    building <- building %>%  sf::st_transform(crs =  crs_local_metres)
+    highway <- highway %>%  sf::st_transform(crs =  crs_local_metres)
+    leisure <- leisure %>%  sf::st_transform(crs =  crs_local_metres)
+    landuse <- landuse %>%  sf::st_transform(crs =  crs_local_metres)
+    natural <- natural %>%  sf::st_transform(crs =  crs_local_metres)
+    waterway <- waterway %>%  sf::st_transform(crs =  crs_local_metres)
+    railway <- railway %>%  sf::st_transform(crs =  crs_local_metres)
+    hub_location <- hub_location %>%  sf::st_transform(crs =  crs_local_metres)
+
+
 
   # wrangle label information
-
   labels <- hub_location
   labels$name <- "You are here"
 

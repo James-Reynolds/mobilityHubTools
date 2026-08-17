@@ -14,6 +14,11 @@ synthesis_hub_surrounds_map <- function(
     )
 {
 
+  # convert all inputs to the local crs
+  amenity <- amenity %>%  sf::st_transform(crs =  crs_local_metres)
+  building <- building %>%  sf::st_transform(crs =  crs_local_metres)
+  hub_location <- hub_location %>%  sf::st_transform(crs =  crs_local_metres)
+
   #drop points from building layers
     building <- building[!(building %>% sf::st_geometry_type() == "POINT"),]
 

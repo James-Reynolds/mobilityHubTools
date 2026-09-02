@@ -1,24 +1,3 @@
-#' Build the smaller scale regional map as per the Bristol mobility hub example.
-#'
-#' @param amenity osm layers as sf, with crs set to local metres.
-#' @param building osm layers as sf, with crs set to local metres.
-#' @param highway osm layers as sf, with crs set to local metres.
-#' @param leisure osm layers as sf, with crs set to local metres.
-#' @param landuse osm layers as sf, with crs set to local metres.
-#' @param natural osm layers as sf, with crs set to local metres.
-#' @param railway osm layers as sf, with crs set to local metres.
-#' @param waterway osm layers as sf, with crs set to local metres.
-#' @param hub_location sf point with name of mobility hub and location, with crs set to local metres.
-#' @param map_limits a numeric value setting the extents of the map
-#' @param crs_local_metres the numeric value representing the crs for local metres
-#' @param highlight_building_regional character values of the names of buildings to be highlighted and labelled on the map
-#' @param highlight_amenity_regional character values of the names of amenities to be labelled on the map
-#' @param highlight_leisure_regional character values of the names of leisure facilities to be labelled on the map
-#'
-#' @returns a ggplot object of a map in the style of the Bristol mobility hubs
-#' @export
-#'
-#' @examples
 
 
 bristol_regional_map <- function(
@@ -47,6 +26,17 @@ bristol_regional_map <- function(
     highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
   {
 
+
+  # convert all inputs to the local crs
+  amenity <- amenity %>%  sf::st_transform(crs =  crs_local_metres)
+  building <- building %>%  sf::st_transform(crs =  crs_local_metres)
+  highway <- highway %>%  sf::st_transform(crs =  crs_local_metres)
+  leisure <- leisure %>%  sf::st_transform(crs =  crs_local_metres)
+  landuse <- landuse %>%  sf::st_transform(crs =  crs_local_metres)
+  natural <- natural %>%  sf::st_transform(crs =  crs_local_metres)
+  waterway <- waterway %>%  sf::st_transform(crs =  crs_local_metres)
+  railway <- railway %>%  sf::st_transform(crs =  crs_local_metres)
+  hub_location <- hub_location %>%  sf::st_transform(crs =  crs_local_metres)
 
 # wrangle label information
 

@@ -13,28 +13,27 @@
 #'
 #' @examples
 bristol_totem_pedestal <- function(
-    file_to_save_to = "layout_test.pdf",
+    file_to_save_to = "results/gainsborough_bristol-style_totem.pdf",
     hub_name_text = "Gainsborough Square",
     icons_to_include_in_header = list(
-      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_bus.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_share_car.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_charging.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_toilets.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_blank.png", package = "mobilityHubTools"),
-      system.file("extdata/bristol_blank.png", package = "mobilityHubTools")),
+      system.file("extdata/No_image.svg", package = "mobilityHubTools"),
+      system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
+      system.file("extdata/bicycle_parking.svg", package = "mobilityHubTools"),
+      system.file("extdata/bicycle_repair_station.svg", package = "mobilityHubTools"),
+      system.file("extdata/e-scooter-svgrepo-com.svg", package = "mobilityHubTools"),
+      system.file("extdata/bicycle-electric-2.svg", package = "mobilityHubTools"),
+      system.file("extdata/toilets.svg", package = "mobilityHubTools"),
+      system.file("extdata/RWBA_Behinderten-WC.svg", package = "mobilityHubTools"),
+      system.file("extdata/No_image.svg", package = "mobilityHubTools"),
+      system.file("extdata/No_image.svg", package = "mobilityHubTools")),
     directions_image = system.file(
       "extdata/bristol_greensborough_directions.png", package = "mobilityHubTools"),
-    map_local = map_local_test,
+    map_local = bristol_local_map(),
     facilities_image =  system.file(
       "extdata/bristol_facilities.png", package = "mobilityHubTools"),
-    map_regional = map_regional_test,
-    logo_image =  system.file(
-      "extdata/bristol_blank.png", package = "mobilityHubTools")
-    )
+    map_regional = bristol_regional_map(),
+    acknowledgements_text = "Map data from OpenStreetMap, available under the Open Database License. © OpenStreetMap contributors. See openstreetmap.org/copyright \n \nIcons from https://github.com/gmgeo/osmic https://www.svgrepo.com/svg/450115/e-scooter \nand https://commons.wikimedia.org/wiki/File:RWBA_Behinderten-WC.svg"
+)
 {
 
 grid::grid.rect(gp = grid::gpar(lty = "dashed"))
@@ -97,7 +96,7 @@ gs[[1]] <- gridExtra::grid.arrange(hub_name_viewport)
 
 
 #Wrangle icons below hub name
-image <- lapply(icons_to_include_in_header, function (x) grid::rasterGrob(magick::image_read(x)))
+image <- lapply(icons_to_include_in_header, function (x) svgparser::read_svg(x))
 grob_1 <- image[[1]]
 grob_2 <- image[[2]]
 grob_3 <- image[[3]]
@@ -128,11 +127,12 @@ gs[[5]] <- rasterGrob(magick::image_read(facilities_image))
 
 gs[[6]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="darkgreen", lty = 1)))
 gs[[7]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="darkgreen", lty = 1)))
-gs[[8]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="darkgreen", lty = "blank")),
-                    gridExtra::grid.arrange(rasterGrob(magick::image_read(
-                      logo_image)),
-                      ncol = 1)
-)
+gs[[8]] <- gridExtra::grid.arrange(
+  grid::grobTree(
+    grid::rectGrob(
+      gp=grid::gpar(fill="darkgreen")),
+    grid::textGrob(acknowledgements_text,
+                   x = 0.95, y=0.05, gp = grid::gpar(fontsize = 10, col = "white"), just = c("right", "bottom"))))
 gs[[9]] <- map_regional
 
 
@@ -163,7 +163,7 @@ lay <- rbind(c(1,1,1,1,1),
              c(5,5,5,9,9),
              c(5,5,5,9,9),
              c(5,5,5,9,9),
-             c(6,6,7,8,8))
+             c(6,7,8,8,8))
 gridExtra::grid.arrange(grobs = gs, layout_matrix = lay)
 grDevices::dev.copy2pdf(file = file_to_save_to, width = 17, height = 40.8, fonts = NULL)
 grDevices::dev.off()

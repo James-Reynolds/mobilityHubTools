@@ -1,39 +1,20 @@
-#' Builds a totem pedestral sign in the style of Birmingham Local Travel Point
-#'
-#' @param file_to_save_to a character string of the file to save the png to
-#' @param hub_name_text the name of the hub
-#' @param icons_to_include_in_header a list of 5 strings of the location of the icons to include in the header, including blanks
-#' @param directions_image a character string of the location of an image showing directions
-#' @param map_local ggplot of the local map to include
-#' @param points_of_interest_image a character string of the location of an image showing points of interest
-#' @param map_regional ggplot of the regional map to include
-#' @param logo_image a character string of the location of an image showing agency logos
-#' @returns nothing, but outputs a png to the named file
-#' @export
-#'
-#' @examples
+
 birmingham_totem_pedestal <- function(
     file_to_save_to = "layout_test.pdf",
-    hub_name_text = "Andrew Road",
+    hub_name_text = "Gainsbourgh Square",
     icons_to_include_in_header = list(
-      system.file(
-      "extdata/birmingham_icon_hub.png", package = "mobilityHubTools"),
-      system.file(
-        "extdata/birmingham_icon_bike.png", package = "mobilityHubTools"),
-      system.file(
-        "extdata/birmingham_icon_bus.png", package = "mobilityHubTools"),
-      system.file(
-        "extdata/birmingham_icon_blank.png", package = "mobilityHubTools"),
-      system.file(
-      "extdata/birmingham_icon_blank.png", package = "mobilityHubTools")),
+      system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
+      system.file("extdata/bicycle_repair_station.svg", package = "mobilityHubTools"),
+      system.file("extdata/e-scooter-svgrepo-com.svg", package = "mobilityHubTools"),
+      system.file("extdata/bicycle-electric-2.svg", package = "mobilityHubTools"),
+      system.file("extdata/toilets.svg", package = "mobilityHubTools")),
     directions_image = system.file(
       "extdata/birmingham_directions.png", package = "mobilityHubTools"),
-    map_local = map_local_test,
+    map_local = bristol_local_map(),
     points_of_interest_image =  system.file(
-      "extdata/bristol_facilities.png", package = "mobilityHubTools"),
-    map_regional = map_regional_test,
-    logo_image =  system.file(
-      "extdata/bristol_blank.png", package = "mobilityHubTools")
+      "extdata/birmingham_points_of_interest.png", package = "mobilityHubTools"),
+    map_regional = bristol_regional_map(),
+    acknowledgements_text = "Map data from OpenStreetMap, available under the Open Database License. © OpenStreetMap contributors. See openstreetmap.org/copyright \n \nIcons from https://github.com/gmgeo/osmic https://www.svgrepo.com/svg/450115/e-scooter"
 )
 {
 
@@ -92,7 +73,7 @@ birmingham_totem_pedestal <- function(
 
 
   #Wrangle icons above hub name
-  image <- lapply(icons_to_include_in_header, function (x) grid::rasterGrob(magick::image_read(x)))
+  image <- lapply(icons_to_include_in_header, function (x) svgparser::read_svg(x))
   grob_1 <- image[[1]]
   grob_2 <- image[[2]]
   grob_3 <- image[[3]]
@@ -142,13 +123,12 @@ birmingham_totem_pedestal <- function(
   # Insert facilities description image below hub name and icons
   gs[[6]] <- map_regional
   gs[[7]] <- rasterGrob(magick::image_read(points_of_interest_image))
-  gs[[8]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = "blank")),
-                            gridExtra::grid.arrange(rasterGrob(magick::image_read(
-                              logo_image)),
-                              ncol = 1)
-  )
-
-
+  gs[[8]] <- gridExtra::grid.arrange(
+    grid::grobTree(
+      grid::rectGrob(
+        gp=grid::gpar(fill="white")),
+      grid::textGrob(acknowledgements_text,
+                     x = 0.95, y=0.05, gp = grid::gpar(fontsize = 10, col = "black"), just = c("right", "bottom"))))
 
 
   # 24 rows, each roughly 100mm high

@@ -1,4 +1,4 @@
-#' Add lat and lon as numeric variables to an sf object
+#' Add lat and lon as numeric variables to an sf object containing points. From karldw at https://github.com/r-spatial/sf/issues/498#issuecomment-333715202
 #'
 #' @param x an sf object
 #'
@@ -6,6 +6,7 @@
 #' @export
 #'
 #' @examples
+#' geometry_to_lonlat(rlist::list.load(system.file("data/greensborough_hub_location.rdata", package = "mobilityHubTools")))
 geometry_to_lonlat <- function(x) {
   if (any(sf::st_geometry_type(x) != "POINT")) {
     stop("Selecting non-points isn't implemented.")

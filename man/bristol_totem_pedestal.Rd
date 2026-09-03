@@ -5,31 +5,32 @@
 \title{Builds a totem pedestral sign in the style of Bristol mobility hubs}
 \usage{
 bristol_totem_pedestal(
-  file_to_save_to = "layout_test.pdf",
-  hub_name_text = "Gainsborough Square",
-  icons_to_include_in_header = list(system.file("extdata/bristol_blank.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_blank.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_blank.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_bus.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_share_car.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_charging.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_toilets.png", package =
+  file_to_save_to,
+  hub_name_text,
+  icons_to_include_in_header = list(system.file("extdata/No_image.svg", package =
+    "mobilityHubTools"), system.file("extdata/bus_stop.svg", package =
+    "mobilityHubTools"), system.file("extdata/bicycle_parking.svg", package =
+    "mobilityHubTools"), system.file("extdata/bicycle_repair_station.svg", package =
+    "mobilityHubTools"), system.file("extdata/e-scooter-svgrepo-com.svg", package =
+    "mobilityHubTools"), system.file("extdata/bicycle-electric-2.svg", package =
+    "mobilityHubTools"), system.file("extdata/toilets.svg", package =
     "mobilityHubTools"), 
-     system.file("extdata/bristol_blank.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_blank.png", package =
-    "mobilityHubTools"), system.file("extdata/bristol_blank.png", package =
+     system.file("extdata/RWBA_Behinderten-WC.svg", package =
+    "mobilityHubTools"), system.file("extdata/No_image.svg", package =
+    "mobilityHubTools"), system.file("extdata/No_image.svg", package =
     "mobilityHubTools")),
   directions_image = system.file("extdata/bristol_greensborough_directions.png", package
     = "mobilityHubTools"),
-  map_local = map_local_test,
+  map_local = bristol_local_map(),
   facilities_image = system.file("extdata/bristol_facilities.png", package =
     "mobilityHubTools"),
-  map_regional = map_regional_test,
-  logo_image = system.file("extdata/bristol_blank.png", package = "mobilityHubTools")
+  map_regional = bristol_regional_map(),
+  acknowledgements_text =
+    "Map data from OpenStreetMap, available under the Open Database License. © OpenStreetMap contributors. See openstreetmap.org/copyright \\n \\nIcons from https://github.com/gmgeo/osmic https://www.svgrepo.com/svg/450115/e-scooter \\nand https://commons.wikimedia.org/wiki/File:RWBA_Behinderten-WC.svg"
 )
 }
 \arguments{
-\item{file_to_save_to}{a character string of the file to save the png to}
+\item{file_to_save_to}{a character string of the file to save the pdf to}
 
 \item{hub_name_text}{the name of the hub}
 
@@ -37,17 +38,22 @@ bristol_totem_pedestal(
 
 \item{directions_image}{a character string of the location of an image showing directions}
 
-\item{map_local}{the output of the bristol_map_local function}
+\item{map_local}{ggplot object, output of bristol_map_local function}
 
 \item{facilities_image}{a character string of the location of an image showing details of the hub facilities}
 
 \item{map_regional}{the output of the bristol_map_regional function}
 
-\item{logo_image}{a character string of the location of an image showing agency logos}
+\item{acknowledgements_text}{a character string including acknowledgements and copyright details.}
 }
 \value{
-nothing, but outputs a png to the named file
+nothing, but outputs a pdf to the named file
 }
 \description{
 Builds a totem pedestral sign in the style of Bristol mobility hubs
+}
+\examples{
+bristol_totem_pedestal(
+file_to_save_to = "gainsborough_bristol-style_totem.pdf",
+hub_name_text = "Gainsborough Square")
 }

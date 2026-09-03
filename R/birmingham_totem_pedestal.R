@@ -1,7 +1,25 @@
+#' Builds a totem pedestral sign in the style of Birmingham mobility hubs
+#'
+#' @param file_to_save_to a character string of the file to save the pdf to
+#' @param hub_name_text the name of the hub
+#' @param icons_to_include_in_header a list of 5 strings of the location of the icons to include in the header
+#' @param directions_image a character string of the location of an image showing directions
+#' @param map_local a ggplot object
+#' @param points_of_interest_image a character string of the location of an image showing local points of interest
+#' @param map_regional a ggplot object
+#' @param acknowledgements_text a character string including acknowledgements and copyright details.
+#'
+#' @returns nothing, but outputs a pdf to the named file
+#' @export
+#'
+#' @examples
+#' birmingham_totem_pedestal(
+#'  file_to_save_to = "layout_test.pdf",
+#'  hub_name_text = "Gainsbourgh Square")
 
 birmingham_totem_pedestal <- function(
-    file_to_save_to = "layout_test.pdf",
-    hub_name_text = "Gainsbourgh Square",
+    file_to_save_to,
+    hub_name_text,
     icons_to_include_in_header = list(
       system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
       system.file("extdata/bicycle_repair_station.svg", package = "mobilityHubTools"),
@@ -114,15 +132,15 @@ birmingham_totem_pedestal <- function(
 
 
   # Insert directions image below hub name and icons
-  gs[[4]] <- grid::grobTree(grid::rectGrob(gp=gpar(fill="white", lty = 1)),
-                            gridExtra::grid.arrange(rasterGrob(magick::image_read(
+  gs[[4]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="white", lty = 1)),
+                            gridExtra::grid.arrange(grid::rasterGrob(magick::image_read(
                               directions_image)),
                               ncol = 1))
 
   gs[[5]] <- map_local
   # Insert facilities description image below hub name and icons
   gs[[6]] <- map_regional
-  gs[[7]] <- rasterGrob(magick::image_read(points_of_interest_image))
+  gs[[7]] <- grid::rasterGrob(magick::image_read(points_of_interest_image))
   gs[[8]] <- gridExtra::grid.arrange(
     grid::grobTree(
       grid::rectGrob(

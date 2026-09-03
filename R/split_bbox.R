@@ -1,5 +1,3 @@
-
-### from https://github.com/ropensci/osmdata/blob/main/vignettes/query-split.Rmd
 split_bbox <- function (bbox, grid = 2, eps = 0.05) {
   xmin <- bbox ["x", "min"]
   ymin <- bbox ["y", "min"]

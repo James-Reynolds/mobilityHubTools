@@ -1,7 +1,28 @@
-
+#' Create a map showing the local area surrounding a mobility hub
+#'
+#' @param building osm layers as sf.
+#' @param map_limits a numeric value setting the extents of the map as a buffer distance
+#' @param crs_local_metres the numeric value representing the crs to be used for distance calculations (assumes metres)
+#' @param annotation_map_zoom the zoom level for osm map tiles
+#' @param annotation_map_type the osm map tile type to use
+#' @param highlight_building character values of the names of buildings to be highlighted and labelled on the map
+#' @param hub_location sf point with name of mobility hub and location.
+#'
+#' @returns a ggplot object
+#'
+#' @export
+#'
+#' @examples
+#' synthesis_hub_surrounds_map <- function(
+#' building = rlist::list.load(system.file(
+#' "data/greensborough_building.rdata", package = "mobilityHubTools")),
+#' map_limits = 100,
+#' crs_local_metres = 27700,
+#' annotation_map_zoom = 18,
+#' annotation_map_type = "osm",
+#' highlight_building = c("North Bristol Advice Centre", "The Hub"),
+#' hub_location = rlist::list.load(system.file("data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]])
 synthesis_hub_surrounds_map <- function(
-    amenity = rlist::list.load(system.file(
-      "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
     building = rlist::list.load(system.file(
       "data/greensborough_building.rdata", package = "mobilityHubTools")),
     map_limits = 100,
@@ -15,7 +36,6 @@ synthesis_hub_surrounds_map <- function(
 {
 
   # convert all inputs to the local crs
-  amenity <- amenity %>%  sf::st_transform(crs =  crs_local_metres)
   building <- building %>%  sf::st_transform(crs =  crs_local_metres)
   hub_location <- hub_location %>%  sf::st_transform(crs =  crs_local_metres)
 
@@ -31,8 +51,8 @@ synthesis_hub_surrounds_map <- function(
   labels <- labels %>%
     tibble::add_row(
       tibble::tibble(building %>%
-                       select(name) %>%
-                       filter(name %in% highlight_building) %>%
+                       dplyr::select(name) %>%
+                       dplyr::filter(name %in% highlight_building) %>%
                        sf::st_centroid()))
 
 hub_surrounds_map <-
@@ -48,11 +68,11 @@ hub_surrounds_map <-
                      ),
                    mapping = ggplot2::aes(), fill = "black", size = 10) +
 #set map size
-  ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=map_limits), fill = NA, colour = "white", size = 0.0002) +
+  ggplot2::geom_sf(data = hub_location %>% sf::st_buffer(dist=map_limits), fill = NA, colour = "white", size = 0.0002) +
 
   # Highlight buildings
 
-  ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building) %>%
+  ggplot2::geom_sf(data = building %>% dplyr::filter(name %in% highlight_building) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%

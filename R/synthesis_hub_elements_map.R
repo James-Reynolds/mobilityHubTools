@@ -1,3 +1,44 @@
+#' Build a map of mobility hub elements from OSM data.
+#'
+#' @param building osm layers as sf.
+#' @param highway osm layers as sf.
+#' @param leisure osm layers as sf.
+#' @param landuse osm layers as sf.
+#' @param natural osm layers as sf.
+#' @param waterway osm layers as sf.
+#' @param railway osm layers as sf.
+#' @param hub_location sf point with name of mobility hub and location.
+#' @param map_limits a numeric value setting the extents of the map as a buffer distance
+#' @param crs_local_metres the numeric value representing the crs to be used for distance calculations (assumes metres)
+#' @param hub_element_locations a tibble including values for the lat, lon, name and icon_filename to use to show hub elements
+#'
+#' @returns a ggplot object
+#' @export
+#'
+#' @examples synthesis_hub_elements_map(building = rlist::list.load(system.file(
+#' "data/greensborough_building.rdata", package = "mobilityHubTools")),
+#' highway = rlist::list.load(system.file(
+#' "data/greensborough_highway.rdata", package = "mobilityHubTools")),
+#' leisure = rlist::list.load(system.file(
+#' "data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+#' landuse = rlist::list.load(system.file(
+#' "data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+#' natural = rlist::list.load(system.file(
+#' "data/greensborough_natural.rdata", package = "mobilityHubTools")),
+#' waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+#' railway = rlist::list.load(system.file(
+#' "data/greensborough_railway.rdata", package = "mobilityHubTools")),
+#' hub_location = rlist::list.load(system.file(
+#' "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
+#' map_limits = 100,
+#' crs_local_metres = 27700,
+#' hub_element_locations = tibble::tibble(
+#' lat = c(51.49091020337705),
+#' lon = c(-2.5638763617435965),
+#' name = c("Gainsborough Sq. Stop A"),
+#' icon_filename = c(system.file("extdata/bus_stop.svg", package = "mobilityHubTools")))
+
+
 synthesis_hub_elements_map <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
@@ -58,11 +99,7 @@ synthesis_hub_elements_map <- function(
           system.file("extdata/e-scooter-svgrepo-com.svg", package = "mobilityHubTools"),
           system.file("extdata/bicycle-electric-2.svg", package = "mobilityHubTools"),
           system.file("extdata/toilets.svg", package = "mobilityHubTools"),
-          system.file("extdata/RWBA_Behinderten-WC.svg", package = "mobilityHubTools")
-        )) %>% sf::st_as_sf(coords = c("lon", "lat"),
-                            crs = 4326) %>%
-      sf::st_transform(crs =  27700) %>%
-      sf::st_cast("POINT")
+          system.file("extdata/RWBA_Behinderten-WC.svg", package = "mobilityHubTools")))
     )
 
 {
@@ -88,30 +125,36 @@ synthesis_hub_elements_map <- function(
 
   labels <- labels %>%
     tibble::add_row(hub_element_locations %>%
-                      filter(!is.na(name)) %>%
-                      select(name))
+                      sf::st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+                      sf::st_transform(crs =  crs_local_metres) %>%
+                      sf::st_cast("POINT") %>%
+                      dplyr::filter(!is.na(name)) %>%
+                      dplyr::select(name))
   labels <- labels %>%
     tibble::add_row(
     tibble::tibble(railway %>%
                      dplyr::filter(railway == "station") %>%
-                     select(name) %>%
+                     dplyr::select(name) %>%
                      sf::st_centroid()))
 
 ## build dataframe with transit stops and other locations to be represented by an icon
 # hub location
 icon_locations <- hub_element_locations %>%
+  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+  sf::st_transform(crs =  crs_local_metres) %>%
+  sf::st_cast("POINT") %>%
   sf::st_coordinates() %>%
   as.data.frame()
 icon_locations$icon_filename <- hub_element_locations$icon_filename
 # railway stations
 holding <- data.frame(
-  railway %>% filter(railway %in% c("station")) %>%
+  railway %>% dplyr::filter(railway %in% c("station")) %>%
     sf::st_transform(crs = crs_local_metres) %>%
     sf::st_make_valid() %>%
     sf::st_crop(hub_location %>%
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
-    st_coordinates())
+    sf::st_coordinates())
 icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_railway.png", package = "mobilityHubTools"))
@@ -125,7 +168,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
     ggplot2::ggplot() +
     # parks and grassland
     ggplot2::geom_sf(data = leisure %>%
-                       filter(leisure %in% c("garden", "pitch", "park", "dog_park")) %>%
+                       dplyr::filter(leisure %in% c("garden", "pitch", "park", "dog_park")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -133,7 +176,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = landuse %>%
-                       filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
+                       dplyr::filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
@@ -142,7 +185,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("grassland")) %>%
+                       dplyr::filter(natural %in% c("grassland")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -150,7 +193,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = leisure %>%
-                       filter(leisure %in% c("nature_reserve", "golf_course")) %>%
+                       dplyr::filter(leisure %in% c("nature_reserve", "golf_course")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -158,7 +201,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = landuse %>%
-                       filter(landuse %in% c("forest", "orchard")) %>%
+                       dplyr::filter(landuse %in% c("forest", "orchard")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -166,7 +209,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
+                       dplyr::filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -174,7 +217,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("beach", "dune", "sand")) %>%
+                       dplyr::filter(natural %in% c("beach", "dune", "sand")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -183,7 +226,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                        ), mapping = ggplot2::aes(), fill = "yellow") +
     # waterways
     ggplot2::geom_sf(data = waterway %>%
-                       filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
+                       dplyr::filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -191,7 +234,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "blue") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
+                       dplyr::filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
                                      sf::st_buffer(dist = map_limits) %>%
@@ -209,7 +252,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
 
     # roads, trails and railways
     ggplot2::geom_sf(data = highway %>%
-                       filter(highway %in% c("living_street", "motorway", "motorway_link",
+                       dplyr::filter(highway %in% c("living_street", "motorway", "motorway_link",
                                              "primary", "primary_link", "residential",
                                              "secondary", "secondary_link", "service",
                                              "tertiary", "tertiary_link",
@@ -222,7 +265,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
                        ), mapping = ggplot2::aes(), colour = "darkgrey") +
 
     ggplot2::geom_sf(data = railway %>%
-                       filter(railway %in% c("rail", "tram")) %>%
+                       dplyr::filter(railway %in% c("rail", "tram")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -243,7 +286,7 @@ icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
 
   # add cycleways
   ggplot2::geom_sf(data = highway %>%
-                     filter(highway %in% c("pedestrian", "track", "footway", "path",  "cycleway")) %>%
+                     dplyr::filter(highway %in% c("pedestrian", "track", "footway", "path",  "cycleway")) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%

@@ -1,20 +1,25 @@
 #' Builds a totem pedestral sign in the style of Bristol mobility hubs
 #'
-#' @param file_to_save_to a character string of the file to save the png to
+#' @param file_to_save_to a character string of the file to save the pdf to
 #' @param hub_name_text the name of the hub
 #' @param icons_to_include_in_header a list of 10 strings of the location of the icons to include in the header, including blanks
 #' @param directions_image a character string of the location of an image showing directions
-#' @param map_local the output of the bristol_map_local function
+#' @param map_local ggplot object, output of bristol_map_local function
 #' @param facilities_image a character string of the location of an image showing details of the hub facilities
 #' @param map_regional the output of the bristol_map_regional function
-#' @param logo_image a character string of the location of an image showing agency logos
-#' @returns nothing, but outputs a png to the named file
+#' @param acknowledgements_text a character string including acknowledgements and copyright details.
+#'
+#' @returns nothing, but outputs a pdf to the named file
 #' @export
 #'
 #' @examples
+#' bristol_totem_pedestal(
+#' file_to_save_to = "gainsborough_bristol-style_totem.pdf",
+#' hub_name_text = "Gainsborough Square")
+
 bristol_totem_pedestal <- function(
-    file_to_save_to = "results/gainsborough_bristol-style_totem.pdf",
-    hub_name_text = "Gainsborough Square",
+    file_to_save_to,
+    hub_name_text,
     icons_to_include_in_header = list(
       system.file("extdata/No_image.svg", package = "mobilityHubTools"),
       system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
@@ -115,15 +120,15 @@ gs[[2]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="darkgreen", lty = 1
                     )
 
 # Insert directions image below hub name and icons
-gs[[3]] <- grid::grobTree(grid::rectGrob(gp=gpar(fill="darkgreen", lty = 1)),
-                          gridExtra::grid.arrange(rasterGrob(magick::image_read(
+gs[[3]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="darkgreen", lty = 1)),
+                          gridExtra::grid.arrange(grid::rasterGrob(magick::image_read(
                       directions_image)),
                       ncol = 1)
                     )
 
 gs[[4]] <- map_local
 # Insert facilities description image below hub name and icons
-gs[[5]] <- rasterGrob(magick::image_read(facilities_image))
+gs[[5]] <- grid::rasterGrob(magick::image_read(facilities_image))
 
 gs[[6]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="darkgreen", lty = 1)))
 gs[[7]] <- grid::grobTree(grid::rectGrob(gp=grid::gpar(fill="darkgreen", lty = 1)))

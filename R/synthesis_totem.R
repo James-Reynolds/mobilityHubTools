@@ -1,77 +1,90 @@
+#' Builds a totem pedestal that is a sythesis version of various styles
+#'
+#' @param file_to_save_to a character string of the file to save the png to
+#' @param element1_what_is_this_top_text a character string displayed at the top of the totem
+#' @param element2_where_is_it_top_text a character string of the name of the hub location
+#' @param element2_where_is_it_top_text_detail a character string describing the location of the hub (address details)
+#' @param element3_what_is_here_top a list of 10 strings of the location of the icons to include in the header, including blanks
+#' @param element4_up_what_is_nearby a character string (with arrows) to indicate what is nearby in front of the totem
+#' @param element4_left_what_is_nearby a character string (with arrows) to indicate what is nearby to the left of the totem
+#' @param element4_right_what_is_nearby a character string (with arrows) to indicate what is nearby to the right of the totem
+#' @param element4_layout_matrix a matrix of characters setting the layout of the up, left and right directions. Defaults to 3 lines
+#' @param element5_regional_map a ggplot object
+#' @param element6_what_is_this_bottom_text a character string describing what the hub is and what is nearby
+#' @param element7_hub_elements_map a ggplot object
+#' @param element8_how_can_you_travel a character string describing travel options from the hub.
+#' @param element9_hub_surrounds_map a ggplot object
+#' @param element10_what_is_nearby_bottom_text a character string describing what is nearby and other relevant details.
+#' @param element11_transport_map_small a ggplot object
+#' @param element12_transport_map_large a ggplot object
+#' @param element13_cycle_map a ggplot object
+#' @param element14_acknowledgements_text a character string including acknowledgements and copyright details.
+#'
+#' @returns nothing, but outputs a pdf to the named file
+#' @export
+#'
+#' @examples synthesis_totem(
+#'   file_to_save_to = "gainsboroungh_synthesis_totem.pdf",
+#'   element1_what_is_this_top_text = "Mobility Hub / Local Travel Point",
+#'   element2_where_is_it_top_text = "Gainsborough Square",
+#'   element2_where_is_it_top_text_detail = "Lockleaze, Bristol, BS7 9AP",
+#'   element3_what_is_here_top = list(
+#'     system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/bicycle_parking.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/bicycle_repair_station.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/e-scooter-svgrepo-com.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/bicycle-electric-2.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/toilets.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/RWBA_Behinderten-WC.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/No_image.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/No_image.svg", package = "mobilityHubTools"),
+#'     system.file("extdata/No_image.svg", package = "mobilityHubTools")),
+#'   element4_up_what_is_nearby = "^ Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
+#'   element4_left_what_is_nearby = "\U2190 Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n\U2190 North Bristol Advice Centre",
+#'   element4_right_what_is_nearby = "Buses: Cameron Walk stop (Route 24, 72 westbound) \U2192\n St James Church \U2192",
+#'   element6_what_is_this_bottom_text = "What is this: \nWelcome to this Mobility Hub / Local Travel Point,\n a location where shared mobility and other services\n offer a range of options to support sustainable travel. \n\nWhat is here: (see left)\nThis mobility hub includes nearby bus stops,\n bicycle parking and a repair station, \n shared scooters and electric bikes, and toilets (in the Hub).",
+#'   element7_hub_elements_map = synthesis_hub_elements_map(),
+#'   element8_how_can_you_travel = "How can you travel from here: (see maps below) \nBuses 24, 77 northbound leave from Gainsborough Square Stop A (left and across the square),\nBuses 24, 72 and 73 eastbound leave from Gainsbourough Square Stop B (in front of you).\n Buses 24, 72 westbound leave from a stop in Cameron Walk (to your right)  \n Ashley Down and Filton Abbey Wd Railway Stations are around a 15 minute walk away (see map below centre).\n The Frome Valley Greenway and Concorde Way are also nearby (see map below right).",
+#'   element10_what_is_nearby_bottom_text = "What is nearby: (see maps above)\nThe Hub is accross the street behind you.  \nThe North Bristol Advice Centre is across Gainsborough Square to your left.\nShops, food and services are also across Gainborough Square.\nTo get to St James Church go right along Cameron Walk\n until you get to Romney Avenue. \n \nWhere am I:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\nThe latitude is 51.4904 and the longitude is -2.5627.\nwhat3words.com calls this location hero.blend.sock\n\n ")
 synthesis_totem <- function(
-    file_to_save_to = "layout_test.pdf",
+    file_to_save_to,
     element1_what_is_this_top_text = "Mobility Hub / Local Travel Point",
-    element2_where_is_it_top_text = "Gainsborough Square",
-    element2_where_is_it_top_text_detail = "Lockleaze, Bristol, BS7 9AP",
-
-# icons from osmic-master https://github.com/gmgeo/osmic
-# electric scooter icon from    https://commons.wikimedia.org/wiki/File:Tabler-icons_scooterrom https://www.svgrepo.com/svg/450115/e-scooter
-# accessible toilet icon from https://commons.wikimedia.org/wiki/File:RWBA_Behinderten-WC.svg
-
-       element3_what_is_here_top = list(
-      system.file(
-        "extdata/bus_stop.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/bicycle_parking.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/bicycle_repair_station.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/e-scooter-svgrepo-com.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/bicycle-electric-2.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/toilets.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/RWBA_Behinderten-WC.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/No_image.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/No_image.svg",
-        package = "mobilityHubTools"),
-      system.file(
-        "extdata/No_image.svg",
-        package = "mobilityHubTools")),
-
-    element4_up_what_is_nearby = "^ Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
-    element4_left_what_is_nearby = "\U2190 Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n\U2190 North Bristol Advice Centre",
-    element4_right_what_is_nearby = "Buses: Cameron Walk stop (Route 24, 72 westbound) \U2192\n St James Church \U2192",
+    element2_where_is_it_top_text,
+    element2_where_is_it_top_text_detail,
+    element3_what_is_here_top = list(
+      system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
+      system.file("extdata/bicycle_parking.svg", package = "mobilityHubTools"),
+      system.file("extdata/bicycle_repair_station.svg", package = "mobilityHubTools"),
+      system.file("extdata/e-scooter-svgrepo-com.svg",package = "mobilityHubTools"),
+      system.file("extdata/bicycle-electric-2.svg", package = "mobilityHubTools"),
+      system.file("extdata/toilets.svg", package = "mobilityHubTools"),
+      system.file("extdata/RWBA_Behinderten-WC.svg", package = "mobilityHubTools"),
+      system.file("extdata/No_image.svg", package = "mobilityHubTools"),
+      system.file("extdata/No_image.svg", package = "mobilityHubTools"),
+      system.file("extdata/No_image.svg", package = "mobilityHubTools")),
+    element4_up_what_is_nearby,
+    element4_left_what_is_nearby,
+    element4_right_what_is_nearby,
     element4_layout_matrix = rbind(c(1,1,1,1,1),
                                    c(2,2,2,2,2),
                                    c(3,3,3,3,3)),
     element5_regional_map = synthesis_regional_map(),
-    element6_what_is_this_bottom_text = "What is this: \nWelcome to this Mobility Hub / Local Travel Point,\n a location where shared mobility and other services\n offer a range of options to support sustainable travel. \n\nWhat is here: (see left)\nThis mobility hub includes nearby bus stops,\n bicycle parking and a repair station, \n shared scooters and electric bikes, and toilets (in the Hub).",
+    element6_what_is_this_bottom_text = "What is this: \nWelcome to this Mobility Hub / Local Travel Point,\n a location where shared mobility and other services\n offer a range of options to support sustainable travel. \n\nWhat is here: (see left)\nThis mobility hub includes...",
     element7_hub_elements_map = synthesis_hub_elements_map(),
-    element8_what_is_this_bottom_text = "How can you travel from here: (see maps below) \nBuses 24, 77 northbound leave from Gainsborough Square Stop A (left and across the square),\nBuses 24, 72 and 73 eastbound leave from Gainsbourough Square Stop B (in front of you).\n Buses 24, 72 westbound leave from a stop in Cameron Walk (to your right)  \n Ashley Down and Filton Abbey Wd Railway Stations are around a 15 minute walk away (see map below centre).\n The Frome Valley Greenway and Concorde Way are also nearby (see map below right).",
+    element8_how_can_you_travel = "How can you travel from here: (see maps below) \n By transit ....\n On foot...\n By bike....(see map below right).",
     element9_hub_surrounds_map = synthesis_hub_surrounds_map(),
-    element10_what_is_this_bottom_text = "What is nearby: (see maps above)\nThe Hub is accross the street behind you.  \nThe North Bristol Advice Centre is across Gainsborough Square to your left.\nShops, food and services are also across Gainborough Square.\nTo get to St James Church go right along Cameron Walk\n until you get to Romney Avenue.
-\n \nWhere am I:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\nThe latitude is 51.4904 and the longitude is -2.5627.\nwhat3words.com calls this location hero.blend.sock\n\n ",
+    element10_what_is_nearby_bottom_text = "What is nearby: (see maps above)\n
 
+\n \nWhere am I:\n ...\nThe latitude is ... and the longitude is ....\nwhat3words.com calls this location ...\n\n ",
     element11_transport_map_small = synthesis_hub_surrounds_map(
-  map_limits = 100,
-  annotation_map_zoom = 17,
-  annotation_map_type = "osmtransport",
-  highlight_building = ""),
-
+      map_limits = 100, annotation_map_zoom = 17,
+      annotation_map_type = "osmtransport", highlight_building = ""),
     element12_transport_map_large = synthesis_hub_surrounds_map(
-  map_limits = 2000,
-  annotation_map_zoom = 13,
-  annotation_map_type = "osmtransport",
-  highlight_building = ""),
-
+      map_limits = 2000, annotation_map_zoom = 13,
+      annotation_map_type = "osmtransport", highlight_building = ""),
     element13_cycle_map = synthesis_hub_surrounds_map(
-  map_limits = 2000,
-  annotation_map_zoom = 13,
-  annotation_map_type = "opencycle",
-  highlight_building = ""),
-
+      map_limits = 2000, annotation_map_zoom = 13,
+      annotation_map_type = "opencycle", highlight_building = ""),
     element14_acknowledgements_text = "Map data from OpenStreetMap, available under the Open Database License. \n © OpenStreetMap contributors. See openstreetmap.org/copyright \n \n Map tiles from: OSM standard layer © OpenStreetMap contributors.; \n and Thunderforest Open CycleMap and Transport layers by Andy Allan, https://www.thunderforest.com/ \n \nIcons from https://github.com/gmgeo/osmic https://www.svgrepo.com/svg/450115/e-scooter \n and https://commons.wikimedia.org/wiki/File:RWBA_Behinderten-WC.svg"
 )
 
@@ -206,7 +219,7 @@ gs[[8]] <- gridExtra::grid.arrange(
   grid::grobTree(
     grid::rectGrob(
       gp=grid::gpar(fill="white")),
-    grid::textGrob(element8_what_is_this_bottom_text,
+    grid::textGrob(element8_how_can_you_travel,
                    x = 0.01, y=0.05, gp = grid::gpar(fontsize = 14), just = c("left", "bottom"))))
 
 
@@ -216,7 +229,7 @@ gs[[10]] <- gridExtra::grid.arrange(
   grid::grobTree(
     grid::rectGrob(
       gp=grid::gpar(fill="white")),
-    grid::textGrob(element10_what_is_this_bottom_text,
+    grid::textGrob(element10_what_is_nearby_bottom_text,
                    x = 0.01, y=0.95, gp = grid::gpar(fontsize = 14), just = c("left", "top"))))
 
 

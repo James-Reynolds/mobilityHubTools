@@ -2,7 +2,7 @@
 % Please edit documentation in R/bristol_regional_map.R
 \name{bristol_regional_map}
 \alias{bristol_regional_map}
-\title{Build the smaller scale regional map as per the Bristol mobility hub example.}
+\title{Build the regional area map as per the Bristol mobility hub example.}
 \usage{
 bristol_regional_map(
   amenity = rlist::list.load(system.file("data/greensborough_amenity.rdata", package =
@@ -32,37 +32,56 @@ bristol_regional_map(
 )
 }
 \arguments{
-\item{amenity}{osm layers as sf, with crs set to local metres.}
+\item{amenity}{osm layers as sf.}
 
-\item{building}{osm layers as sf, with crs set to local metres.}
+\item{building}{osm layers as sf.}
 
-\item{highway}{osm layers as sf, with crs set to local metres.}
+\item{highway}{osm layers as sf.}
 
-\item{leisure}{osm layers as sf, with crs set to local metres.}
+\item{leisure}{osm layers as sf.}
 
-\item{landuse}{osm layers as sf, with crs set to local metres.}
+\item{landuse}{osm layers as sf.}
 
-\item{natural}{osm layers as sf, with crs set to local metres.}
+\item{natural}{osm layers as sf.}
 
-\item{railway}{osm layers as sf, with crs set to local metres.}
+\item{railway}{osm layers as sf.}
 
-\item{waterway}{osm layers as sf, with crs set to local metres.}
+\item{waterway}{osm layers as sf.}
 
-\item{hub_location}{sf point with name of mobility hub and location, with crs set to local metres.}
+\item{hub_location}{sf point with name of mobility hub and location.}
 
-\item{map_limits}{a numeric value setting the extents of the map}
+\item{map_limits}{a numeric value setting the extents of the map as a buffer distance}
 
-\item{crs_local_metres}{the numeric value representing the crs for local metres}
+\item{crs_local_metres}{the numeric value representing the crs to be used for distance calculations (assumes metres)}
 
 \item{highlight_building_regional}{character values of the names of buildings to be highlighted and labelled on the map}
 
 \item{highlight_amenity_regional}{character values of the names of amenities to be labelled on the map}
 
-\item{highlight_leisure_regional}{character values of the names of leisure facilities to be labelled on the map}
+\item{highlight_leisure_regional}{character values of the names of leisure items to be labelled on the map}
+
+\item{highlight_landuse_regional}{character values of the names of landuse items to be labelled on the map}
 }
 \value{
-a ggplot object of a map in the style of the Bristol mobility hubs
+a ggplot object
 }
 \description{
-Build the smaller scale regional map as per the Bristol mobility hub example.
+Build the regional area map as per the Bristol mobility hub example.
+}
+\examples{
+bristol_regional_map(amenity = rlist::list.load(system.file("data/greensborough_amenity.rdata", package = "mobilityHubTools")),
+building = rlist::list.load(system.file("data/greensborough_building.rdata", package = "mobilityHubTools")),
+highway = rlist::list.load(system.file("data/greensborough_highway.rdata", package = "mobilityHubTools")),
+leisure = rlist::list.load(system.file("data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+landuse = rlist::list.load(system.file("data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+natural = rlist::list.load(system.file("data/greensborough_natural.rdata", package = "mobilityHubTools")),
+railway = rlist::list.load(system.file("data/greensborough_railway.rdata", package = "mobilityHubTools")),
+waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+hub_location = rlist::list.load(system.file("data/greensborough_hub_location.rdata", package = "mobilityHubTools")),
+map_limits = 1500,
+crs_local_metres = 27700,
+highlight_building_regional = c("Horfield Library", "Horfield Health Centre"),
+highlight_amenity_regional = c("nill"),
+highlight_leisure_regional = c("Bristol County Ground"),
+highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
 }

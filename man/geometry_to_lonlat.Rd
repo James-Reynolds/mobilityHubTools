@@ -2,7 +2,7 @@
 % Please edit documentation in R/geometry_to_lonlat.R
 \name{geometry_to_lonlat}
 \alias{geometry_to_lonlat}
-\title{Add lat and lon as numeric variables to an sf object}
+\title{Add lat and lon as numeric variables to an sf object containing points. From karldw at https://github.com/r-spatial/sf/issues/498#issuecomment-333715202}
 \usage{
 geometry_to_lonlat(x)
 }
@@ -13,5 +13,8 @@ geometry_to_lonlat(x)
 an sf object with the lat and lon included as numeric variables
 }
 \description{
-Add lat and lon as numeric variables to an sf object
+Add lat and lon as numeric variables to an sf object containing points. From karldw at https://github.com/r-spatial/sf/issues/498#issuecomment-333715202
+}
+\examples{
+geometry_to_lonlat(rlist::list.load(system.file("data/greensborough_hub_location.rdata", package = "mobilityHubTools")))
 }

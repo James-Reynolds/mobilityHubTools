@@ -56,3 +56,16 @@ a map in the style of the Bristol mobility hubs
 \description{
 Build the base layers of maps as per the Bristol mobility hub example.
 }
+\examples{
+bristol_map_base(amenity = rlist::list.load(system.file("data/greensborough_amenity.rdata", package = "mobilityHubTools")),
+building = rlist::list.load(system.file("data/greensborough_building.rdata", package = "mobilityHubTools")),
+highway = rlist::list.load(system.file("data/greensborough_highway.rdata", package = "mobilityHubTools")),
+leisure = rlist::list.load(system.file("data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+landuse = rlist::list.load(system.file("data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+natural = rlist::list.load(system.file("data/greensborough_natural.rdata", package = "mobilityHubTools")),
+railway = rlist::list.load(system.file("data/greensborough_railway.rdata", package = "mobilityHubTools")),
+waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+hub_location = rlist::list.load(system.file("data/greensborough_hub_location.rdata", package = "mobilityHubTools")),
+map_limits = 500,
+crs_local_metres = 27700)
+}

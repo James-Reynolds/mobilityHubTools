@@ -1,4 +1,54 @@
-
+#' Create a map showing the regional area surrounding a mobility hub
+#'
+#' @param amenity osm layers as sf.
+#' @param building osm layers as sf.
+#' @param highway osm layers as sf.
+#' @param leisure osm layers as sf.
+#' @param landuse osm layers as sf.
+#' @param natural osm layers as sf.
+#' @param waterway osm layers as sf.
+#' @param railway osm layers as sf.
+#' @param hub_location sf point with name of mobility hub and location.
+#' @param map_limits a numeric value setting the extents of the map as a buffer distance
+#' @param crs_local_metres the numeric value representing the crs to be used for distance calculations (assumes metres)
+#' @param annotation_map_tile_type the osm map tile type to use. If NA a background map is built from the osm sf layers
+#' @param annotation_map_zoom the zoom level for osm map tiles
+#' @param highlight_building_regional character values of the names of buildings to be highlighted and labelled on the map
+#' @param highlight_amenity_regional character values of the names of amenities to be highlighted and labelled on the map
+#' @param highlight_leisure_regional character values of the names of leisure facilities to be highlighted and labelled on the map
+#' @param highlight_landuse_regional character values of the names of landuses to be highlighted and labelled on the map
+#'
+#' @returns a ggplot object
+#' @export
+#'
+#' @examples
+#' synthesis_regional_map(amenity = rlist::list.load(system.file(
+#' "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
+#' building = rlist::list.load(system.file(
+#' "data/greensborough_building.rdata", package = "mobilityHubTools")),
+#' highway = rlist::list.load(system.file(
+#' "data/greensborough_highway.rdata", package = "mobilityHubTools")),
+#' leisure = rlist::list.load(system.file(
+#' "data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+#' landuse = rlist::list.load(system.file(
+#' "data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+#' natural = rlist::list.load(system.file(
+#' "data/greensborough_natural.rdata", package = "mobilityHubTools")),
+#' waterway = rlist::list.load(system.file(
+#' "data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+#' railway = rlist::list.load(system.file(
+#' "data/greensborough_railway.rdata", package = "mobilityHubTools")),
+#' hub_location = rlist::list.load(system.file(
+#' "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
+#' map_limits = 1500,
+#' crs_local_metres = 27700,
+#' annotation_map_tile_type = "osm",
+#' annotation_map_zoom = 14,
+#' highlight_building_regional = c("Horfield Library", "Horfield Health Centre"),
+#' highlight_amenity_regional =
+#' c("University of the West of England (Frenchay Campus)", "St James Church"),
+#' highlight_leisure_regional = c("Bristol County Ground"),
+#' highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
 synthesis_regional_map <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
@@ -49,33 +99,33 @@ synthesis_regional_map <- function(
   labels <- labels %>%
     tibble::add_row(
       tibble::tibble(building %>%
-                       select(name) %>%
-                       filter(name %in% highlight_building_regional) %>%
+                       dplyr::select(name) %>%
+                       dplyr::filter(name %in% highlight_building_regional) %>%
                        sf::st_centroid()))
 
   labels <- labels %>%
     tibble::add_row(
       tibble::tibble(amenity %>%
-                       select(name) %>%
-                       filter(name %in% highlight_amenity_regional) %>%
+                       dplyr::select(name) %>%
+                       dplyr::filter(name %in% highlight_amenity_regional) %>%
                        sf::st_centroid()))
   labels <- labels %>%
     tibble::add_row(
       tibble::tibble(leisure %>%
-                       select(name) %>%
-                       filter(name %in% highlight_leisure_regional) %>%
+                       dplyr::select(name) %>%
+                       dplyr::filter(name %in% highlight_leisure_regional) %>%
                        sf::st_centroid()))
   labels <- labels %>%
     tibble::add_row(
       tibble::tibble(landuse %>%
-                       select(name) %>%
-                       filter(name %in% highlight_landuse_regional) %>%
+                       dplyr::select(name) %>%
+                       dplyr::filter(name %in% highlight_landuse_regional) %>%
                        sf::st_centroid()))
   labels <- labels %>%
     tibble::add_row(
     tibble::tibble(railway %>%
                      dplyr::filter(railway == "station") %>%
-                     select(name) %>%
+                     dplyr::select(name) %>%
                      sf::st_centroid()))
 
 ## build dataframe with transit stops and other locations to be represented by an icon
@@ -87,13 +137,13 @@ icon_locations$icon_filename <- system.file(
   "extdata/hub_location.png", package = "mobilityHubTools")
 # railway stations
 holding <- data.frame(
-  railway %>% filter(railway %in% c("station")) %>%
+  railway %>% dplyr::filter(railway %in% c("station")) %>%
     sf::st_transform(crs = crs_local_metres) %>%
     sf::st_make_valid() %>%
     sf::st_crop(hub_location %>%
                   sf::st_buffer(dist = map_limits) %>%
                   sf::st_bbox()) %>%
-    st_coordinates())
+    sf::st_coordinates())
 icon_locations <- if(nrow(holding) > 0) icon_locations %>% tibble::add_row(
   holding %>% tibble::add_column(
     icon_filename = system.file("extdata/bristol_railway.png", package = "mobilityHubTools"))
@@ -106,13 +156,13 @@ if(is.na(annotation_map_tile_type)) {
   map <-
     ggplot2::ggplot() +
     # Hub walking radius
-    ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour = "black", size = 2) +
+    ggplot2::geom_sf(data = hub_location %>% sf::st_buffer(dist=1500), fill = NA, colour = "black", size = 2) +
 
 
 
     # parks and grassland
     ggplot2::geom_sf(data = leisure %>%
-                       filter(leisure %in% c("garden", "pitch", "park", "dog_park")) %>%
+                       dplyr::filter(leisure %in% c("garden", "pitch", "park", "dog_park")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -120,7 +170,7 @@ if(is.na(annotation_map_tile_type)) {
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = landuse %>%
-                       filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
+                       dplyr::filter(landuse %in% c("grass", "meadow", "farmyard", "vineyard")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
@@ -129,7 +179,7 @@ if(is.na(annotation_map_tile_type)) {
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("grassland")) %>%
+                       dplyr::filter(natural %in% c("grassland")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -137,7 +187,7 @@ if(is.na(annotation_map_tile_type)) {
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "lightgreen") +
     ggplot2::geom_sf(data = leisure %>%
-                       filter(leisure %in% c("nature_reserve", "golf_course")) %>%
+                       dplyr::filter(leisure %in% c("nature_reserve", "golf_course")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -145,7 +195,7 @@ if(is.na(annotation_map_tile_type)) {
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = landuse %>%
-                       filter(landuse %in% c("forest", "orchard")) %>%
+                       dplyr::filter(landuse %in% c("forest", "orchard")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -153,7 +203,7 @@ if(is.na(annotation_map_tile_type)) {
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
+                       dplyr::filter(natural %in% c("heath", "moor", "scrub", "shrubbery", "wood")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -161,7 +211,7 @@ if(is.na(annotation_map_tile_type)) {
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "darkgreen") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("beach", "dune", "sand")) %>%
+                       dplyr::filter(natural %in% c("beach", "dune", "sand")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -170,7 +220,7 @@ if(is.na(annotation_map_tile_type)) {
                        ), mapping = ggplot2::aes(), fill = "yellow") +
     # waterways
     ggplot2::geom_sf(data = waterway %>%
-                       filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
+                       dplyr::filter(waterway %in% c("river", "stream", "tidal_channel", "flowline", "canal", "drain", "ditch", "link", "fairway", "dam")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -178,7 +228,7 @@ if(is.na(annotation_map_tile_type)) {
                                      sf::st_bbox()
                        ), mapping = ggplot2::aes(), fill = "blue") +
     ggplot2::geom_sf(data = natural %>%
-                       filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
+                       dplyr::filter(natural %in% c("bay", "shoal", "strait", "water", "wetland")) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
                                      sf::st_buffer(dist = map_limits) %>%
@@ -187,7 +237,7 @@ if(is.na(annotation_map_tile_type)) {
 
     # roads, trails and railways
     ggplot2::geom_sf(data = highway %>%
-                       filter(highway %in% c("living_street", "motorway", "motorway_link",
+                       dplyr::filter(highway %in% c("living_street", "motorway", "motorway_link",
                                              "primary", "primary_link", "residential",
                                              "secondary", "secondary_link", "service",
                                              "tertiary", "tertiary_link",
@@ -200,7 +250,7 @@ if(is.na(annotation_map_tile_type)) {
                        ), mapping = ggplot2::aes(), colour = "darkgrey") +
 
     ggplot2::geom_sf(data = railway %>%
-                       filter(railway %in% c("rail", "tram")) %>%
+                       dplyr::filter(railway %in% c("rail", "tram")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -218,7 +268,7 @@ if(is.na(annotation_map_tile_type)) {
                         size = 0.02) +
     # add cycleways
     ggplot2::geom_sf(data = highway %>%
-                       filter(highway %in% c("pedestrian", "track", "footway", "path",  "cycleway")) %>%
+                       dplyr::filter(highway %in% c("pedestrian", "track", "footway", "path",  "cycleway")) %>%
                        sf::st_transform(crs = crs_local_metres) %>%
                        sf::st_make_valid() %>%
                        sf::st_crop(hub_location %>%
@@ -233,7 +283,7 @@ if(is.na(annotation_map_tile_type)) {
       type = annotation_map_tile_type,
       zoom = annotation_map_zoom) +
       # Hub walking radius (to set map limits)
-      ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour = "black", size = 2)
+      ggplot2::geom_sf(data = hub_location %>% sf::st_buffer(dist=1500), fill = NA, colour = "black", size = 2)
 
   }
 
@@ -251,7 +301,7 @@ map <- map +
 
 
   # Highlight buildings
-  ggplot2::geom_sf(data = amenity %>% filter(name %in% highlight_amenity_regional) %>%
+  ggplot2::geom_sf(data = amenity %>% dplyr::filter(name %in% highlight_amenity_regional) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%
@@ -260,7 +310,7 @@ map <- map +
                      ),
                    mapping = ggplot2::aes(), fill = "purple") +
 
-  ggplot2::geom_sf(data = building %>% filter(name %in% highlight_building_regional) %>%
+  ggplot2::geom_sf(data = building %>% dplyr::filter(name %in% highlight_building_regional) %>%
                      sf::st_transform(crs = crs_local_metres) %>%
                      sf::st_make_valid() %>%
                      sf::st_crop(hub_location %>%
@@ -271,7 +321,7 @@ map <- map +
 
 
   # Hub walking radius 5 minutes
-  ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=400), fill = NA, colour = "black", size = 2) +
+  ggplot2::geom_sf(data = hub_location %>% sf::st_buffer(dist=400), fill = NA, colour = "black", size = 2) +
 
   # Add 5 minute walk radius text
   ggplot2::geom_sf_label(data = data.frame(
@@ -283,7 +333,7 @@ map <- map +
       sf::st_as_sfc(), ggplot2::aes(), label = "5 minute walk", colour = "black", angle = 45) +
 
   # Hub walking radius (to display on top of purple marking)
-  ggplot2::geom_sf(data = hub_location %>% st_buffer(dist=1500), fill = NA, colour = "black", size = 2) +
+  ggplot2::geom_sf(data = hub_location %>% sf::st_buffer(dist=1500), fill = NA, colour = "black", size = 2) +
 
 
   # Add hub location labels and other text

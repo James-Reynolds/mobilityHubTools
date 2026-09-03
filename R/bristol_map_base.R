@@ -27,6 +27,7 @@
 #' hub_location = rlist::list.load(system.file("data/greensborough_hub_location.rdata", package = "mobilityHubTools")),
 #' map_limits = 500,
 #' crs_local_metres = 27700)
+
 bristol_map_base <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),

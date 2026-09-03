@@ -91,28 +91,3 @@ nothing, but outputs a pdf to the named file
 \description{
 Builds a totem pedestal that is a sythesis version of various styles
 }
-\examples{
-synthesis_totem(
-  file_to_save_to = "gainsboroungh_synthesis_totem.pdf",
-  element1_what_is_this_top_text = "Mobility Hub / Local Travel Point",
-  element2_where_is_it_top_text = "Gainsborough Square",
-  element2_where_is_it_top_text_detail = "Lockleaze, Bristol, BS7 9AP",
-  element3_what_is_here_top = list(
-    system.file("extdata/bus_stop.svg", package = "mobilityHubTools"),
-    system.file("extdata/bicycle_parking.svg", package = "mobilityHubTools"),
-    system.file("extdata/bicycle_repair_station.svg", package = "mobilityHubTools"),
-    system.file("extdata/e-scooter-svgrepo-com.svg", package = "mobilityHubTools"),
-    system.file("extdata/bicycle-electric-2.svg", package = "mobilityHubTools"),
-    system.file("extdata/toilets.svg", package = "mobilityHubTools"),
-    system.file("extdata/RWBA_Behinderten-WC.svg", package = "mobilityHubTools"),
-    system.file("extdata/No_image.svg", package = "mobilityHubTools"),
-    system.file("extdata/No_image.svg", package = "mobilityHubTools"),
-    system.file("extdata/No_image.svg", package = "mobilityHubTools")),
-  element4_up_what_is_nearby = "^ Buses: Gainsborough Square Stop B (Routes 24, 72, 73 eastbound)",
-  element4_left_what_is_nearby = "\U2190 Buses: Gainsborough Square Stop A (Routes 24, 77 northbound)\n\U2190 North Bristol Advice Centre",
-  element4_right_what_is_nearby = "Buses: Cameron Walk stop (Route 24, 72 westbound) \U2192\n St James Church \U2192",
-  element6_what_is_this_bottom_text = "What is this: \nWelcome to this Mobility Hub / Local Travel Point,\n a location where shared mobility and other services\n offer a range of options to support sustainable travel. \n\nWhat is here: (see left)\nThis mobility hub includes nearby bus stops,\n bicycle parking and a repair station, \n shared scooters and electric bikes, and toilets (in the Hub).",
-  element7_hub_elements_map = synthesis_hub_elements_map(),
-  element8_how_can_you_travel = "How can you travel from here: (see maps below) \nBuses 24, 77 northbound leave from Gainsborough Square Stop A (left and across the square),\nBuses 24, 72 and 73 eastbound leave from Gainsbourough Square Stop B (in front of you).\n Buses 24, 72 westbound leave from a stop in Cameron Walk (to your right)  \n Ashley Down and Filton Abbey Wd Railway Stations are around a 15 minute walk away (see map below centre).\n The Frome Valley Greenway and Concorde Way are also nearby (see map below right).",
-  element10_what_is_nearby_bottom_text = "What is nearby: (see maps above)\nThe Hub is accross the street behind you.  \nThe North Bristol Advice Centre is across Gainsborough Square to your left.\nShops, food and services are also across Gainborough Square.\nTo get to St James Church go right along Cameron Walk\n until you get to Romney Avenue. \n \nWhere am I:\n Gainsborough Square, Lockleaze, Bristol BS7 9AP.\nThe latitude is 51.4904 and the longitude is -2.5627.\nwhat3words.com calls this location hero.blend.sock\n\n ")
-}

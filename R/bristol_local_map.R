@@ -34,6 +34,7 @@
 #' highlight_amenity = c("Stoke Park Primary School", "Saint Mary Magdalen and Saint Francis Lockleaze", "St James Church"),
 #' highlight_leisure = c("Lockleaze Youth And Play Space", "Gainsborough Square"),
 #' highlight_landuse = c("Bonnington Walk Playing Fields"))
+
 bristol_local_map <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),

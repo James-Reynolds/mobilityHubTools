@@ -15,28 +15,23 @@
 #' @returns a ggplot object
 #' @export
 #'
-#' @examples synthesis_hub_elements_map(building = rlist::list.load(system.file(
-#' "data/greensborough_building.rdata", package = "mobilityHubTools")),
-#' highway = rlist::list.load(system.file(
-#' "data/greensborough_highway.rdata", package = "mobilityHubTools")),
-#' leisure = rlist::list.load(system.file(
-#' "data/greensborough_leisure.rdata", package = "mobilityHubTools")),
-#' landuse = rlist::list.load(system.file(
-#' "data/greensborough_landuse.rdata", package = "mobilityHubTools")),
-#' natural = rlist::list.load(system.file(
-#' "data/greensborough_natural.rdata", package = "mobilityHubTools")),
-#' waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
-#' railway = rlist::list.load(system.file(
-#' "data/greensborough_railway.rdata", package = "mobilityHubTools")),
-#' hub_location = rlist::list.load(system.file(
-#' "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
-#' map_limits = 100,
-#' crs_local_metres = 27700,
-#' hub_element_locations = tibble::tibble(
-#' lat = c(51.49091020337705),
-#' lon = c(-2.5638763617435965),
-#' name = c("Gainsborough Sq. Stop A"),
-#' icon_filename = c(system.file("extdata/bus_stop.svg", package = "mobilityHubTools")))
+#' @examples synthesis_hub_elements_map(
+#'   building = rlist::list.load(system.file("data/greensborough_building.rdata", package = "mobilityHubTools")),
+#'   highway = rlist::list.load(system.file("data/greensborough_highway.rdata", package = "mobilityHubTools")),
+#'   leisure = rlist::list.load(system.file("data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+#'   landuse = rlist::list.load(system.file("data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+#'   natural = rlist::list.load(system.file("data/greensborough_natural.rdata", package = "mobilityHubTools")),
+#'   waterway = rlist::list.load(system.file("data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+#'   railway = rlist::list.load(system.file("data/greensborough_railway.rdata", package = "mobilityHubTools")),
+#'   hub_location = rlist::list.load(system.file("data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
+#'   map_limits = 100,
+#'   crs_local_metres = 27700,
+#'   hub_element_locations = tibble::tibble(lat = 51.49091020337705,
+#'                                          lon = -2.5638763617435965,
+#'                                          name = "Gainsborough Sq. Stop A",
+#'                                          icon_filename = system.file(
+#'                      "extdata/bus_stop.svg", package = "mobilityHubTools")))
+
 
 
 synthesis_hub_elements_map <- function(

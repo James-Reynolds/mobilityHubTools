@@ -13,15 +13,17 @@
 #' @export
 #'
 #' @examples
-#' synthesis_hub_surrounds_map <- function(
-#' building = rlist::list.load(system.file(
-#' "data/greensborough_building.rdata", package = "mobilityHubTools")),
-#' map_limits = 100,
-#' crs_local_metres = 27700,
-#' annotation_map_zoom = 18,
-#' annotation_map_type = "osm",
-#' highlight_building = c("North Bristol Advice Centre", "The Hub"),
-#' hub_location = rlist::list.load(system.file("data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]])
+#' synthesis_hub_surrounds_map(
+#'   building = rlist::list.load(system.file(
+#'    "data/greensborough_building.rdata", package = "mobilityHubTools")),
+#'   map_limits = 100,
+#'   crs_local_metres = 27700,
+#'   annotation_map_zoom = 18,
+#'   annotation_map_type = "osm",
+#'   highlight_building = c("North Bristol Advice Centre", "The Hub"),
+#'   hub_location = rlist::list.load(system.file(
+#'    "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]])
+
 synthesis_hub_surrounds_map <- function(
     building = rlist::list.load(system.file(
       "data/greensborough_building.rdata", package = "mobilityHubTools")),

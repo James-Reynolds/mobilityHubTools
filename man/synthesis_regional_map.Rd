@@ -76,31 +76,32 @@ a ggplot object
 Create a map showing the regional area surrounding a mobility hub
 }
 \examples{
-synthesis_regional_map(amenity = rlist::list.load(system.file(
-"data/greensborough_amenity.rdata", package = "mobilityHubTools")),
-building = rlist::list.load(system.file(
-"data/greensborough_building.rdata", package = "mobilityHubTools")),
-highway = rlist::list.load(system.file(
-"data/greensborough_highway.rdata", package = "mobilityHubTools")),
-leisure = rlist::list.load(system.file(
-"data/greensborough_leisure.rdata", package = "mobilityHubTools")),
-landuse = rlist::list.load(system.file(
-"data/greensborough_landuse.rdata", package = "mobilityHubTools")),
-natural = rlist::list.load(system.file(
-"data/greensborough_natural.rdata", package = "mobilityHubTools")),
-waterway = rlist::list.load(system.file(
-"data/greensborough_waterway.rdata", package = "mobilityHubTools")),
-railway = rlist::list.load(system.file(
-"data/greensborough_railway.rdata", package = "mobilityHubTools")),
-hub_location = rlist::list.load(system.file(
-"data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
-map_limits = 1500,
-crs_local_metres = 27700,
-annotation_map_tile_type = "osm",
-annotation_map_zoom = 14,
-highlight_building_regional = c("Horfield Library", "Horfield Health Centre"),
-highlight_amenity_regional =
-c("University of the West of England (Frenchay Campus)", "St James Church"),
-highlight_leisure_regional = c("Bristol County Ground"),
-highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
+synthesis_regional_map(
+  amenity = rlist::list.load(system.file(
+    "data/greensborough_amenity.rdata", package = "mobilityHubTools")),
+  building = rlist::list.load(system.file(
+      "data/greensborough_building.rdata", package = "mobilityHubTools")),
+  highway = rlist::list.load(system.file(
+      "data/greensborough_highway.rdata", package = "mobilityHubTools")),
+  leisure = rlist::list.load(system.file(
+      "data/greensborough_leisure.rdata", package = "mobilityHubTools")),
+  landuse = rlist::list.load(system.file(
+      "data/greensborough_landuse.rdata", package = "mobilityHubTools")),
+  natural = rlist::list.load(system.file(
+      "data/greensborough_natural.rdata", package = "mobilityHubTools")),
+  waterway = rlist::list.load(system.file(
+      "data/greensborough_waterway.rdata", package = "mobilityHubTools")),
+  railway = rlist::list.load(system.file(
+      "data/greensborough_railway.rdata", package = "mobilityHubTools")),
+  hub_location = rlist::list.load(system.file(
+      "data/test_hub_location.rdata", package = "mobilityHubTools"))[[1]],
+  map_limits = 1500,
+  crs_local_metres = 27700,
+  annotation_map_tile_type = "osm",
+  annotation_map_zoom = 14,
+  highlight_building_regional = c("Horfield Library"),
+  highlight_amenity_regional = c(
+   "University of the West of England (Frenchay Campus)", "St James Church"),
+  highlight_leisure_regional = c("Bristol County Ground"),
+  highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
 }

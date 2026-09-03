@@ -52,8 +52,3 @@ nothing, but outputs a pdf to the named file
 \description{
 Builds a totem pedestral sign in the style of Bristol mobility hubs
 }
-\examples{
-bristol_totem_pedestal(
-file_to_save_to = "gainsborough_bristol-style_totem.pdf",
-hub_name_text = "Gainsborough Square")
-}

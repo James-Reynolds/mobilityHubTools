@@ -35,6 +35,7 @@
 #' highlight_amenity_regional = c("nill"),
 #' highlight_leisure_regional = c("Bristol County Ground"),
 #' highlight_landuse_regional = c("Bonnington Walk Playing Fields"))
+
 bristol_regional_map <- function(
     amenity = rlist::list.load(system.file(
       "data/greensborough_amenity.rdata", package = "mobilityHubTools")),

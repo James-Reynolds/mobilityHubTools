@@ -13,9 +13,6 @@
 #' @export
 #'
 #' @examples
-#' bristol_totem_pedestal(
-#' file_to_save_to = "gainsborough_bristol-style_totem.pdf",
-#' hub_name_text = "Gainsborough Square")
 
 bristol_totem_pedestal <- function(
     file_to_save_to,

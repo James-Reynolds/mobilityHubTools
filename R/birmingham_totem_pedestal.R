@@ -13,9 +13,6 @@
 #' @export
 #'
 #' @examples
-#' birmingham_totem_pedestal(
-#'  file_to_save_to = "layout_test.pdf",
-#'  hub_name_text = "Gainsbourgh Square")
 
 birmingham_totem_pedestal <- function(
     file_to_save_to,
